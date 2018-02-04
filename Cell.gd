@@ -25,9 +25,8 @@ func _init(pos, water_level):
 	self.water_level = water_level
 
 func add_vertex(surfTool, uv, pos):
-	var height = globals.get_height(world_pos.x+pos.x,world_pos.z+pos.z)
-	if height < water_level: height = water_level
-	var up = Vector3(0.0, globals.TERRAIN_HEIGHT_SCALE * height * height, 0.0)
+	var height = globals.get_terrain_mesh_height(world_pos.x+pos.x,world_pos.z+pos.z)
+	var up = Vector3(0.0, height, 0.0)
 	surfTool.add_uv(uv)
 	surfTool.add_vertex(pos+up)
 
