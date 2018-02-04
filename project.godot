@@ -1,0 +1,33 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=3
+
+[application]
+
+config/name="hexnul0x02"
+run/main_scene="res://WorldView.tscn"
+boot_splash/fullsize=false
+config/icon="res://icon.png"
+
+[autoload]
+
+global="*res://global.gd"
+
+[display]
+
+window/size/width=1280
+window/size/height=1024
+
+[editor]
+
+convert_text_resources_to_binary_on_export=true
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"
