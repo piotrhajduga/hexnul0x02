@@ -1,6 +1,6 @@
 extends Spatial
 
-onready var globals = get_node("/root/global")
+onready var globals = get_node("/root/TerrainGlobals")
 
 onready var camera = get_node("Camera")
 onready var cell_grid = get_node("CellGrid")

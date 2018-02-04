@@ -3,13 +3,13 @@
 [ext_resource path="res://WorldView.gd" type="Script" id=1]
 [ext_resource path="res://WorldView.tres" type="Environment" id=2]
 [ext_resource path="res://Camera.gd" type="Script" id=3]
-[ext_resource path="res://CellGrid.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Water.tres.material" type="Material" id=5]
-[ext_resource path="res://Sand.tres.material" type="Material" id=6]
-[ext_resource path="res://Grass.tres.material" type="Material" id=7]
-[ext_resource path="res://Stone.tres.material" type="Material" id=8]
-[ext_resource path="res://Snow.tres.material" type="Material" id=9]
-[ext_resource path="res://cell_highlight.obj" type="ArrayMesh" id=10]
+[ext_resource path="res://terrain/CellGrid.tscn" type="PackedScene" id=4]
+[ext_resource path="res://terrain/Water.tres.material" type="Material" id=5]
+[ext_resource path="res://terrain/Sand.tres.material" type="Material" id=6]
+[ext_resource path="res://terrain/Grass.tres.material" type="Material" id=7]
+[ext_resource path="res://terrain/Stone.tres.material" type="Material" id=8]
+[ext_resource path="res://terrain/Snow.tres.material" type="Material" id=9]
+[ext_resource path="res://terrain/cell_highlight.obj" type="ArrayMesh" id=10]
 
 [sub_resource type="PlaneShape" id=1]
 
@@ -158,8 +158,6 @@ disabled = false
 [node name="CellGrid" parent="." index="4" instance=ExtResource( 4 )]
 
 _sections_unfolded = [ "Pause", "Transform" ]
-cols = 140
-rows = 70
 water = ExtResource( 5 )
 sand = ExtResource( 6 )
 grass = ExtResource( 7 )

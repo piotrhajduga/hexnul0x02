@@ -1,6 +1,6 @@
 extends Node
 
-var SoftNoise = preload("res://softnoise.gd")
+var SoftNoise = preload("res://terrain/softnoise.gd")
 
 const NOISES_COUNT = 5
 var noises_weight_sum = 0.0
