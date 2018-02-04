@@ -8,13 +8,11 @@ onready var hover = get_node("Hover")
 onready var collision_plane = get_node("Area")
 
 var mouse_pos = Vector2()
-var mouse_probe_delta = 0.8
+var mouse_probe_delta = 0.5
 
 func _ready():
 	camera.target_position = cell_grid.translation
-	collision_plane.translation.x = camera.translation.x
-	collision_plane.translation.y = 0.0
-	collision_plane.translation.z = camera.translation.z
+	collision_plane.translation = camera.translation
 
 func handle_mouse_button(event):
 	match event.button_index:
@@ -26,8 +24,7 @@ func handle_mouse_motion(event):
 	if event.button_mask & BUTTON_MASK_LEFT || event.alt:
 		var relative = event.relative
 		camera.move(relative)
-		collision_plane.translation.x = camera.translation.x
-		collision_plane.translation.z = camera.translation.z
+		collision_plane.translation = camera.translation
 		camera.look_at_target()
 	else:
 		mouse_pos = event.position
@@ -45,18 +42,19 @@ func _physics_process(delta):
 	var pos3d = null
 	
 	var probe_height = globals.TERRAIN_HEIGHT_SCALE
-	var min_err = mouse_probe_delta * 0.2
+	var min_err = globals.TERRAIN_HEIGHT_SCALE
 	
 	while probe_height > -mouse_probe_delta:
 		collision_plane.translation.y = probe_height
 		var result = space_state.intersect_ray(from, to)
 		if result.has("position"):
 			var pos2d = globals.get_game_coords(result["position"])
-			pos3d = globals.get_world_coords(pos2d.x,pos2d.y)
-			pos3d.y = globals.get_terrain_mesh_height(pos3d.x,pos3d.z)
-			var err = (pos3d - result["position"]).length()
+			var tpos3d = globals.get_world_coords(pos2d.x,pos2d.y)
+			tpos3d.y = globals.get_terrain_mesh_height(tpos3d.x,tpos3d.z)
+			var err = (tpos3d - result["position"]).length()
 			if err < min_err:
-				break
+				pos3d = tpos3d
+				min_err = err
 		probe_height -= mouse_probe_delta
 	if pos3d != null:
 		hover.translation = pos3d

@@ -1,6 +1,6 @@
 extends Camera
 
-onready var globals = get_node("/root/global")
+onready var globals = get_node("/root/TerrainGlobals")
 
 const up = Vector3(0.0,1.0,0.0)
 

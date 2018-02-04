@@ -15,7 +15,7 @@ var outlineUVs = [
 	Vector2(0.5,-1),Vector2(-0.5,-1)
 ]
 
-onready var globals = get_node("/root/global")
+onready var globals = get_node("/root/TerrainGlobals")
 
 var world_pos = Vector3()
 var water_level = 0.0
