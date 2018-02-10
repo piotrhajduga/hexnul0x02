@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/oddzialludzikow.obj-19a522b49e97f7e1a408900c6c41295a.mesh"
+
+[deps]
+
+files=[ "res://.import/oddzialludzikow.obj-19a522b49e97f7e1a408900c6c41295a.mesh" ]
+
+source_file="res://oddzialludzikow.obj"
+source_md5="746520b031432b66a266feb340980711"
+
+dest_files=[ "res://.import/oddzialludzikow.obj-19a522b49e97f7e1a408900c6c41295a.mesh", "res://.import/oddzialludzikow.obj-19a522b49e97f7e1a408900c6c41295a.mesh" ]
+dest_md5="d35c78222b29f05d04e024de30a28add"
+
+[params]
+
+generate_tangents=true

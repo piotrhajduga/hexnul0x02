@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://WorldView.gd" type="Script" id=1]
 [ext_resource path="res://WorldView.tres" type="Environment" id=2]
@@ -8,10 +8,9 @@
 [ext_resource path="res://terrain/Sand.tres.material" type="Material" id=6]
 [ext_resource path="res://terrain/Grass.tres.material" type="Material" id=7]
 [ext_resource path="res://terrain/Stone.tres.material" type="Material" id=8]
-[ext_resource path="res://terrain/Snow.tres.material" type="Material" id=9]
-[ext_resource path="res://terrain/cell_highlight.obj" type="ArrayMesh" id=10]
+[ext_resource path="res://terrain/cell_highlight.obj" type="ArrayMesh" id=9]
 
-[sub_resource type="PlaneShape" id=1]
+[sub_resource type="PlaneShape" id=3]
 
 plane = Plane( 0, 1, 0, 0 )
 
@@ -114,7 +113,7 @@ v_offset = 0.0
 doppler_tracking = 0
 projection = 0
 current = false
-fov = 100.0
+fov = 70.0
 size = 1.0
 near = 0.05
 far = 100.0
@@ -125,9 +124,21 @@ camera_offset = Vector3( 0, 3, 7 )
 camera_height = 5.0
 camera_vspeed = 1.0
 camera_hspeed = 1.0
+camera_y_angle = 0.0
 
-[node name="Area" type="Area" parent="." index="3"]
+[node name="CellGrid" parent="." index="3" instance=ExtResource( 4 )]
 
+_sections_unfolded = [ "Pause", "Transform" ]
+cols = 120
+rows = 80
+water = ExtResource( 5 )
+sand = ExtResource( 6 )
+grass = ExtResource( 7 )
+stone = ExtResource( 8 )
+
+[node name="Area" type="Area" parent="CellGrid" index="0"]
+
+editor/display_folded = true
 input_ray_pickable = false
 input_capture_on_drag = false
 space_override = 0
@@ -138,8 +149,8 @@ gravity = 9.8
 linear_damp = 0.1
 angular_damp = 1.0
 priority = 1.0
-monitoring = true
-monitorable = true
+monitoring = false
+monitorable = false
 collision_layer = 1
 collision_mask = 1
 audio_bus_override = false
@@ -150,41 +161,18 @@ reverb_bus_amount = 0.0
 reverb_bus_uniformity = 0.0
 _sections_unfolded = [ "Collision", "Transform" ]
 
-[node name="CollisionShape" type="CollisionShape" parent="Area" index="0"]
+[node name="CollisionShape" type="CollisionShape" parent="CellGrid/Area" index="0"]
 
-shape = SubResource( 1 )
+shape = SubResource( 3 )
 disabled = false
 
-[node name="CellGrid" parent="." index="4" instance=ExtResource( 4 )]
-
-_sections_unfolded = [ "Pause", "Transform" ]
-water = ExtResource( 5 )
-sand = ExtResource( 6 )
-grass = ExtResource( 7 )
-stone = ExtResource( 8 )
-snow = ExtResource( 9 )
-
-[node name="Hover" type="MeshInstance" parent="." index="5"]
+[node name="Hover" type="Spatial" parent="." index="4"]
 
 editor/display_folded = true
-transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0, 0 )
-layers = 1
-material_override = null
-cast_shadow = 0
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-mesh = ExtResource( 10 )
-skeleton = NodePath("..")
-material/0 = SubResource( 2 )
-_sections_unfolded = [ "Geometry", "Transform", "material" ]
 
 [node name="SpotLight" type="SpotLight" parent="Hover" index="0"]
 
-transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 1, 0 )
+transform = Transform( -1.62921e-07, -1, -1.62921e-07, 0, -1.62921e-07, 1, -1, 1.62921e-07, 2.65433e-14, 0, 1.5, 0 )
 layers = 1
 light_color = Color( 0.921875, 0.757295, 0.500549, 1 )
 light_energy = 1.0
@@ -203,6 +191,23 @@ spot_range = 2.0
 spot_attenuation = 1.0
 spot_angle = 45.0
 spot_angle_attenuation = 1.0
-_sections_unfolded = [ "Transform" ]
+_sections_unfolded = [ "Light", "Transform" ]
+
+[node name="MeshInstance" type="MeshInstance" parent="Hover" index="1"]
+
+transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0, 0 )
+layers = 1
+material_override = null
+cast_shadow = 0
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = ExtResource( 9 )
+skeleton = NodePath("..")
+material/0 = SubResource( 2 )
+_sections_unfolded = [ "Geometry", "Transform", "material" ]
 
 

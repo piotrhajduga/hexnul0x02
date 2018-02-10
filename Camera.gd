@@ -5,9 +5,10 @@ onready var globals = get_node("/root/TerrainGlobals")
 const up = Vector3(0.0,1.0,0.0)
 
 var max_camera_height = 60.0
-var min_camera_height = 3.0
+var min_camera_height = 0.0
+var min_camera_height_offset = 3.0
 
-enum camera_movement {CAM_HI, CAM_LO}
+enum camera_movement {CAM_HI, CAM_LO, CAM_TURN_LEFT, CAM_TURN_RIGHT}
 
 export(Vector3) var target_position = Vector3()
 export(Vector3) var camera_offset = Vector3(0.0,3.0,7.0)
@@ -16,29 +17,33 @@ export(float,0,100) var camera_height = 5.0
 export var camera_vspeed = 1.0
 export var camera_hspeed = 1.0
 
+export var camera_y_angle = 0.0
+
 func _ready():
 	move(Vector2())
+	set_height(camera_height)
 	look_at_target()
-	self.camera_vspeed = camera_height * 0.01
 	
 func look_at_target():
-	self.look_at_from_position(target_position+camera_offset+(up*camera_height),target_position,up)
+	self.look_at_from_position(target_position+(camera_offset.rotated(up,camera_y_angle))+(up*camera_height),target_position,up)
 	
 func set_height(new_height):
 	if new_height >= min_camera_height and new_height <= max_camera_height:
 		self.camera_height = new_height
-		self.camera_vspeed = new_height * 0.02
+		self.camera_vspeed = 0.007 * camera_height
 
-func move(relative):
-	target_position.x += relative.x * camera_vspeed
-	target_position.z += relative.y * camera_vspeed
-	min_camera_height = globals.get_terrain_mesh_height(target_position.x, target_position.z)
+func move(relative2d):
+	var relative3d = Vector3(relative2d.x,0.0,relative2d.y).rotated(up,camera_y_angle)
+	target_position += -relative3d * camera_vspeed
+	min_camera_height = min_camera_height_offset + globals.get_terrain_mesh_height(target_position.x, target_position.z)
 	if camera_height < min_camera_height:
 		set_height(min_camera_height)
+	look_at_target()
 	
 func move_camera(dir):
-	var new_height
 	match dir:
-		CAM_HI: new_height = camera_height + camera_hspeed
-		CAM_LO: new_height = camera_height - camera_hspeed
-	set_height(new_height)
+		CAM_HI: set_height(camera_height + camera_hspeed)
+		CAM_LO: set_height(camera_height - camera_hspeed)
+		CAM_TURN_LEFT: camera_y_angle -= PI/60.0
+		CAM_TURN_RIGHT: camera_y_angle += PI/60.0
+	look_at_target()

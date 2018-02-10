@@ -4,7 +4,8 @@ var SoftNoise = preload("res://terrain/softnoise.gd")
 
 const NOISES_COUNT = 5
 var noises_weight_sum = 0.0
-var noises_scales = [0.02,0.06,0.18,0.35,0.49,0.73]
+#var noises_scales = [0.02,0.06,0.18,0.35,0.49,0.73]
+var noises_scales = [0.006,0.023,0.164,0.41,0.26,0.73]
 var noises_modifiers = []
 var noise = null
 
@@ -12,11 +13,11 @@ const TERRAIN_HEIGHT_SCALE = 15.0
 const xStep = 1.0
 const zStep = sqrt(3.0) / 2.0
 
-export(float,0,1) var water_height = 0.4
-export(float,0,1) var sand_height = 0.401
-export(float,0,1) var grass_height = 0.44
-export(float,0,1) var stone_height = 0.57
-export(float,0,1) var snow_height = 0.66
+export(float,0,1) var water_height = 0.42
+export(float,0,1) var sand_height = 0.421
+export(float,0,1) var grass_height = 0.45
+export(float,0,1) var stone_height = 0.61
+export(float,0,1) var snow_height = 0.68
 
 enum cell_type {WATER, SAND, GRASS, STONE, SNOW}
 

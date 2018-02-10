@@ -12,7 +12,6 @@ config_version=3
 
 config/name="hexnul0x02"
 run/main_scene="res://WorldView.tscn"
-boot_splash/fullsize=false
 config/icon="res://icon.png"
 
 [autoload]
