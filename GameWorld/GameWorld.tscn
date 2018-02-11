@@ -63,11 +63,11 @@ distance_fade_enable = false
 script = ExtResource( 1 )
 noises_scales = [ 0.006, 0.023, 0.164, 0.41, 0.26, 0.73 ]
 game_seed = ""
-water_height = 0.42
-sand_height = 0.421
+water_height = 0.4
+sand_height = 0.41
 grass_height = 0.45
 stone_height = 0.61
-snow_height = 0.68
+snow_height = 0.67
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="0"]
 

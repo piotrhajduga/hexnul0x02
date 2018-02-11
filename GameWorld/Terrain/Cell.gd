@@ -10,9 +10,9 @@ var outline = [
 ]
 
 var outlineUVs = [
-	Vector2(-1.0,0.0),Vector2(-0.5,1.0),
-	Vector2(0.5,1.0),Vector2(1.0,0.0),
-	Vector2(0.5,-1),Vector2(-0.5,-1)
+	Vector2(0.0,0.5),Vector2(0.25,0.0),
+	Vector2(0.75,0.0),Vector2(1.0,0.5),
+	Vector2(0.75,1.0),Vector2(0.25,1.0)
 ]
 
 onready var globals = get_node("/root/GameWorldGlobals")
@@ -39,7 +39,7 @@ func create_mesh():
 		
 	surfTool.add_smooth_group(true)
 	for i in range(6):
-		add_vertex(surfTool, Vector2(), Vector3())
+		add_vertex(surfTool, Vector2(0.5,0.5), Vector3())
 		add_vertex(surfTool, outlineUVs[i], outline[i])
 		add_vertex(surfTool, outlineUVs[i-1], outline[i-1])
 	surfTool.generate_normals()

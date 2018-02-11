@@ -13,8 +13,12 @@ func _ready():
 
 func handle_mouse_button(event):
 	match event.button_index:
-		BUTTON_WHEEL_UP: camera.move_camera(camera.CAM_LO)
-		BUTTON_WHEEL_DOWN: camera.move_camera(camera.CAM_HI)
+		BUTTON_WHEEL_UP:
+			camera.move_camera(camera.CAM_LO)
+			hover.hide()
+		BUTTON_WHEEL_DOWN:
+			camera.move_camera(camera.CAM_HI)
+			hover.hide()
 		BUTTON_RIGHT:
 			if hover.is_visible():
 				create_unit(hover.translation)
