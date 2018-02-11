@@ -1,4 +1,4 @@
 # Screenshots
-![Camera low](screenshots/screen1.png)
-![Camera medium](screenshots/screen2.png)
-![Camera high](screenshots/screen3.png)
+![](screenshots/screen1.jpg)
+![](screenshots/screen2.jpg)
+![](screenshots/screen3.jpg)

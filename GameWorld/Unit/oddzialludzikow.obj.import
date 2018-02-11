@@ -9,10 +9,10 @@ path="res://.import/oddzialludzikow.obj-43c5e6378b4e38659fa5818ed43f3bdf.mesh"
 files=[ "res://.import/oddzialludzikow.obj-43c5e6378b4e38659fa5818ed43f3bdf.mesh" ]
 
 source_file="res://GameWorld/Unit/oddzialludzikow.obj"
-source_md5="746520b031432b66a266feb340980711"
+source_md5="a353f13027830747682fe9919d34da6f"
 
 dest_files=[ "res://.import/oddzialludzikow.obj-43c5e6378b4e38659fa5818ed43f3bdf.mesh", "res://.import/oddzialludzikow.obj-43c5e6378b4e38659fa5818ed43f3bdf.mesh" ]
-dest_md5="d35c78222b29f05d04e024de30a28add"
+dest_md5="95cb871ecc40f1ac833ed9b373c20ee3"
 
 [params]
 

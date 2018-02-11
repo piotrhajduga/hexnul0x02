@@ -61,11 +61,11 @@ proximity_fade_enable = false
 distance_fade_enable = false
 _sections_unfolded = [ "Albedo", "Metallic" ]
 
-[node name="GameWorld" type="Spatial" index="0"]
+[node name="GameWorld" type="Spatial"]
 
 script = ExtResource( 1 )
-noises_scales = [ 0.006, 0.023, 0.164, 0.41, 0.26, 0.73 ]
-game_seed = ""
+noises_scales = [ 0.006, 0.023, 0.164, 0.41, 0.26, 0.53 ]
+game_seed = "czekolada"
 water_height = 0.4
 sand_height = 0.41
 grass_height = 0.45
@@ -83,14 +83,14 @@ v_offset = 0.0
 doppler_tracking = 0
 projection = 0
 current = false
-fov = 70.0
+fov = 75.0
 size = 1.0
 near = 0.05
 far = 100.0
 script = ExtResource( 2 )
 _sections_unfolded = [ "Transform" ]
 target_position = Vector3( 0, 0, 0 )
-camera_offset = Vector3( 0, 3, 7 )
+camera_offset = Vector3( 0, 5, 10 )
 camera_height = 5.0
 camera_vspeed = 1.0
 camera_hspeed = 1.0

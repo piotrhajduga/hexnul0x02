@@ -7,7 +7,7 @@ var Unit = preload("res://GameWorld/Unit/Unit.tscn")
 const TERRAIN_HEIGHT_SCALE = 15.0
 
 var noises_weight_sum = 0.0
-export var noises_scales = [0.006,0.023,0.164,0.41,0.26,0.73]
+export var noises_scales = [0.006,0.023,0.164,0.41,0.26,0.53]
 var noises_modifiers = []
 var noise = null
 
