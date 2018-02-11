@@ -15,20 +15,21 @@ var outlineUVs = [
 	Vector2(0.5,-1),Vector2(-0.5,-1)
 ]
 
-onready var globals = get_node("/root/TerrainGlobals")
+onready var globals = get_node("/root/GameWorldGlobals")
 
 var world_pos = Vector3()
 var water_level = 0.0
+var game_world = null
 
-func _init(pos, water_level):
+func _init(pos, game_world):
 	self.world_pos = pos
-	self.water_level = water_level
+	self.game_world = game_world
 
 func add_vertex(surfTool, uv, pos):
-	var height = globals.get_terrain_mesh_height(world_pos.x+pos.x,world_pos.z+pos.z)
-	var up = Vector3(0.0, height, 0.0)
+	var height = game_world.get_terrain_mesh_height(world_pos+pos)
+	var offset = Vector3(0.0, height, 0.0)
 	surfTool.add_uv(uv)
-	surfTool.add_vertex(pos+up)
+	surfTool.add_vertex(pos+offset)
 
 func create_mesh():
 	var new_mesh = Mesh.new()
@@ -36,10 +37,9 @@ func create_mesh():
 	var surfTool = SurfaceTool.new()
 	surfTool.begin(Mesh.PRIMITIVE_TRIANGLES)
 		
+	surfTool.add_smooth_group(true)
 	for i in range(6):
-		surfTool.add_smooth_group(true)
 		add_vertex(surfTool, Vector2(), Vector3())
-		surfTool.add_smooth_group(false)
 		add_vertex(surfTool, outlineUVs[i], outline[i])
 		add_vertex(surfTool, outlineUVs[i-1], outline[i-1])
 	surfTool.generate_normals()

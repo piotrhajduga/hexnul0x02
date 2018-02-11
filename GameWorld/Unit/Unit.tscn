@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://oddzialludzikow.obj" type="ArrayMesh" id=1]
+[ext_resource path="res://GameWorld/Unit/oddzialludzikow.obj" type="ArrayMesh" id=1]
 
 [sub_resource type="SpatialMaterial" id=1]
 

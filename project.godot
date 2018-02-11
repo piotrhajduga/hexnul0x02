@@ -11,12 +11,12 @@ config_version=3
 [application]
 
 config/name="hexnul0x02"
-run/main_scene="res://WorldView.tscn"
+run/main_scene="res://GameWorld/GameWorld.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
-TerrainGlobals="*res://terrain/global.gd"
+GameWorldGlobals="*res://GameWorld/global.gd"
 
 [display]
 

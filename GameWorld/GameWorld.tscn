@@ -1,18 +1,11 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://WorldView.gd" type="Script" id=1]
-[ext_resource path="res://WorldView.tres" type="Environment" id=2]
+[ext_resource path="res://GameWorld/GameWorld.gd" type="Script" id=1]
+[ext_resource path="res://GameWorld/GameWorld.tres" type="Environment" id=2]
 [ext_resource path="res://Camera.gd" type="Script" id=3]
-[ext_resource path="res://terrain/CellGrid.tscn" type="PackedScene" id=4]
-[ext_resource path="res://terrain/Water.tres.material" type="Material" id=5]
-[ext_resource path="res://terrain/Sand.tres.material" type="Material" id=6]
-[ext_resource path="res://terrain/Grass.tres.material" type="Material" id=7]
-[ext_resource path="res://terrain/Stone.tres.material" type="Material" id=8]
-[ext_resource path="res://terrain/cell_highlight.obj" type="ArrayMesh" id=9]
-
-[sub_resource type="PlaneShape" id=3]
-
-plane = Plane( 0, 1, 0, 0 )
+[ext_resource path="res://GameWorld/Terrain/Terrain.tscn" type="PackedScene" id=4]
+[ext_resource path="res://GameWorld/cell_highlight.obj" type="ArrayMesh" id=5]
+[ext_resource path="res://GameWorld/Controller.gd" type="Script" id=6]
 
 [sub_resource type="SpatialMaterial" id=2]
 
@@ -65,9 +58,16 @@ uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
 
-[node name="WorldView" type="Spatial" index="0"]
+[node name="GameWorld" type="Spatial" index="0"]
 
 script = ExtResource( 1 )
+noises_scales = [ 0.006, 0.023, 0.164, 0.41, 0.26, 0.73 ]
+game_seed = ""
+water_height = 0.42
+sand_height = 0.421
+grass_height = 0.45
+stone_height = 0.61
+snow_height = 0.68
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="0"]
 
@@ -126,49 +126,12 @@ camera_vspeed = 1.0
 camera_hspeed = 1.0
 camera_y_angle = 0.0
 
-[node name="CellGrid" parent="." index="3" instance=ExtResource( 4 )]
+[node name="Terrain" parent="." index="3" instance=ExtResource( 4 )]
 
-_sections_unfolded = [ "Pause", "Transform" ]
-cols = 120
-rows = 80
-water = ExtResource( 5 )
-sand = ExtResource( 6 )
-grass = ExtResource( 7 )
-stone = ExtResource( 8 )
-
-[node name="Area" type="Area" parent="CellGrid" index="0"]
-
-editor/display_folded = true
-input_ray_pickable = false
-input_capture_on_drag = false
-space_override = 0
-gravity_point = false
-gravity_distance_scale = 0.0
-gravity_vec = Vector3( 0, -1, 0 )
-gravity = 9.8
-linear_damp = 0.1
-angular_damp = 1.0
-priority = 1.0
-monitoring = false
-monitorable = false
-collision_layer = 1
-collision_mask = 1
-audio_bus_override = false
-audio_bus_name = "Master"
-reverb_bus_enable = false
-reverb_bus_name = "Master"
-reverb_bus_amount = 0.0
-reverb_bus_uniformity = 0.0
-_sections_unfolded = [ "Collision", "Transform" ]
-
-[node name="CollisionShape" type="CollisionShape" parent="CellGrid/Area" index="0"]
-
-shape = SubResource( 3 )
-disabled = false
+cols = 100
+rows = 100
 
 [node name="Hover" type="Spatial" parent="." index="4"]
-
-editor/display_folded = true
 
 [node name="SpotLight" type="SpotLight" parent="Hover" index="0"]
 
@@ -205,9 +168,13 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = ExtResource( 9 )
+mesh = ExtResource( 5 )
 skeleton = NodePath("..")
 material/0 = SubResource( 2 )
 _sections_unfolded = [ "Geometry", "Transform", "material" ]
+
+[node name="Controller" type="Node" parent="." index="5"]
+
+script = ExtResource( 6 )
 
 

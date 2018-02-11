@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/oddzialludzikow.obj-43c5e6378b4e38659fa5818ed43f3bdf.mesh"
+
+[deps]
+
+files=[ "res://.import/oddzialludzikow.obj-43c5e6378b4e38659fa5818ed43f3bdf.mesh" ]
+
+source_file="res://GameWorld/Unit/oddzialludzikow.obj"
+source_md5="746520b031432b66a266feb340980711"
+
+dest_files=[ "res://.import/oddzialludzikow.obj-43c5e6378b4e38659fa5818ed43f3bdf.mesh", "res://.import/oddzialludzikow.obj-43c5e6378b4e38659fa5818ed43f3bdf.mesh" ]
+dest_md5="d35c78222b29f05d04e024de30a28add"
+
+[params]
+
+generate_tangents=true

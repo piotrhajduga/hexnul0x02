@@ -1,17 +1,17 @@
 extends Camera
 
-onready var globals = get_node("/root/TerrainGlobals")
+onready var globals = get_node("/root/GameWorldGlobals")
+onready var game_world = get_parent()
 
 const up = Vector3(0.0,1.0,0.0)
 
-var max_camera_height = 60.0
+var max_camera_height = 40.0
 var min_camera_height = 0.0
-var min_camera_height_offset = 3.0
 
 enum camera_movement {CAM_HI, CAM_LO, CAM_TURN_LEFT, CAM_TURN_RIGHT}
 
 export(Vector3) var target_position = Vector3()
-export(Vector3) var camera_offset = Vector3(0.0,3.0,7.0)
+export(Vector3) var camera_offset = Vector3(0.0,5.0,10.0)
 export(float,0,100) var camera_height = 5.0
 
 export var camera_vspeed = 1.0
@@ -34,8 +34,8 @@ func set_height(new_height):
 
 func move(relative2d):
 	var relative3d = Vector3(relative2d.x,0.0,relative2d.y).rotated(up,camera_y_angle)
-	target_position += -relative3d * camera_vspeed
-	min_camera_height = min_camera_height_offset + globals.get_terrain_mesh_height(target_position.x, target_position.z)
+	target_position -= relative3d * camera_vspeed
+	min_camera_height = game_world.get_terrain_mesh_height(target_position)
 	if camera_height < min_camera_height:
 		set_height(min_camera_height)
 	look_at_target()

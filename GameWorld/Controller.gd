@@ -1,24 +1,15 @@
-extends Spatial
+extends Node
 
-onready var Unit = preload("../Unit.tscn")
-
-onready var globals = get_node("/root/TerrainGlobals")
-
-onready var camera = get_node("Camera")
-onready var cell_grid = get_node("CellGrid")
-onready var hover = get_node("Hover")
-
-var game_map = Dictionary()
+onready var globals = get_node("/root/GameWorldGlobals")
+onready var game_world = get_parent()
+onready var camera = game_world.get_node("Camera")
+onready var terrain = game_world.get_node("Terrain")
+onready var hover = game_world.get_node("Hover")
 
 var mouse_pos = Vector2()
 
-func create_unit(pos):
-	var unit = Unit.instance()
-	unit.translation = pos
-	self.add_child(unit)
-
 func _ready():
-	camera.target_position = cell_grid.translation
+	camera.target_position = terrain.translation
 
 func handle_mouse_button(event):
 	match event.button_index:
@@ -48,13 +39,13 @@ func _physics_process(delta):
 	var ray_length = 100
 	var from = camera.project_ray_origin(mouse_pos)
 	var to = from + camera.project_ray_normal(mouse_pos) * ray_length
-	var space_state = get_world().get_direct_space_state()
+	var space_state = game_world.get_world().get_direct_space_state()
 
 	var result = space_state.intersect_ray(from, to)
-	if result.has("position"):
+	if result.has("position") and (result["position"]-camera.target_position).length() < 10 + 8 * log(camera.camera_height):
 		var pos2d = globals.get_game_coords(result["position"])
 		hover.translation = globals.get_world_coords(pos2d.x, pos2d.y)
-		hover.translation.y = globals.get_terrain_mesh_height(hover.translation.x,hover.translation.z)
+		hover.translation.y = game_world.get_terrain_mesh_height(hover.translation)
 		hover.show()
 	else:
 		hover.hide()

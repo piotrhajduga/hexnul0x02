@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/cell_highlight.obj-188700dc43827c769a8a8c400eebdea9.mesh"
+
+[deps]
+
+files=[ "res://.import/cell_highlight.obj-188700dc43827c769a8a8c400eebdea9.mesh" ]
+
+source_file="res://GameWorld/cell_highlight.obj"
+source_md5="7fb08d71ae478ce6f383ad42c439bd81"
+
+dest_files=[ "res://.import/cell_highlight.obj-188700dc43827c769a8a8c400eebdea9.mesh", "res://.import/cell_highlight.obj-188700dc43827c769a8a8c400eebdea9.mesh" ]
+dest_md5="3120c4eb0dd8236117408c65ba3bb1ec"
+
+[params]
+
+generate_tangents=true
