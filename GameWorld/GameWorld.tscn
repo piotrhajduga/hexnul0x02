@@ -1,17 +1,18 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://GameWorld/GameWorld.gd" type="Script" id=1]
-[ext_resource path="res://GameWorld/GameWorld.tres" type="Environment" id=2]
-[ext_resource path="res://Camera.gd" type="Script" id=3]
-[ext_resource path="res://GameWorld/Terrain/Terrain.tscn" type="PackedScene" id=4]
-[ext_resource path="res://GameWorld/cell_highlight.obj" type="ArrayMesh" id=5]
-[ext_resource path="res://GameWorld/Controller.gd" type="Script" id=6]
+[ext_resource path="res://Camera.gd" type="Script" id=2]
+[ext_resource path="res://GameWorld/Controller.gd" type="Script" id=3]
+[ext_resource path="res://GameWorld/GameWorld.tres" type="Environment" id=4]
+[ext_resource path="res://GameWorld/Terrain/Terrain.tscn" type="PackedScene" id=5]
+[ext_resource path="res://GameWorld/Hover.gd" type="Script" id=6]
+[ext_resource path="res://GameWorld/Terrain/cell_stone_highlight.jpg" type="Texture" id=7]
 
-[sub_resource type="SpatialMaterial" id=2]
+[sub_resource type="SpatialMaterial" id=1]
 
 render_priority = 0
 flags_transparent = false
-flags_unshaded = false
+flags_unshaded = true
 flags_vertex_lighting = false
 flags_no_depth_test = false
 flags_use_point_size = false
@@ -21,8 +22,8 @@ flags_albedo_tex_force_srgb = false
 vertex_color_use_as_albedo = false
 vertex_color_is_srgb = false
 params_diffuse_mode = 0
-params_specular_mode = 0
-params_blend_mode = 0
+params_specular_mode = 4
+params_blend_mode = 1
 params_cull_mode = 0
 params_depth_draw_mode = 0
 params_line_width = 1.0
@@ -30,8 +31,9 @@ params_point_size = 1.0
 params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
-albedo_color = Color( 1, 1, 1, 1 )
-metallic = 0.0
+albedo_color = Color( 0, 0.817108, 0.878906, 1 )
+albedo_texture = ExtResource( 7 )
+metallic = 1.0
 metallic_specular = 0.5
 metallic_texture_channel = 0
 roughness = 0.0
@@ -57,6 +59,7 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
+_sections_unfolded = [ "Albedo", "Metallic" ]
 
 [node name="GameWorld" type="Spatial" index="0"]
 
@@ -69,12 +72,40 @@ grass_height = 0.45
 stone_height = 0.61
 snow_height = 0.67
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="0"]
+[node name="Camera" type="Camera" parent="." index="0"]
 
-environment = ExtResource( 2 )
+transform = Transform( 1, 0, 0, 0, 0.736169, 0.676797, 0, -0.676797, 0.736169, 0, 3, 3.18431 )
+keep_aspect = 1
+cull_mask = 1048575
+environment = null
+h_offset = 0.0
+v_offset = 0.0
+doppler_tracking = 0
+projection = 0
+current = false
+fov = 70.0
+size = 1.0
+near = 0.05
+far = 100.0
+script = ExtResource( 2 )
+_sections_unfolded = [ "Transform" ]
+target_position = Vector3( 0, 0, 0 )
+camera_offset = Vector3( 0, 3, 7 )
+camera_height = 5.0
+camera_vspeed = 1.0
+camera_hspeed = 1.0
+camera_y_angle = 0.0
+
+[node name="Controller" type="Node" parent="." index="1"]
+
+script = ExtResource( 3 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="2"]
+
+environment = ExtResource( 4 )
 _sections_unfolded = [ "Pause" ]
 
-[node name="DirectionalLight" type="DirectionalLight" parent="." index="1"]
+[node name="DirectionalLight" type="DirectionalLight" parent="." index="3"]
 
 transform = Transform( -0.458478, -0.669656, 0.584258, 0, 0.657426, 0.753519, -0.888706, 0.345472, -0.301416, 0, 7.74309, 0 )
 layers = 1
@@ -102,36 +133,17 @@ directional_shadow_depth_range = 0
 directional_shadow_max_distance = 200.0
 _sections_unfolded = [ "Light", "Shadow" ]
 
-[node name="Camera" type="Camera" parent="." index="2"]
-
-transform = Transform( 1, 0, 0, 0, 0.736169, 0.676797, 0, -0.676797, 0.736169, 0, 3, 3.18431 )
-keep_aspect = 1
-cull_mask = 1048575
-environment = null
-h_offset = 0.0
-v_offset = 0.0
-doppler_tracking = 0
-projection = 0
-current = false
-fov = 70.0
-size = 1.0
-near = 0.05
-far = 100.0
-script = ExtResource( 3 )
-_sections_unfolded = [ "Transform" ]
-target_position = Vector3( 0, 0, 0 )
-camera_offset = Vector3( 0, 3, 7 )
-camera_height = 5.0
-camera_vspeed = 1.0
-camera_hspeed = 1.0
-camera_y_angle = 0.0
-
-[node name="Terrain" parent="." index="3" instance=ExtResource( 4 )]
+[node name="Terrain" parent="." index="4" instance=ExtResource( 5 )]
 
 cols = 100
 rows = 100
 
-[node name="Hover" type="Spatial" parent="." index="4"]
+[node name="Hover" type="Spatial" parent="." index="5"]
+
+script = ExtResource( 6 )
+_sections_unfolded = [ "Transform", "Visibility" ]
+light_height = 3.0
+material = SubResource( 1 )
 
 [node name="SpotLight" type="SpotLight" parent="Hover" index="0"]
 
@@ -155,26 +167,5 @@ spot_attenuation = 1.0
 spot_angle = 45.0
 spot_angle_attenuation = 1.0
 _sections_unfolded = [ "Light", "Transform" ]
-
-[node name="MeshInstance" type="MeshInstance" parent="Hover" index="1"]
-
-transform = Transform( -1.62921e-07, 0, 1, 0, 1, 0, -1, 0, -1.62921e-07, 0, 0, 0 )
-layers = 1
-material_override = null
-cast_shadow = 0
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-mesh = ExtResource( 5 )
-skeleton = NodePath("..")
-material/0 = SubResource( 2 )
-_sections_unfolded = [ "Geometry", "Transform", "material" ]
-
-[node name="Controller" type="Node" parent="." index="5"]
-
-script = ExtResource( 6 )
 
 

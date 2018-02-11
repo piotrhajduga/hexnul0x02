@@ -61,4 +61,5 @@ func get_cell_type(height):
 func create_unit(pos):
 	var unit = Unit.instance()
 	unit.translation = pos
+	unit.translation.y = get_terrain_mesh_height(pos)
 	self.add_child(unit)

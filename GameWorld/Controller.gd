@@ -21,7 +21,7 @@ func handle_mouse_button(event):
 			hover.hide()
 		BUTTON_RIGHT:
 			if hover.is_visible():
-				create_unit(hover.translation)
+				game_world.create_unit(hover.translation)
 	
 func handle_mouse_motion(event):
 	if event.button_mask & BUTTON_MASK_LEFT:
@@ -34,22 +34,21 @@ func handle_mouse_motion(event):
 			camera.move_camera(camera.CAM_TURN_LEFT)
 		else:
 			camera.move_camera(camera.CAM_TURN_RIGHT)
-	elif event.button_mask == 0:
+	elif event.button_mask & (~BUTTON_MASK_LEFT) == 0:
 		mouse_pos = event.position
-		set_physics_process(true)
+		select_cell()
 
-func _physics_process(delta):
-	set_physics_process(false)
+func select_cell():
 	var ray_length = 100
 	var from = camera.project_ray_origin(mouse_pos)
 	var to = from + camera.project_ray_normal(mouse_pos) * ray_length
 	var space_state = game_world.get_world().get_direct_space_state()
 
 	var result = space_state.intersect_ray(from, to)
-	if result.has("position") and (result["position"]-camera.target_position).length() < 10 + 8 * log(camera.camera_height):
+	if result.has("position"):
 		var pos2d = globals.get_game_coords(result["position"])
 		hover.translation = globals.get_world_coords(pos2d.x, pos2d.y)
-		hover.translation.y = game_world.get_terrain_mesh_height(hover.translation)
+		hover.update_shape()
 		hover.show()
 	else:
 		hover.hide()

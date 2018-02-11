@@ -23,8 +23,8 @@ func get_material(cell_type):
 		game_world.SAND: return sand
 		_: return water
 
-func create_cell(coords):
-	var cell = Cell.new(coords, game_world)
+func create_cell(pos, cell_type):
+	var cell = Cell.new(game_world, get_material(cell_type))
 	cell.scale = Vector3(1.005,1.0,1.005)
 	return cell
 	
@@ -40,12 +40,12 @@ func _ready():
 		for y in range((-rows/2)-1,rows/2+1):
 			if x >= -cols/2 && y >= -rows/2:
 				var world_coords = globals.get_world_coords(x,y)
-				var cell = create_cell(world_coords)
 				var height = game_world.get_height(world_coords)
 				var cell_type = game_world.get_cell_type(height)
+				var cell = create_cell(world_coords, cell_type)
 				add_child(cell)
 				cell.global_translate(world_coords)
-				cell.set_surface_material(0, get_material(cell_type))
+				cell.update_shape()
 		
 			points.append(get_world_point(x,y))
 			points.append(get_world_point(x,y+1))
