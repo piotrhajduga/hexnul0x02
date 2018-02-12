@@ -7,6 +7,7 @@ export(int) var rows = 40
 
 onready var globals = get_node("/root/GameWorldGlobals")
 onready var game_world = get_parent()
+onready var world_data = game_world.get_node("WorldData")
 onready var collision = get_node("Area/CollisionShape")
 
 export(Material) var water = preload("Water.tres.material")
@@ -17,20 +18,20 @@ export(Material) var snow = preload("Snow.tres.material")
 
 func get_material(cell_type):
 	match cell_type:
-		game_world.SNOW: return snow
-		game_world.STONE: return stone
-		game_world.GRASS: return grass
-		game_world.SAND: return sand
+		world_data.SNOW: return snow
+		world_data.STONE: return stone
+		world_data.GRASS: return grass
+		world_data.SAND: return sand
 		_: return water
 
 func create_cell(pos, cell_type):
-	var cell = Cell.new(game_world, get_material(cell_type))
+	var cell = Cell.new(world_data, get_material(cell_type))
 	cell.scale = Vector3(1.005,1.0,1.005)
 	return cell
 	
 func get_world_point(x,y):
 	var pt = globals.get_world_coords(x,y)
-	pt.y = game_world.get_terrain_mesh_height(pt)
+	pt.y = world_data.get_terrain_mesh_height(pt)
 	return pt
 
 func _ready():
@@ -40,8 +41,8 @@ func _ready():
 		for y in range((-rows/2)-1,rows/2+1):
 			if x >= -cols/2 && y >= -rows/2:
 				var world_coords = globals.get_world_coords(x,y)
-				var height = game_world.get_height(world_coords)
-				var cell_type = game_world.get_cell_type(height)
+				var height = world_data.get_height(world_coords)
+				var cell_type = world_data.get_cell_type(height)
 				var cell = create_cell(world_coords, cell_type)
 				add_child(cell)
 				cell.global_translate(world_coords)

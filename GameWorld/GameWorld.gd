@@ -1,65 +1,74 @@
-extends Node
-
-var SoftNoise = preload("res://GameWorld/softnoise.gd")
+extends Spatial
 
 var Unit = preload("res://GameWorld/Unit/Unit.tscn")
 
-const TERRAIN_HEIGHT_SCALE = 15.0
+onready var globals = get_node("/root/GameWorldGlobals")
+onready var world_data = get_node("WorldData")
+onready var camera = get_node("Camera")
+onready var terrain = get_node("Terrain")
+onready var hover = get_node("Hover")
 
-var noises_weight_sum = 0.0
-export var noises_scales = [0.006,0.023,0.164,0.41,0.26,0.53]
-var noises_modifiers = []
-var noise = null
+var mouse_pos = Vector2()
 
-export(String) var game_seed = ""
+enum mode {MODE_SELECT,MODE_WAGON,MODE_MOVE}
 
-export(float,0,1) var water_height = 0.42
-export(float,0,1) var sand_height = 0.421
-export(float,0,1) var grass_height = 0.45
-export(float,0,1) var stone_height = 0.61
-export(float,0,1) var snow_height = 0.68
+func _ready():
+	camera.target_position = terrain.translation
+	hover.hide()
 
-enum cell_type {WATER, SAND, GRASS, STONE, SNOW}
+func _input(event):
+	match event.get_class():
+		"InputEventMouseButton": handle_mouse_button(event)
+		"InputEventMouseMotion": handle_mouse_motion(event)
 
-func _init():
-	if game_seed == "": 
-		randomize()
-	else:
-		seed(game_seed)
-	noise = SoftNoise.new(randi())
-	for i in range(noises_scales.size()):
-		noises_modifiers.insert(i, Vector2(randf(),randf()))
-
-func get_height(pos):
-	var sum = 0.0
-	var sum_weight = 1.0
-	var weight = 1.0
-	for i in range(noises_scales.size()):
-		var scale = noises_scales[i]
-		var probe = (Vector2(pos.x,pos.z) + noises_modifiers[i]) * noises_scales[i]
-		var val = (noise.openSimplex2D(probe.x, probe.y) + 1.0) * 0.5
-		val *= weight
-		sum += val
-		weight = val
-		sum_weight += weight
-	return sum / sum_weight
-
-func get_terrain_mesh_height(pos):
-	var height = get_height(pos)
-	if height < water_height: height = water_height
-	height -= water_height
-	height /= 1.0 - water_height
-	return height * height * TERRAIN_HEIGHT_SCALE
+func handle_mouse_button(event):
+	match event.button_index:
+		BUTTON_WHEEL_UP:
+			camera.move_camera(camera.CAM_LO)
+			hover.hide()
+		BUTTON_WHEEL_DOWN:
+			camera.move_camera(camera.CAM_HI)
+			hover.hide()
+		BUTTON_RIGHT:
+			if hover.is_visible():
+				create_unit(hover.translation)
 	
-func get_cell_type(height):
-	if height>=snow_height: return SNOW
-	elif height>=stone_height: return STONE
-	elif height>=grass_height: return GRASS
-	elif height>=sand_height: return SAND
-	else: return WATER
+func handle_mouse_motion(event):
+	if event.button_mask & BUTTON_MASK_LEFT:
+		var relative = event.relative
+		camera.move(relative)
+		hover.hide()
+	if event.button_mask & BUTTON_MASK_MIDDLE:
+		hover.hide()
+		if event.relative.x > 0:
+			camera.move_camera(camera.CAM_TURN_LEFT)
+		else:
+			camera.move_camera(camera.CAM_TURN_RIGHT)
+	elif event.button_mask & (~BUTTON_MASK_LEFT) == 0:
+		mouse_pos = get_viewport().get_mouse_position()
+		select_cell()
+
+func select_cell():
+	var ray_length = 100
+	var from = camera.project_ray_origin(mouse_pos)
+	var to = from + camera.project_ray_normal(mouse_pos) * ray_length
+	var space_state = get_world().get_direct_space_state()
+
+	var result = space_state.intersect_ray(from, to)
+	if result.has("position"):
+		var pos2d = globals.get_game_coords(result["position"])
+		hover.translation = globals.get_world_coords(pos2d.x, pos2d.y)
+		hover.update_shape()
+		hover.show()
+	else:
+		hover.hide()
 
 func create_unit(pos):
 	var unit = Unit.instance()
 	unit.translation = pos
 	unit.translation.y = get_terrain_mesh_height(pos)
-	self.add_child(unit)
+	add_child(unit)
+
+func _on_Select_pressed():
+	print("_on_Select_pressed")
+	pass # replace with function body

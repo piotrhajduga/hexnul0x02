@@ -1,7 +1,7 @@
 extends Camera
 
 onready var globals = get_node("/root/GameWorldGlobals")
-onready var game_world = get_parent()
+onready var world_data = get_parent().get_node("WorldData")
 
 const up = Vector3(0.0,1.0,0.0)
 
@@ -35,7 +35,7 @@ func set_height(new_height):
 func move(relative2d):
 	var relative3d = Vector3(relative2d.x,0.0,relative2d.y).rotated(up,camera_y_angle)
 	target_position -= relative3d * camera_vspeed
-	min_camera_height = game_world.get_terrain_mesh_height(target_position)
+	min_camera_height = world_data.get_terrain_mesh_height(target_position)
 	if camera_height < min_camera_height:
 		set_height(min_camera_height)
 	look_at_target()

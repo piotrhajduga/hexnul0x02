@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://GameWorld/GameWorld.gd" type="Script" id=1]
-[ext_resource path="res://Camera.gd" type="Script" id=2]
-[ext_resource path="res://GameWorld/Controller.gd" type="Script" id=3]
+[ext_resource path="res://GameWorld/WorldData.gd" type="Script" id=2]
+[ext_resource path="res://Camera.gd" type="Script" id=3]
 [ext_resource path="res://GameWorld/GameWorld.tres" type="Environment" id=4]
 [ext_resource path="res://GameWorld/Terrain/Terrain.tscn" type="PackedScene" id=5]
 [ext_resource path="res://GameWorld/Hover.gd" type="Script" id=6]
@@ -64,15 +64,19 @@ _sections_unfolded = [ "Albedo", "Metallic" ]
 [node name="GameWorld" type="Spatial"]
 
 script = ExtResource( 1 )
+
+[node name="WorldData" type="Node" parent="." index="0"]
+
+script = ExtResource( 2 )
 noises_scales = [ 0.006, 0.023, 0.164, 0.41, 0.26, 0.53 ]
-game_seed = "czekolada"
-water_height = 0.4
-sand_height = 0.41
+game_seed = ""
+water_height = 0.42
+sand_height = 0.421
 grass_height = 0.45
 stone_height = 0.61
-snow_height = 0.67
+snow_height = 0.68
 
-[node name="Camera" type="Camera" parent="." index="0"]
+[node name="Camera" type="Camera" parent="." index="1"]
 
 transform = Transform( 1, 0, 0, 0, 0.736169, 0.676797, 0, -0.676797, 0.736169, 0, 3, 3.18431 )
 keep_aspect = 1
@@ -87,7 +91,7 @@ fov = 75.0
 size = 1.0
 near = 0.05
 far = 100.0
-script = ExtResource( 2 )
+script = ExtResource( 3 )
 _sections_unfolded = [ "Transform" ]
 target_position = Vector3( 0, 0, 0 )
 camera_offset = Vector3( 0, 5, 10 )
@@ -95,10 +99,6 @@ camera_height = 5.0
 camera_vspeed = 1.0
 camera_hspeed = 1.0
 camera_y_angle = 0.0
-
-[node name="Controller" type="Node" parent="." index="1"]
-
-script = ExtResource( 3 )
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="2"]
 
