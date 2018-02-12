@@ -1,6 +1,8 @@
 extends Spatial
 
-var Unit = preload("res://GameWorld/Unit/Unit.tscn")
+signal wagon(game_pos)
+signal select(game_pos)
+signal move(game_pos)
 
 onready var globals = get_node("/root/GameWorldGlobals")
 onready var world_data = get_node("WorldData")
@@ -9,8 +11,10 @@ onready var terrain = get_node("Terrain")
 onready var hover = get_node("Hover")
 
 var mouse_pos = Vector2()
+var selected = Vector2()
 
-enum mode {MODE_SELECT,MODE_WAGON,MODE_MOVE}
+enum {MODE_IDLE,MODE_SELECT,MODE_WAGON,MODE_MOVE}
+var mode = MODE_IDLE
 
 func _ready():
 	camera.target_position = terrain.translation
@@ -29,46 +33,70 @@ func handle_mouse_button(event):
 		BUTTON_WHEEL_DOWN:
 			camera.move_camera(camera.CAM_HI)
 			hover.hide()
-		BUTTON_RIGHT:
-			if hover.is_visible():
-				create_unit(hover.translation)
+		BUTTON_LEFT:
+			use_tool()
+	
+func use_tool():
+	match mode:
+		MODE_WAGON: emit_signal("wagon", selected)
+		MODE_SELECT: emit_signal("select", selected)
+		MODE_MOVE: emit_signal("move", selected)
+	mode = MODE_IDLE
+	hover.hide()
 	
 func handle_mouse_motion(event):
-	if event.button_mask & BUTTON_MASK_LEFT:
+	if event.button_mask & BUTTON_MASK_RIGHT:
 		var relative = event.relative
 		camera.move(relative)
 		hover.hide()
-	if event.button_mask & BUTTON_MASK_MIDDLE:
+	elif event.button_mask & BUTTON_MASK_MIDDLE:
 		hover.hide()
 		if event.relative.x > 0:
 			camera.move_camera(camera.CAM_TURN_LEFT)
 		else:
 			camera.move_camera(camera.CAM_TURN_RIGHT)
-	elif event.button_mask & (~BUTTON_MASK_LEFT) == 0:
+	elif mode != MODE_IDLE:
 		mouse_pos = get_viewport().get_mouse_position()
-		select_cell()
+		selected = select_cell()
 
 func select_cell():
 	var ray_length = 100
 	var from = camera.project_ray_origin(mouse_pos)
 	var to = from + camera.project_ray_normal(mouse_pos) * ray_length
 	var space_state = get_world().get_direct_space_state()
+	var pos2d = null
 
 	var result = space_state.intersect_ray(from, to)
 	if result.has("position"):
-		var pos2d = globals.get_game_coords(result["position"])
+		pos2d = globals.get_game_coords(result["position"])
 		hover.translation = globals.get_world_coords(pos2d.x, pos2d.y)
 		hover.update_shape()
 		hover.show()
 	else:
 		hover.hide()
-
-func create_unit(pos):
-	var unit = Unit.instance()
-	unit.translation = pos
-	unit.translation.y = get_terrain_mesh_height(pos)
-	add_child(unit)
+	return pos2d
 
 func _on_Select_pressed():
-	print("_on_Select_pressed")
-	pass # replace with function body
+	mode = MODE_SELECT
+	
+func _on_Wagon_pressed():
+	mode = MODE_WAGON
+
+func _on_Move_pressed():
+	mode = MODE_MOVE
+
+func _on_GameData_actor_placed(actor, pos):
+	_on_GameData_actor_moved(actor, pos)
+	add_child(actor)
+
+func _on_GameData_actor_moved( actor, pos ):
+	actor.translation = globals.get_world_coords(pos.x, pos.y)
+	actor.translation.y = world_data.get_terrain_mesh_height(actor.translation)
+
+func _on_GameData_selected( pos ):
+	$Selection.translation = globals.get_world_coords(pos.x, pos.y)
+	$Selection.update_shape()
+	$Selection.show()
+
+func _on_GameData_deselected():
+	$Selection.hide()

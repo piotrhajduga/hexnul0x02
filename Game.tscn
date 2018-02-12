@@ -1,37 +1,36 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://Viewport.gd" type="Script" id=1]
-[ext_resource path="res://GameWorld/GameWorld.tscn" type="PackedScene" id=2]
+[ext_resource path="res://GameData.gd" type="Script" id=1]
+[ext_resource path="res://Viewport.gd" type="Script" id=2]
+[ext_resource path="res://GameWorld/GameWorld.gd" type="Script" id=3]
+[ext_resource path="res://WorldData.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Camera.gd" type="Script" id=5]
+[ext_resource path="res://GameWorld/GameWorld.tres" type="Environment" id=6]
+[ext_resource path="res://GameWorld/Terrain/Terrain.tscn" type="PackedScene" id=7]
+[ext_resource path="res://GameWorld/Selection.tscn" type="PackedScene" id=8]
+[ext_resource path="res://GameWorld/Hover.material" type="Material" id=9]
 
-[node name="Game" type="Container" index="0"]
+[node name="Game" type="Node" index="0"]
+
+[node name="GameData" type="Node" parent="." index="0"]
+
+script = ExtResource( 1 )
+
+[node name="GridContainer" type="GridContainer" parent="." index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 1279.0
-margin_bottom = 800.0
-rect_pivot_offset = Vector2( 0, 0 )
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="GridContainer" type="GridContainer" parent="." index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 1279.0
-margin_bottom = 800.0
+margin_right = 1280.0
+margin_bottom = 824.0
 rect_pivot_offset = Vector2( 0, 0 )
 mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 1
-_sections_unfolded = [ "Size Flags", "Theme" ]
+_sections_unfolded = [ "Mouse", "Theme" ]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GridContainer" index="0"]
 
@@ -47,6 +46,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 alignment = 0
+_sections_unfolded = [ "Mouse" ]
 
 [node name="Select" type="Button" parent="GridContainer/HBoxContainer" index="0"]
 
@@ -126,22 +126,23 @@ margin_top = 24.0
 margin_right = 1280.0
 margin_bottom = 824.0
 rect_pivot_offset = Vector2( 0, 0 )
-mouse_filter = 0
+mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 stretch = false
-stretch_shrink = 2
+stretch_shrink = 1
+_sections_unfolded = [ "Mouse" ]
 
 [node name="Viewport" type="Viewport" parent="GridContainer/ViewportContainer" index="0"]
 
 arvr = false
-size = Vector2( 1280, 800 )
+size = Vector2( 1280, 776 )
 own_world = true
 world = null
 transparent_bg = false
-msaa = 0
-hdr = true
+msaa = 1
+hdr = false
 disable_3d = false
 usage = 2
 debug_draw = 0
@@ -158,12 +159,107 @@ shadow_atlas_quad_0 = 2
 shadow_atlas_quad_1 = 2
 shadow_atlas_quad_2 = 3
 shadow_atlas_quad_3 = 4
-script = ExtResource( 1 )
+script = ExtResource( 2 )
 
-[node name="GameWorld" parent="GridContainer/ViewportContainer/Viewport" index="0" instance=ExtResource( 2 )]
+[node name="GameWorld" type="Spatial" parent="GridContainer/ViewportContainer/Viewport" index="0"]
 
+script = ExtResource( 3 )
 _sections_unfolded = [ "Transform" ]
 
+[node name="WorldData" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="0" instance=ExtResource( 4 )]
+
+[node name="Camera" type="Camera" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="1"]
+
+transform = Transform( 1, 0, 0, 0, 0.736169, 0.676797, 0, -0.676797, 0.736169, 0, 3, 3.18431 )
+keep_aspect = 1
+cull_mask = 1048575
+environment = null
+h_offset = 0.0
+v_offset = 0.0
+doppler_tracking = 0
+projection = 0
+current = true
+fov = 75.0
+size = 1.0
+near = 0.05
+far = 100.0
+script = ExtResource( 5 )
+_sections_unfolded = [ "Transform" ]
+target_position = Vector3( 0, 0, 0 )
+camera_offset = Vector3( 0, 5, 10 )
+camera_height = 5.0
+camera_vspeed = 1.0
+camera_hspeed = 1.0
+camera_y_angle = 0.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="2"]
+
+environment = ExtResource( 6 )
+_sections_unfolded = [ "Pause" ]
+
+[node name="DirectionalLight" type="DirectionalLight" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="3"]
+
+transform = Transform( -0.458478, -0.669656, 0.584258, 0, 0.657426, 0.753519, -0.888706, 0.345472, -0.301416, 0, 7.74309, 0 )
+layers = 1
+light_color = Color( 1, 1, 1, 1 )
+light_energy = 1.0
+light_indirect_energy = 1.0
+light_negative = false
+light_specular = 0.5
+light_bake_mode = 2
+light_cull_mask = -1
+shadow_enabled = true
+shadow_color = Color( 0, 0, 0, 1 )
+shadow_bias = 0.1
+shadow_contact = 0.0
+shadow_reverse_cull_face = false
+editor_only = false
+directional_shadow_mode = 2
+directional_shadow_split_1 = 0.1
+directional_shadow_split_2 = 0.2
+directional_shadow_split_3 = 0.5
+directional_shadow_blend_splits = false
+directional_shadow_normal_bias = 0.8
+directional_shadow_bias_split_scale = 0.25
+directional_shadow_depth_range = 0
+directional_shadow_max_distance = 200.0
+_sections_unfolded = [ "Light" ]
+
+[node name="Terrain" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="4" instance=ExtResource( 7 )]
+
+cols = 100
+rows = 100
+
+[node name="Hover" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="5" instance=ExtResource( 8 )]
+
+light_color = Color( 0.139526, 0.992188, 0.952219, 1 )
+material = ExtResource( 9 )
+
+[node name="Selection" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="6" instance=ExtResource( 8 )]
+
+light_height = 5.0
+light_color = Color( 0.682353, 0.517647, 0.14902, 1 )
+
+[connection signal="actor_moved" from="GameData" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_GameData_actor_moved"]
+
+[connection signal="actor_placed" from="GameData" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_GameData_actor_placed"]
+
+[connection signal="deselected" from="GameData" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_GameData_deselected"]
+
+[connection signal="selected" from="GameData" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_GameData_selected"]
+
 [connection signal="pressed" from="GridContainer/HBoxContainer/Select" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_Select_pressed"]
+
+[connection signal="pressed" from="GridContainer/HBoxContainer/Wagon" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_Wagon_pressed"]
+
+[connection signal="pressed" from="GridContainer/HBoxContainer/Move" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_Move_pressed"]
+
+[connection signal="mouse_entered" from="GridContainer/ViewportContainer" to="GridContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_entered"]
+
+[connection signal="mouse_exited" from="GridContainer/ViewportContainer" to="GridContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_exited"]
+
+[connection signal="select" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameData" method="_on_GameWorld_select"]
+
+[connection signal="wagon" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameData" method="_on_GameWorld_wagon"]
 
 
