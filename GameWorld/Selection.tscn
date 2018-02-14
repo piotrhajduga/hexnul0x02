@@ -5,12 +5,11 @@
 
 [node name="Selection" type="Spatial"]
 
-visible = false
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform", "Visibility" ]
 light_height = 3.0
+light_color = null
 material = ExtResource( 2 )
-offset = Vector3( 0, 0.01, 0 )
 
 [node name="SpotLight" type="SpotLight" parent="." index="0"]
 

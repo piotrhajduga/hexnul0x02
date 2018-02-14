@@ -16,10 +16,10 @@ export(String) var game_seed = ""
 export(float,0,1) var water_height = 0.42
 export(float,0,1) var sand_height = 0.421
 export(float,0,1) var grass_height = 0.45
-export(float,0,1) var stone_height = 0.61
-export(float,0,1) var snow_height = 0.68
+export(float,0,1) var gravel_height = 0.61
+export(float,0,1) var snow_height = 0.67
 
-enum cell_type {WATER, SAND, GRASS, STONE, SNOW}
+enum cell_type {WATER, SAND, GRASS, STONE, GRAVEL, SNOW}
 
 func _init():
 	if game_seed == "": 
@@ -44,16 +44,29 @@ func get_height(pos):
 		sum_weight += weight
 	return sum / sum_weight
 
+func get_normal(pos):
+	var d2d = 0.01
+	var p0 = pos + Vector3(d2d,0.0,-d2d)
+	p0.y = get_terrain_mesh_height(p0)
+	var p1 = pos + Vector3(-d2d,0.0,0.0)
+	p1.y = get_terrain_mesh_height(p1)
+	var p2 = pos + Vector3(0.0,0.0,d2d)
+	p2.y = get_terrain_mesh_height(p2)
+	return (p1-p0).cross(p2-p0).normalized()
+
 func get_terrain_mesh_height(pos):
 	var height = get_height(pos)
 	if height < water_height: height = water_height
 	height -= water_height
 	height /= 1.0 - water_height
 	return height * height * TERRAIN_HEIGHT_SCALE
-	
-func get_cell_type(height):
+
+func get_cell_type(pos):
+	var height = get_height(pos)
 	if height>=snow_height: return SNOW
-	elif height>=stone_height: return STONE
+	if acos(Vector3(0.0,1.0,0.0).dot(get_normal(pos))) > PI/10:
+		return STONE
+	elif height>=gravel_height: return GRAVEL
 	elif height>=grass_height: return GRASS
 	elif height>=sand_height: return SAND
 	else: return WATER

@@ -44,6 +44,6 @@ func move_camera(dir):
 	match dir:
 		CAM_HI: set_height(camera_height + camera_hspeed)
 		CAM_LO: set_height(camera_height - camera_hspeed)
-		CAM_TURN_LEFT: camera_y_angle -= PI/60.0
-		CAM_TURN_RIGHT: camera_y_angle += PI/60.0
+		CAM_TURN_LEFT: camera_y_angle -= PI/30.0
+		CAM_TURN_RIGHT: camera_y_angle += PI/30.0
 	look_at_target()

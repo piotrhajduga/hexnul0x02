@@ -8,7 +8,6 @@ onready var globals = get_node("/root/GameWorldGlobals")
 onready var world_data = get_node("WorldData")
 onready var camera = get_node("Camera")
 onready var terrain = get_node("Terrain")
-onready var hover = get_node("Hover")
 
 var mouse_pos = Vector2()
 var selected = Vector2()
@@ -18,7 +17,7 @@ var mode = MODE_IDLE
 
 func _ready():
 	camera.target_position = terrain.translation
-	hover.hide()
+	$Hover.hide()
 
 func _input(event):
 	match event.get_class():
@@ -29,12 +28,12 @@ func handle_mouse_button(event):
 	match event.button_index:
 		BUTTON_WHEEL_UP:
 			camera.move_camera(camera.CAM_LO)
-			hover.hide()
+			$Hover.hide()
 		BUTTON_WHEEL_DOWN:
 			camera.move_camera(camera.CAM_HI)
-			hover.hide()
+			$Hover.hide()
 		BUTTON_LEFT:
-			use_tool()
+			if !event.is_pressed(): use_tool()
 	
 func use_tool():
 	match mode:
@@ -42,15 +41,15 @@ func use_tool():
 		MODE_SELECT: emit_signal("select", selected)
 		MODE_MOVE: emit_signal("move", selected)
 	mode = MODE_IDLE
-	hover.hide()
+	$Hover.hide()
 	
 func handle_mouse_motion(event):
 	if event.button_mask & BUTTON_MASK_RIGHT:
 		var relative = event.relative
 		camera.move(relative)
-		hover.hide()
+		$Hover.hide()
 	elif event.button_mask & BUTTON_MASK_MIDDLE:
-		hover.hide()
+		$Hover.hide()
 		if event.relative.x > 0:
 			camera.move_camera(camera.CAM_TURN_LEFT)
 		else:
@@ -69,11 +68,11 @@ func select_cell():
 	var result = space_state.intersect_ray(from, to)
 	if result.has("position"):
 		pos2d = globals.get_game_coords(result["position"])
-		hover.translation = globals.get_world_coords(pos2d.x, pos2d.y)
-		hover.update_shape()
-		hover.show()
+		$Hover.translation = globals.get_world_coords(pos2d.x, pos2d.y)
+		$Hover.update_shape()
+		$Hover.show()
 	else:
-		hover.hide()
+		$Hover.hide()
 	return pos2d
 
 func _on_Select_pressed():

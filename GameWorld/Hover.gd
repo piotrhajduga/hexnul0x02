@@ -8,13 +8,11 @@ onready var light = get_node("SpotLight")
 export(float,1.0,10.0) var light_height = 3.0
 export(Color) var light_color = null
 export(Material) var material = null
-export(Vector3) var offset = Vector3()
 
 var cell = null
 
 func _ready():
 	cell = Cell.new(world_data, material)
-	cell.translation = offset
 	add_child(cell)
 	light.translation.y = light_height + world_data.get_terrain_mesh_height(self.translation)
 	if light_color:

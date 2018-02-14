@@ -18,25 +18,23 @@ var outlineUVs = [
 onready var globals = get_node("/root/GameWorldGlobals")
 
 var water_level = 0.0
-var game_world = null
+var world_data = null
 var material = null
 
-func _init(game_world, material):
-	self.game_world = game_world
+func _init(world_data, material):
+	self.world_data = world_data
 	self.material = material
 
 func add_vertex(surfTool, uv, pos):
-	var height = game_world.get_terrain_mesh_height(to_global(pos))
-	var offset = Vector3(0.0, height, 0.0)
+	var height = world_data.get_terrain_mesh_height(to_global(pos))
 	surfTool.add_uv(uv)
-	surfTool.add_vertex(pos+offset)
+	surfTool.add_vertex(pos + Vector3(0.0, height, 0.0))
 
 func _ready():
 	update_shape()
 
 func update_shape():
 	var new_mesh = Mesh.new()
-
 	var surfTool = SurfaceTool.new()
 	surfTool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	surfTool.add_smooth_group(true)

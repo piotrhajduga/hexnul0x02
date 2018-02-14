@@ -1,11 +1,13 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://GameWorld/Terrain/Terrain.gd" type="Script" id=1]
 [ext_resource path="res://GameWorld/Terrain/Water.tres.material" type="Material" id=2]
 [ext_resource path="res://GameWorld/Terrain/Sand.tres.material" type="Material" id=3]
 [ext_resource path="res://GameWorld/Terrain/Grass.tres.material" type="Material" id=4]
-[ext_resource path="res://GameWorld/Terrain/Stone.tres.material" type="Material" id=5]
-[ext_resource path="res://GameWorld/Terrain/Snow.tres.material" type="Material" id=6]
+[ext_resource path="res://GameWorld/Terrain/Gravel.tres" type="Material" id=5]
+[ext_resource path="res://GameWorld/Terrain/Stone.tres.material" type="Material" id=6]
+[ext_resource path="res://GameWorld/Terrain/Snow.tres.material" type="Material" id=7]
+[ext_resource path="res://GameWorld/Terrain/Area.gd" type="Script" id=8]
 
 [sub_resource type="ConcavePolygonShape" id=1]
 
@@ -20,8 +22,9 @@ rows = 40
 water = ExtResource( 2 )
 sand = ExtResource( 3 )
 grass = ExtResource( 4 )
-stone = ExtResource( 5 )
-snow = ExtResource( 6 )
+gravel = ExtResource( 5 )
+stone = ExtResource( 6 )
+snow = ExtResource( 7 )
 
 [node name="Area" type="Area" parent="." index="0"]
 
@@ -45,6 +48,7 @@ reverb_bus_enable = false
 reverb_bus_name = "Master"
 reverb_bus_amount = 0.0
 reverb_bus_uniformity = 0.0
+script = ExtResource( 8 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Area" index="0"]
 
