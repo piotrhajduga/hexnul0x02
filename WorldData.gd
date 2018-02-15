@@ -64,7 +64,7 @@ func get_terrain_mesh_height(pos):
 func get_cell_type(pos):
 	var height = get_height(pos)
 	if height>=snow_height: return SNOW
-	if acos(Vector3(0.0,1.0,0.0).dot(get_normal(pos))) > PI/10:
+	if acos(Vector3(0.0,1.0,0.0).dot(get_normal(pos))) > PI/8:
 		return STONE
 	elif height>=gravel_height: return GRAVEL
 	elif height>=grass_height: return GRASS

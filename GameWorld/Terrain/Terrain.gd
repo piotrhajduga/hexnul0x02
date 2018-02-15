@@ -36,7 +36,7 @@ func _ready():
 			var world_coords = globals.get_world_coords(x,y)
 			var cell_type = world_data.get_cell_type(world_coords)
 			var cell = Cell.new(world_data, get_material(cell_type))
-			cell.scale = Vector3(1.005,1.0,1.005)
+			cell.scale = Vector3(1.002,1.0,1.002)
 			add_child(cell)
 			cell.global_translate(world_coords)
 			cell.update_shape()

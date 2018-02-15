@@ -13,6 +13,7 @@ var cell = null
 
 func _ready():
 	cell = Cell.new(world_data, material)
+	cell.translation.y = 0.01
 	add_child(cell)
 	light.translation.y = light_height + world_data.get_terrain_mesh_height(self.translation)
 	if light_color:
