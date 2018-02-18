@@ -13,11 +13,11 @@ var noise = null
 
 export(String) var game_seed = ""
 
-export(float,0,1) var water_height = 0.42
-export(float,0,1) var sand_height = 0.421
+export(float,0,1) var water_height = 0.41
+export(float,0,1) var sand_height = 0.41
 export(float,0,1) var grass_height = 0.45
-export(float,0,1) var gravel_height = 0.61
-export(float,0,1) var snow_height = 0.67
+export(float,0,1) var gravel_height = 0.62
+export(float,0,1) var snow_height = 0.68
 
 enum cell_type {WATER, SAND, GRASS, STONE, GRAVEL, SNOW}
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://GameData.gd" type="Script" id=1]
 [ext_resource path="res://Viewport.gd" type="Script" id=2]
@@ -7,8 +7,9 @@
 [ext_resource path="res://Camera.gd" type="Script" id=5]
 [ext_resource path="res://GameWorld/GameWorld.tres" type="Environment" id=6]
 [ext_resource path="res://GameWorld/Terrain/Terrain.tscn" type="PackedScene" id=7]
-[ext_resource path="res://GameWorld/Selection.tscn" type="PackedScene" id=8]
-[ext_resource path="res://GameWorld/Hover.material" type="Material" id=9]
+[ext_resource path="res://GameWorld/Terrain/TerrainCell.material" type="Material" id=8]
+[ext_resource path="res://GameWorld/Selection.tscn" type="PackedScene" id=9]
+[ext_resource path="res://GameWorld/Hover.material" type="Material" id=10]
 
 [node name="Game" type="Node" index="0"]
 
@@ -236,14 +237,15 @@ _sections_unfolded = [ "Light" ]
 
 cols = 100
 rows = 100
+cell_material = ExtResource( 8 )
 
-[node name="Hover" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="5" instance=ExtResource( 8 )]
+[node name="Hover" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="5" instance=ExtResource( 9 )]
 
 visible = false
 light_color = Color( 0.139526, 0.992188, 0.952219, 1 )
-material = ExtResource( 9 )
+material = ExtResource( 10 )
 
-[node name="Selection" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="6" instance=ExtResource( 8 )]
+[node name="Selection" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="6" instance=ExtResource( 9 )]
 
 visible = false
 light_height = 5.0
