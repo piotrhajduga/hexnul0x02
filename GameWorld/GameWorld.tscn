@@ -43,6 +43,7 @@ offset = Vector3( 0, 0, 0 )
 
 [node name="WorldData" parent="." index="0" instance=ExtResource( 1 )]
 
+noises_scales = PoolRealArray( 0.006, 0.023, 0.164, 0.41, 0.26, 0.53 )
 gravel_height = 0.61
 
 [node name="Camera" type="Camera" parent="." index="1"]

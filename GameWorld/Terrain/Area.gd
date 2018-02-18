@@ -4,13 +4,12 @@ onready var terrain = get_parent()
 onready var cols = terrain.cols
 onready var rows = terrain.rows
 
-onready var globals = get_node("/root/GameWorldGlobals")
 onready var game_world = get_parent().get_parent()
 onready var world_data = game_world.get_node("WorldData")
 onready var collision = get_node("CollisionShape")
 	
 func get_world_point(x,y):
-	var pt = globals.get_world_coords(x,y)
+	var pt = world_data.get_world_pos(Vector2(x,y))
 	pt.y = world_data.get_terrain_mesh_height(pt)
 	return pt
 

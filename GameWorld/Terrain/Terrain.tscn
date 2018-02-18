@@ -4,7 +4,7 @@
 [ext_resource path="res://GameWorld/Terrain/Water.tres.material" type="Material" id=2]
 [ext_resource path="res://GameWorld/Terrain/Sand.tres.material" type="Material" id=3]
 [ext_resource path="res://GameWorld/Terrain/Grass.tres.material" type="Material" id=4]
-[ext_resource path="res://GameWorld/Terrain/Gravel.tres" type="Material" id=5]
+[ext_resource path="res://GameWorld/Terrain/Gravel.tres.material" type="Material" id=5]
 [ext_resource path="res://GameWorld/Terrain/Stone.tres.material" type="Material" id=6]
 [ext_resource path="res://GameWorld/Terrain/Snow.tres.material" type="Material" id=7]
 [ext_resource path="res://GameWorld/Terrain/Area.gd" type="Script" id=8]
@@ -13,7 +13,7 @@
 
 data = PoolVector3Array(  )
 
-[node name="Terrain" type="Spatial"]
+[node name="Terrain" type="Spatial" index="0"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]

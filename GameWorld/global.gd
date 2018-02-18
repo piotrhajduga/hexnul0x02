@@ -1,6 +1,5 @@
 extends Node
 
-const TERRAIN_HEIGHT_SCALE = 15.0
 const xStep = 1.0
 const zStep = sqrt(3.0) / 2.0
 

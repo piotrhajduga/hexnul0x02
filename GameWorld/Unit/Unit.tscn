@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://GameWorld/Unit/Unit.gd" type="Script" id=1]
-[ext_resource path="res://GameWorld/Unit/wagon.obj" type="ArrayMesh" id=2]
+[ext_resource path="res://GameWorld/Unit/wagon2.obj" type="ArrayMesh" id=2]
 
 [sub_resource type="SpatialMaterial" id=1]
 
@@ -26,11 +26,11 @@ params_point_size = 1.0
 params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
-albedo_color = Color( 0.457031, 0.111873, 0.0660553, 1 )
+albedo_color = Color( 0.792969, 0.219901, 0.176559, 1 )
 metallic = 0.0
 metallic_specular = 0.5
 metallic_texture_channel = 0
-roughness = 0.76
+roughness = 0.8
 roughness_texture_channel = 0
 emission_enabled = false
 normal_enabled = false
@@ -53,7 +53,7 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
-_sections_unfolded = [ "Albedo", "Roughness" ]
+_sections_unfolded = [ "Albedo", "Parameters" ]
 
 [sub_resource type="SpatialMaterial" id=2]
 
@@ -78,11 +78,11 @@ params_point_size = 1.0
 params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
-albedo_color = Color( 0.230469, 0.207231, 0.180054, 1 )
+albedo_color = Color( 0.183594, 0.128804, 0.092514, 1 )
 metallic = 0.0
 metallic_specular = 0.5
 metallic_texture_channel = 0
-roughness = 0.86
+roughness = 0.5
 roughness_texture_channel = 0
 emission_enabled = false
 normal_enabled = false
@@ -105,7 +105,7 @@ uv2_triplanar = false
 uv2_triplanar_sharpness = 1.0
 proximity_fade_enable = false
 distance_fade_enable = false
-_sections_unfolded = [ "Roughness" ]
+_sections_unfolded = [ "Albedo", "Roughness" ]
 
 [sub_resource type="SpatialMaterial" id=3]
 
@@ -130,11 +130,11 @@ params_point_size = 1.0
 params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
-albedo_color = Color( 0.367188, 0.328741, 0.262482, 1 )
+albedo_color = Color( 0.820312, 0.801913, 0.753021, 1 )
 metallic = 0.0
 metallic_specular = 0.5
 metallic_texture_channel = 0
-roughness = 0.8
+roughness = 0.9
 roughness_texture_channel = 0
 emission_enabled = false
 normal_enabled = false
@@ -182,11 +182,11 @@ params_point_size = 1.0
 params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
-albedo_color = Color( 0.242188, 0.196681, 0.118256, 1 )
+albedo_color = Color( 0.355469, 0.235858, 0.148575, 1 )
 metallic = 0.0
 metallic_specular = 0.5
 metallic_texture_channel = 0
-roughness = 0.76
+roughness = 0.7
 roughness_texture_channel = 0
 emission_enabled = false
 normal_enabled = false

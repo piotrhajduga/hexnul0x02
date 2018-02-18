@@ -7,8 +7,8 @@ onready var game_world = get_parent()
 const TERRAIN_HEIGHT_SCALE = 15.0
 
 var noises_weight_sum = 0.0
-export var noises_scales = [0.006,0.023,0.164,0.41,0.26,0.53]
-var noises_modifiers = []
+export var noises_scales = PoolRealArray([0.006,0.023,0.164,0.41,0.26,0.53])
+var noises_modifiers = PoolVector2Array()
 var noise = null
 
 export(String) var game_seed = ""
@@ -21,14 +21,47 @@ export(float,0,1) var snow_height = 0.67
 
 enum cell_type {WATER, SAND, GRASS, STONE, GRAVEL, SNOW}
 
+const xStep = 1.0
+const zStep = sqrt(3.0) / 2.0
+
+var astar = AStar.new()
+
 func _init():
-	if game_seed == "": 
+	if game_seed == "":
 		randomize()
 	else:
 		seed(game_seed)
 	noise = SoftNoise.new(randi())
 	for i in range(noises_scales.size()):
 		noises_modifiers.insert(i, Vector2(randf(),randf()))
+		
+func add_cell(game_pos, type):
+	var pos = get_world_pos(game_pos)
+	var id = astar.get_available_point_id()
+	astar.add_point(id, pos, get_height(pos))
+	for xi in range(-1,1):
+		for yi in range(-1,1):
+			if xi == 0 and yi == 0:
+				continue
+			var neighbor = get_world_pos(game_pos + Vector2(xi, yi))
+			if ![STONE,WATER].has(get_cell_type(neighbor)):
+				astar.connect_points(id, astar.get_closest_point(neighbor))
+
+func get_game_pos(pos):
+	var x = int(round(pos.x / (1.5 * xStep)))
+	var zpos = pos.z
+	if x % 2 != 0:
+		zpos -= zStep / 2.0
+	var y = int(round(zpos / (2.0 * zStep)))
+	return Vector2(x,y)
+	
+func get_world_pos(game_pos):
+	var pos = Vector3()
+	pos.x = floor(game_pos.x) * 1.5 * xStep
+	pos.z = floor(game_pos.y) * 2.0 * zStep
+	if int(game_pos.x) % 2 != 0:
+		pos.z += zStep
+	return pos
 
 func get_height(pos):
 	var sum = 0.0

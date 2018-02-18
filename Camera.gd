@@ -1,6 +1,5 @@
 extends Camera
 
-onready var globals = get_node("/root/GameWorldGlobals")
 onready var world_data = get_parent().get_node("WorldData")
 
 const up = Vector3(0.0,1.0,0.0)

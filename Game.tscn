@@ -141,7 +141,7 @@ size = Vector2( 1280, 776 )
 own_world = true
 world = null
 transparent_bg = false
-msaa = 1
+msaa = 0
 hdr = false
 disable_3d = false
 usage = 2
@@ -153,13 +153,14 @@ audio_listener_enable_2d = false
 audio_listener_enable_3d = false
 physics_object_picking = false
 gui_disable_input = false
-gui_snap_controls_to_pixels = true
+gui_snap_controls_to_pixels = false
 shadow_atlas_size = 0
 shadow_atlas_quad_0 = 2
 shadow_atlas_quad_1 = 2
 shadow_atlas_quad_2 = 3
 shadow_atlas_quad_3 = 4
 script = ExtResource( 2 )
+_sections_unfolded = [ "Rendering" ]
 
 [node name="GameWorld" type="Spatial" parent="GridContainer/ViewportContainer/Viewport" index="0"]
 
@@ -168,12 +169,13 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="WorldData" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="0" instance=ExtResource( 4 )]
 
-game_seed = "colorado"
+noises_scales = PoolRealArray( 0.006, 0.023, 0.164, 0.41, 0.26, 0.53 )
+game_seed = "1234"
 water_height = 0.41
 sand_height = 0.41
 gravel_height = 0.62
 
-[node name="Camera" type="Camera" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="1"]
+[node name="GameCamera" type="Camera" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="1"]
 
 transform = Transform( 1, 0, 0, 0, 0.736169, 0.676797, 0, -0.676797, 0.736169, 0, 3, 3.18431 )
 keep_aspect = 1
@@ -264,6 +266,8 @@ light_color = Color( 0.682353, 0.517647, 0.14902, 1 )
 [connection signal="mouse_entered" from="GridContainer/ViewportContainer" to="GridContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_entered"]
 
 [connection signal="mouse_exited" from="GridContainer/ViewportContainer" to="GridContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_exited"]
+
+[connection signal="move" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameData" method="_on_GameWorld_move"]
 
 [connection signal="select" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameData" method="_on_GameWorld_select"]
 

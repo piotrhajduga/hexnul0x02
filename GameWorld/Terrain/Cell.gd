@@ -15,8 +15,6 @@ var outlineUVs = [
 	Vector2(0.75,1.0),Vector2(0.25,1.0)
 ]
 
-onready var globals = get_node("/root/GameWorldGlobals")
-
 var water_level = 0.0
 var world_data = null
 var material = null
