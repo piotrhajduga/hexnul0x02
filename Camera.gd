@@ -5,12 +5,12 @@ onready var world_data = get_parent().get_node("WorldData")
 const up = Vector3(0.0,1.0,0.0)
 
 var max_camera_height = 40.0
-var min_camera_height = 0.0
+var min_camera_height = 2.0
 
 enum camera_movement {CAM_HI, CAM_LO, CAM_TURN_LEFT, CAM_TURN_RIGHT}
 
 export(Vector3) var target_position = Vector3()
-export(Vector3) var camera_offset = Vector3(0.0,5.0,10.0)
+export(Vector3) var camera_offset = Vector3(0.0,3.0,10.0)
 export(float,0,100) var camera_height = 5.0
 
 export var camera_vspeed = 1.0
@@ -43,6 +43,6 @@ func move_camera(dir):
 	match dir:
 		CAM_HI: set_height(camera_height + camera_hspeed)
 		CAM_LO: set_height(camera_height - camera_hspeed)
-		CAM_TURN_LEFT: camera_y_angle -= PI/30.0
-		CAM_TURN_RIGHT: camera_y_angle += PI/30.0
+		CAM_TURN_LEFT: camera_y_angle -= PI/48.0
+		CAM_TURN_RIGHT: camera_y_angle += PI/48.0
 	look_at_target()

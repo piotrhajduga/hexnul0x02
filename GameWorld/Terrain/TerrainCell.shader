@@ -152,7 +152,7 @@ void fragment() {
 	ALBEDO = (albedo / weights_sum);
 	
 	float radius = length(UV - vec2(0.5,0.5));
-	ALPHA = (radius<0.3) ? 1.0 : (1.3 - radius);
+	ALPHA = (radius<=0.38) ? 1.0 : pow(1.38 - radius, 2.0);
 	
 	ROUGHNESS = roughness / weights_sum;
 	NORMALMAP = normalmap / weights_sum;

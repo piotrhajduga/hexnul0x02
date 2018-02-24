@@ -197,7 +197,7 @@ far = 100.0
 script = ExtResource( 5 )
 _sections_unfolded = [ "Transform" ]
 target_position = Vector3( 0, 0, 0 )
-camera_offset = Vector3( 0, 5, 10 )
+camera_offset = Vector3( 0, 3, 10 )
 camera_height = 5.0
 camera_vspeed = 1.0
 camera_hspeed = 1.0
@@ -238,8 +238,8 @@ _sections_unfolded = [ "Light" ]
 
 [node name="Terrain" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="4" instance=ExtResource( 7 )]
 
-cols = 128
-rows = 128
+cols = 96
+rows = 96
 
 [node name="Hover" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="5" instance=ExtResource( 8 )]
 
