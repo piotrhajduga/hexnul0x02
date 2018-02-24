@@ -2,8 +2,9 @@ extends Spatial
 
 var Cell = preload("Cell.gd")
 
-export(int) var cols = 60
-export(int) var rows = 40
+export(int) var radius = 32
+
+onready var collision = get_node("Area/CollisionShape")
 
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
@@ -19,14 +20,33 @@ func _ready():
 	cell_material.set_shader_param("sand_height", world_data.sand_height)
 	cell_material.set_shader_param("water_height", world_data.water_height)
 	
-	for x in range((-cols/2),cols/2):
-		for y in range((-rows/2),rows/2):
-			var game_pos = Vector2(x,y)
-			var world_pos = world_data.get_world_pos(game_pos)
-			var cell_type = world_data.get_cell_type(world_pos)
-			var cell = Cell.new(world_data, cell_material)
-			add_child(cell)
-			cell.global_translate(world_pos)
-			cell.update_shape()
-			cell.scale = Vector3(1.002,1.0,1.002)
-			world_data.add_cell(game_pos, cell_type)
+	var points = PoolVector3Array()
+	for x in range(-radius,radius):
+		var yfrom = -radius+abs(x)/2
+		var yto = radius-ceil(abs(x)/2.0)
+		for y in range(yfrom, yto):
+			add_cell(x, y)
+			points.append(get_world_point(x,y))
+			points.append(get_world_point(x,y+1))
+			points.append(get_world_point(x+1,y+1))
+			points.append(get_world_point(x+1,y+1))
+			points.append(get_world_point(x+1,y))
+			points.append(get_world_point(x,y))
+	collision.shape = ConcavePolygonShape.new()
+	collision.shape.set_faces(points)
+	collision.disabled = false
+
+func add_cell(x,y):
+	var game_pos = Vector2(x,y)
+	var world_pos = world_data.get_world_pos(game_pos)
+	world_data.add_cell(game_pos)
+	var cell = Cell.new(world_data, cell_material)
+	add_child(cell)
+	cell.global_translate(world_pos)
+	cell.update_shape()
+	cell.scale = Vector3(1.002,1.0,1.002)
+
+func get_world_point(x,y):
+	var pt = world_data.get_world_pos(Vector2(x,y))
+	pt.y = world_data.get_terrain_mesh_height(pt)
+	return pt

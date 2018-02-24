@@ -1,10 +1,13 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://WorldData.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Camera.gd" type="Script" id=2]
+[ext_resource path="res://GameWorld/UI/Camera.gd" type="Script" id=2]
 [ext_resource path="res://GameWorld/GameWorld.tres" type="Environment" id=3]
 [ext_resource path="res://GameWorld/Terrain/Terrain.tscn" type="PackedScene" id=4]
-[ext_resource path="res://GameWorld/Selection.tscn" type="PackedScene" id=5]
+[ext_resource path="res://GameWorld/UI/Selection.tscn" type="PackedScene" id=5]
+
+
+
 
 [sub_resource type="GDScript" id=1]
 

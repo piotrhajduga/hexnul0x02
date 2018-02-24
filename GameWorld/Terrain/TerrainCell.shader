@@ -149,10 +149,10 @@ void fragment() {
 	weights_sum += water_weight;
 
 	// set values:
-	ALBEDO = (albedo / weights_sum);
-	
+	float min_radius = 0.37;
 	float radius = length(UV - vec2(0.5,0.5));
-	ALPHA = (radius<=0.38) ? 1.0 : pow(1.38 - radius, 2.0);
+	float mask = (radius<=min_radius) ? 1.0 : (1.0+min_radius-radius);
+	ALBEDO = (albedo / weights_sum) * mask;
 	
 	ROUGHNESS = roughness / weights_sum;
 	NORMALMAP = normalmap / weights_sum;

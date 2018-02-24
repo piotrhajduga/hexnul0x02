@@ -10,7 +10,7 @@ export var noises_scales = PoolRealArray([0.006,0.023,0.124,0.34,0.19,0.53])
 var noises_modifiers = PoolVector2Array()
 var noise = null
 
-export(int) var game_seed = null
+export(String) var game_seed = null
 
 export(float,0,1) var water_height = 0.41
 export(float,0,1) var sand_height = 0.411
@@ -28,17 +28,16 @@ var astar = AStar.new()
 
 func _ready():
 	if game_seed == null:
-		breakpoint
 		randomize()
-		game_seed = randi()
 	else:
-		seed(game_seed)
-	noise = SoftNoise.new(game_seed)
+		seed(game_seed.hash())
+	noise = SoftNoise.new(game_seed.hash())
 	for i in range(noises_scales.size()):
 		noises_modifiers.insert(i, Vector2(randf(),randf()))
 		
-func add_cell(game_pos, type):
+func add_cell(game_pos):
 	var pos = get_world_pos(game_pos)
+	var type = get_cell_type(pos)
 	var id = astar.get_available_point_id()
 	astar.add_point(id, pos, 1+get_height(pos))
 	for xi in range(-1,1):

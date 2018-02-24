@@ -1,17 +1,16 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://GameData.gd" type="Script" id=1]
 [ext_resource path="res://WorldData.gd" type="Script" id=2]
-[ext_resource path="res://Units.gd" type="Script" id=3]
+[ext_resource path="res://Menu/Units.gd" type="Script" id=3]
 [ext_resource path="res://Viewport.gd" type="Script" id=4]
 [ext_resource path="res://GameWorld/GameWorld.gd" type="Script" id=5]
-[ext_resource path="res://Camera.gd" type="Script" id=6]
+[ext_resource path="res://GameWorld/UI/Camera.gd" type="Script" id=6]
 [ext_resource path="res://GameWorld/GameWorld.tres" type="Environment" id=7]
 [ext_resource path="res://GameWorld/Terrain/Terrain.gd" type="Script" id=8]
 [ext_resource path="res://GameWorld/Terrain/TerrainCell.material" type="Material" id=9]
-[ext_resource path="res://GameWorld/Terrain/Area.gd" type="Script" id=10]
-[ext_resource path="res://GameWorld/Selection.tscn" type="PackedScene" id=11]
-[ext_resource path="res://GameWorld/Hover.material" type="Material" id=12]
+[ext_resource path="res://GameWorld/UI/Selection.tscn" type="PackedScene" id=10]
+[ext_resource path="res://GameWorld/UI/Hover.material" type="Material" id=11]
 
 [sub_resource type="ConcavePolygonShape" id=1]
 
@@ -39,7 +38,7 @@ script = ExtResource( 2 )
 TERRAIN_HEIGHT_SCALE = 15.0
 stone_min_angle = 0.392699
 noises_scales = PoolRealArray( 0.006, 0.023, 0.124, 0.34, 0.19, 0.53 )
-game_seed = 666
+game_seed = "cycki"
 water_height = 0.41
 sand_height = 0.411
 grass_height = 0.43
@@ -64,6 +63,7 @@ _sections_unfolded = [ "Mouse", "Theme" ]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GridContainer" index="0"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -192,7 +192,6 @@ shadow_atlas_quad_1 = 2
 shadow_atlas_quad_2 = 3
 shadow_atlas_quad_3 = 4
 script = ExtResource( 4 )
-_sections_unfolded = [ "Rendering" ]
 
 [node name="GameWorld" type="Spatial" parent="GridContainer/ViewportContainer/Viewport" index="0"]
 
@@ -260,17 +259,15 @@ _sections_unfolded = [ "Light" ]
 
 [node name="Terrain" type="Spatial" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="3"]
 
-editor/display_folded = true
 script = ExtResource( 8 )
 _sections_unfolded = [ "Transform" ]
-cols = 32
-rows = 32
+radius = 32
 world_data_node = NodePath("../../../../../WorldData")
 cell_material = ExtResource( 9 )
 
 [node name="Area" type="Area" parent="GridContainer/ViewportContainer/Viewport/GameWorld/Terrain" index="0"]
 
-input_ray_pickable = false
+input_ray_pickable = true
 input_capture_on_drag = false
 space_override = 0
 gravity_point = false
@@ -279,7 +276,7 @@ gravity_vec = Vector3( 0, -1, 0 )
 gravity = 9.8
 linear_damp = 0.1
 angular_damp = 1.0
-priority = 0.0
+priority = 2.0
 monitoring = true
 monitorable = true
 collision_layer = 1
@@ -290,22 +287,20 @@ reverb_bus_enable = false
 reverb_bus_name = "Master"
 reverb_bus_amount = 0.0
 reverb_bus_uniformity = 0.0
-script = ExtResource( 10 )
-world_data_node = NodePath("../../../../../../WorldData")
 
 [node name="CollisionShape" type="CollisionShape" parent="GridContainer/ViewportContainer/Viewport/GameWorld/Terrain/Area" index="0"]
 
 shape = SubResource( 1 )
 disabled = false
 
-[node name="Hover" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="4" instance=ExtResource( 11 )]
+[node name="Hover" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="4" instance=ExtResource( 10 )]
 
 visible = false
 world_data_node = NodePath("../../../../../WorldData")
 light_color = Color( 0.139526, 0.992188, 0.952219, 1 )
-material = ExtResource( 12 )
+material = ExtResource( 11 )
 
-[node name="Selection" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="5" instance=ExtResource( 11 )]
+[node name="Selection" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="5" instance=ExtResource( 10 )]
 
 visible = false
 world_data_node = NodePath("../../../../../WorldData")
