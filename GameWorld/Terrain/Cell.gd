@@ -15,32 +15,58 @@ var outlineUVs = [
 	Vector2(0.75,1.0),Vector2(0.25,1.0)
 ]
 
-var water_level = 0.0
 var world_data = null
 var material = null
+var global_pos = null
 
 func _init(world_data, material):
 	self.world_data = world_data
 	self.material = material
 
-func add_vertex(surfTool, uv, pos):
-	var height = world_data.get_terrain_mesh_height(to_global(pos))
+var normals = {}
+func get_normal(i):
+	if normals.has(i): return normals[i]
+	if i < 7:
+		normals[i] = world_data.get_normal(to_global(outline[i]))
+	else:
+		normals[i] = world_data.get_normal(to_global(Vector3()))
+	return normals[i]
+	
+var heights = {}
+func get_height(i):
+	if heights.has(i): return heights[i]
+	if i < 7:
+		heights[i] = world_data.get_terrain_mesh_height(to_global(outline[i]))
+	else:
+		heights[i] = world_data.get_terrain_mesh_height(to_global(Vector3()))
+	return heights[i]
+	
+func add_vertex(surfTool, i):
+	var pos = outline[i] if i<7 else Vector3()
+	var uv = outlineUVs[i] if i<7 else Vector2(0.5,0.5)
+	var normal = get_normal(i)
+	var height = get_height(i)
+	
+	surfTool.add_normal(normal)
 	surfTool.add_uv(uv)
 	surfTool.add_vertex(pos + Vector3(0.0, height, 0.0))
 
 func _ready():
-	update_shape()
+	pass
 
 func update_shape():
+	heights.clear()
+	normals.clear()
 	var new_mesh = Mesh.new()
 	var surfTool = SurfaceTool.new()
 	surfTool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	surfTool.add_smooth_group(true)
+	
 	for i in range(6):
-		add_vertex(surfTool, Vector2(0.5,0.5), Vector3())
-		add_vertex(surfTool, outlineUVs[i], outline[i])
-		add_vertex(surfTool, outlineUVs[i-1], outline[i-1])
-	surfTool.generate_normals()
+		add_vertex(surfTool, 7)
+		add_vertex(surfTool, i)
+		add_vertex(surfTool, (i-1)%6)
+	#surfTool.generate_normals()
 	surfTool.generate_tangents()
 	surfTool.index()
 	surfTool.set_material(material)
