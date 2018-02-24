@@ -1,6 +1,7 @@
 extends Camera
 
-onready var world_data = get_parent().get_node("WorldData")
+export(NodePath) var world_data_node
+onready var world_data = get_node(world_data_node)
 
 const up = Vector3(0.0,1.0,0.0)
 

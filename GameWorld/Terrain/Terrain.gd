@@ -5,8 +5,8 @@ var Cell = preload("Cell.gd")
 export(int) var cols = 60
 export(int) var rows = 40
 
-onready var game_world = get_parent()
-onready var world_data = game_world.get_node("WorldData")
+export(NodePath) var world_data_node
+onready var world_data = get_node(world_data_node)
 
 export(Material) var cell_material = preload("TerrainCell.material")
 

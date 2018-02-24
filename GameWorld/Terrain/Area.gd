@@ -4,8 +4,8 @@ onready var terrain = get_parent()
 onready var cols = terrain.cols
 onready var rows = terrain.rows
 
-onready var game_world = get_parent().get_parent()
-onready var world_data = game_world.get_node("WorldData")
+export(NodePath) var world_data_node
+onready var world_data = get_node(world_data_node)
 onready var collision = get_node("CollisionShape")
 	
 func get_world_point(x,y):

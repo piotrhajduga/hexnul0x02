@@ -2,23 +2,21 @@ extends Node
 
 var SoftNoise = preload("res://GameWorld/softnoise.gd")
 
-onready var game_world = get_parent()
-
 export var TERRAIN_HEIGHT_SCALE = 15.0
 export var stone_min_angle = PI/8.0
 
 var noises_weight_sum = 0.0
-export var noises_scales = PoolRealArray([0.006,0.023,0.164,0.41,0.26,0.53])
+export var noises_scales = PoolRealArray([0.006,0.023,0.124,0.34,0.19,0.53])
 var noises_modifiers = PoolVector2Array()
 var noise = null
 
 export(int) var game_seed = null
 
 export(float,0,1) var water_height = 0.41
-export(float,0,1) var sand_height = 0.41
-export(float,0,1) var grass_height = 0.45
-export(float,0,1) var gravel_height = 0.62
-export(float,0,1) var snow_height = 0.68
+export(float,0,1) var sand_height = 0.411
+export(float,0,1) var grass_height = 0.43
+export(float,0,1) var gravel_height = 0.61
+export(float,0,1) var snow_height = 0.67
 
 enum cell_type {WATER, SAND, GRASS, STONE, GRAVEL, SNOW}
 

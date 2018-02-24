@@ -2,7 +2,8 @@ extends Spatial
 
 var Cell = preload("res://GameWorld/Terrain/Cell.gd")
 
-onready var world_data = get_parent().get_node("WorldData")
+export(NodePath) var world_data_node
+onready var world_data = get_node(world_data_node)
 onready var light = get_node("SpotLight")
 
 export(float,1.0,10.0) var light_height = 3.0

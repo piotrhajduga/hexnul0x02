@@ -1,5 +1,8 @@
 extends Spatial
 
+export(NodePath) var world_data_node
+onready var world_data = get_node(world_data_node)
+
 signal wagon(game_pos)
 signal select(game_pos)
 signal move(game_pos)
@@ -62,8 +65,8 @@ func select_cell():
 
 	var result = space_state.intersect_ray(from, to)
 	if result.has("position"):
-		pos2d = $WorldData.get_game_pos(result["position"])
-		$Hover.translation = $WorldData.get_world_pos(pos2d)
+		pos2d = world_data.get_game_pos(result["position"])
+		$Hover.translation = world_data.get_world_pos(pos2d)
 		$Hover.update_shape()
 		$Hover.show()
 	else:
@@ -76,6 +79,9 @@ func _on_Select_pressed():
 func _on_Wagon_pressed():
 	mode = MODE_WAGON
 
+func _on_Popup_mode_wagon():
+	mode = MODE_WAGON
+
 func _on_Move_pressed():
 	mode = MODE_MOVE
 
@@ -84,11 +90,11 @@ func _on_GameData_actor_placed(actor, pos):
 	add_child(actor)
 
 func _on_GameData_actor_moved( actor, pos ):
-	actor.translation = $WorldData.get_world_pos(pos)
-	actor.translation.y = $WorldData.get_terrain_mesh_height(actor.translation)
+	actor.translation = world_data.get_world_pos(pos)
+	actor.translation.y = world_data.get_terrain_mesh_height(actor.translation)
 
 func _on_GameData_selected( pos ):
-	$Selection.translation = $WorldData.get_world_pos(pos)
+	$Selection.translation = world_data.get_world_pos(pos)
 	$Selection.update_shape()
 	$Selection.show()
 
