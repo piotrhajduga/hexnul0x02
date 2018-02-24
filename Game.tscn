@@ -1,16 +1,17 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://GameData.gd" type="Script" id=1]
 [ext_resource path="res://WorldData.gd" type="Script" id=2]
-[ext_resource path="res://Viewport.gd" type="Script" id=3]
-[ext_resource path="res://GameWorld/GameWorld.gd" type="Script" id=4]
-[ext_resource path="res://Camera.gd" type="Script" id=5]
-[ext_resource path="res://GameWorld/GameWorld.tres" type="Environment" id=6]
-[ext_resource path="res://GameWorld/Terrain/Terrain.gd" type="Script" id=7]
-[ext_resource path="res://GameWorld/Terrain/TerrainCell.material" type="Material" id=8]
-[ext_resource path="res://GameWorld/Terrain/Area.gd" type="Script" id=9]
-[ext_resource path="res://GameWorld/Selection.tscn" type="PackedScene" id=10]
-[ext_resource path="res://GameWorld/Hover.material" type="Material" id=11]
+[ext_resource path="res://Units.gd" type="Script" id=3]
+[ext_resource path="res://Viewport.gd" type="Script" id=4]
+[ext_resource path="res://GameWorld/GameWorld.gd" type="Script" id=5]
+[ext_resource path="res://Camera.gd" type="Script" id=6]
+[ext_resource path="res://GameWorld/GameWorld.tres" type="Environment" id=7]
+[ext_resource path="res://GameWorld/Terrain/Terrain.gd" type="Script" id=8]
+[ext_resource path="res://GameWorld/Terrain/TerrainCell.material" type="Material" id=9]
+[ext_resource path="res://GameWorld/Terrain/Area.gd" type="Script" id=10]
+[ext_resource path="res://GameWorld/Selection.tscn" type="PackedScene" id=11]
+[ext_resource path="res://GameWorld/Hover.material" type="Material" id=12]
 
 [sub_resource type="ConcavePolygonShape" id=1]
 
@@ -122,37 +123,14 @@ text = "Move"
 flat = false
 align = 1
 
-[node name="Wagon" type="Button" parent="GridContainer/HBoxContainer" index="2"]
+[node name="Units" type="MenuButton" parent="GridContainer/HBoxContainer" index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 106.0
-margin_right = 161.0
-margin_bottom = 20.0
-rect_pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
-text = "Wagon"
-flat = false
-align = 1
-
-[node name="Units" type="MenuButton" parent="GridContainer/HBoxContainer" index="3"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 165.0
-margin_right = 211.0
+margin_right = 152.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
 mouse_filter = 0
@@ -168,25 +146,7 @@ text = "Units"
 flat = true
 align = 1
 items = [  ]
-
-[node name="Popup" type="PopupMenu" parent="GridContainer/HBoxContainer/Units" index="1"]
-
-visible = false
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 20.0
-margin_bottom = 20.0
-rect_pivot_offset = Vector2( 0, 0 )
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-popup_exclusive = false
-items = [  ]
-hide_on_state_item_selection = false
+script = ExtResource( 3 )
 
 [node name="ViewportContainer" type="ViewportContainer" parent="GridContainer" index="1"]
 
@@ -231,12 +191,12 @@ shadow_atlas_quad_0 = 2
 shadow_atlas_quad_1 = 2
 shadow_atlas_quad_2 = 3
 shadow_atlas_quad_3 = 4
-script = ExtResource( 3 )
+script = ExtResource( 4 )
 _sections_unfolded = [ "Rendering" ]
 
 [node name="GameWorld" type="Spatial" parent="GridContainer/ViewportContainer/Viewport" index="0"]
 
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 _sections_unfolded = [ "Transform" ]
 world_data_node = NodePath("../../../../WorldData")
 
@@ -255,7 +215,7 @@ fov = 75.0
 size = 1.0
 near = 0.05
 far = 100.0
-script = ExtResource( 5 )
+script = ExtResource( 6 )
 _sections_unfolded = [ "Transform" ]
 world_data_node = NodePath("../../../../../WorldData")
 target_position = Vector3( 0, 0, 0 )
@@ -267,7 +227,7 @@ camera_y_angle = 0.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="1"]
 
-environment = ExtResource( 6 )
+environment = ExtResource( 7 )
 _sections_unfolded = [ "Pause" ]
 
 [node name="DirectionalLight" type="DirectionalLight" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="2"]
@@ -300,12 +260,13 @@ _sections_unfolded = [ "Light" ]
 
 [node name="Terrain" type="Spatial" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="3"]
 
-script = ExtResource( 7 )
+editor/display_folded = true
+script = ExtResource( 8 )
 _sections_unfolded = [ "Transform" ]
 cols = 32
 rows = 32
 world_data_node = NodePath("../../../../../WorldData")
-cell_material = ExtResource( 8 )
+cell_material = ExtResource( 9 )
 
 [node name="Area" type="Area" parent="GridContainer/ViewportContainer/Viewport/GameWorld/Terrain" index="0"]
 
@@ -329,7 +290,7 @@ reverb_bus_enable = false
 reverb_bus_name = "Master"
 reverb_bus_amount = 0.0
 reverb_bus_uniformity = 0.0
-script = ExtResource( 9 )
+script = ExtResource( 10 )
 world_data_node = NodePath("../../../../../../WorldData")
 
 [node name="CollisionShape" type="CollisionShape" parent="GridContainer/ViewportContainer/Viewport/GameWorld/Terrain/Area" index="0"]
@@ -337,14 +298,14 @@ world_data_node = NodePath("../../../../../../WorldData")
 shape = SubResource( 1 )
 disabled = false
 
-[node name="Hover" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="4" instance=ExtResource( 10 )]
+[node name="Hover" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="4" instance=ExtResource( 11 )]
 
 visible = false
 world_data_node = NodePath("../../../../../WorldData")
 light_color = Color( 0.139526, 0.992188, 0.952219, 1 )
-material = ExtResource( 11 )
+material = ExtResource( 12 )
 
-[node name="Selection" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="5" instance=ExtResource( 10 )]
+[node name="Selection" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="5" instance=ExtResource( 11 )]
 
 visible = false
 world_data_node = NodePath("../../../../../WorldData")
@@ -363,7 +324,7 @@ light_color = Color( 0.682353, 0.517647, 0.14902, 1 )
 
 [connection signal="pressed" from="GridContainer/HBoxContainer/Move" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_Move_pressed"]
 
-[connection signal="pressed" from="GridContainer/HBoxContainer/Wagon" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_Wagon_pressed"]
+[connection signal="mode_wagon" from="GridContainer/HBoxContainer/Units" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_Units_mode_wagon"]
 
 [connection signal="mouse_entered" from="GridContainer/ViewportContainer" to="GridContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_entered"]
 

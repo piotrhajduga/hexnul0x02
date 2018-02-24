@@ -75,8 +75,8 @@ func select_cell():
 
 func _on_Select_pressed():
 	mode = MODE_SELECT
-	
-func _on_Wagon_pressed():
+
+func _on_Units_mode_wagon():
 	mode = MODE_WAGON
 
 func _on_Popup_mode_wagon():
