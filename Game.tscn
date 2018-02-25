@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://WorldData.gd" type="Script" id=1]
 [ext_resource path="res://GameData.gd" type="Script" id=2]
@@ -9,8 +9,9 @@
 [ext_resource path="res://GameWorld/UI/Camera.gd" type="Script" id=7]
 [ext_resource path="res://GameWorld/GameWorld.tres" type="Environment" id=8]
 [ext_resource path="res://GameWorld/Terrain/Terrain.gd" type="Script" id=9]
-[ext_resource path="res://GameWorld/UI/Selection.tscn" type="PackedScene" id=10]
-[ext_resource path="res://GameWorld/UI/Hover.material" type="Material" id=11]
+[ext_resource path="res://GameWorld/Units.gd" type="Script" id=10]
+[ext_resource path="res://GameWorld/UI/Selection.tscn" type="PackedScene" id=11]
+[ext_resource path="res://GameWorld/UI/Hover.material" type="Material" id=12]
 
 [node name="Game" type="Control" index="0"]
 
@@ -262,29 +263,34 @@ _sections_unfolded = [ "Light" ]
 [node name="Terrain" type="Spatial" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="3"]
 
 script = ExtResource( 9 )
-chunks_radius = 12
-radius = 4
+chunks_radius = 6
+radius = 6
 visibility_radius = Vector2( 38, 26 )
 world_data_node = NodePath("../../../../../WorldData")
 camera_node = NodePath("../GameCamera")
 
-[node name="Hover" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="4" instance=ExtResource( 10 )]
+[node name="Units" type="Spatial" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="4"]
+
+script = ExtResource( 10 )
+world_data_node = NodePath("../../../../../WorldData")
+
+[node name="Hover" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="5" instance=ExtResource( 11 )]
 
 visible = false
 world_data_node = NodePath("../../../../../WorldData")
 light_color = Color( 0.139526, 0.992188, 0.952219, 1 )
-material = ExtResource( 11 )
+material = ExtResource( 12 )
 
-[node name="Selection" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="5" instance=ExtResource( 10 )]
+[node name="Selection" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="6" instance=ExtResource( 11 )]
 
 visible = false
 world_data_node = NodePath("../../../../../WorldData")
 light_height = 5.0
 light_color = Color( 0.682353, 0.517647, 0.14902, 1 )
 
-[connection signal="actor_moved" from="GameData" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_GameData_actor_moved"]
+[connection signal="actor_moved" from="GameData" to="GridContainer/ViewportContainer/Viewport/GameWorld/Units" method="_on_GameData_actor_moved"]
 
-[connection signal="actor_placed" from="GameData" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_GameData_actor_placed"]
+[connection signal="actor_placed" from="GameData" to="GridContainer/ViewportContainer/Viewport/GameWorld/Units" method="_on_GameData_actor_placed"]
 
 [connection signal="deselected" from="GameData" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_GameData_deselected"]
 
@@ -305,6 +311,8 @@ light_color = Color( 0.682353, 0.517647, 0.14902, 1 )
 [connection signal="select" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameData" method="_on_GameWorld_select"]
 
 [connection signal="wagon" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameData" method="_on_GameWorld_wagon"]
+
+[connection signal="moved" from="GridContainer/ViewportContainer/Viewport/GameWorld/GameCamera" to="GridContainer/ViewportContainer/Viewport/GameWorld/Terrain" method="_on_GameCamera_moved" flags=3]
 
 [connection signal="create_chunk" from="GridContainer/ViewportContainer/Viewport/GameWorld/Terrain" to="GridContainer/ViewportContainer/Viewport/GameWorld/Terrain" method="_on_create_chunk" flags=3]
 

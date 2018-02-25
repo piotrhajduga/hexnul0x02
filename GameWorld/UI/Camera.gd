@@ -1,5 +1,7 @@
 extends Camera
 
+signal moved (target_position, camera_y_angle)
+
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
 
@@ -38,12 +40,14 @@ func move(relative2d):
 	min_camera_height = world_data.get_terrain_mesh_height(target_position)
 	if camera_height < min_camera_height:
 		set_height(min_camera_height)
+	emit_signal("moved", target_position, camera_y_angle)
 	look_at_target()
 	
 func move_camera(dir):
 	match dir:
 		CAM_HI: set_height(camera_height + camera_hspeed)
 		CAM_LO: set_height(camera_height - camera_hspeed)
-		CAM_TURN_LEFT: camera_y_angle -= PI/48.0
-		CAM_TURN_RIGHT: camera_y_angle += PI/48.0
+		CAM_TURN_LEFT: camera_y_angle -= PI/30
+		CAM_TURN_RIGHT: camera_y_angle += PI/30
+	emit_signal("moved", target_position, camera_y_angle)
 	look_at_target()

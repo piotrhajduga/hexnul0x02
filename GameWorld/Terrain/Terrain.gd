@@ -16,19 +16,14 @@ onready var camera = get_node(camera_node)
 var chunks = {}
 
 func _ready():
-	var cam_game_pos = world_data.get_game_pos(camera.target_position)
 	var cam_chunk_pos = Vector2()
 	for pos in world_data.get_cells_in_radius(cam_chunk_pos, chunks_radius):
 		add_chunk(Vector2(
 			pos.y * 2 * radius + radius * (int(abs(pos.x)) % 2),
 			(pos.x * 3 * radius) / 2
 		))
-	update()
 
-func update():
-	var cam_game_pos = world_data.get_game_pos(
-		camera.target_position - Vector3(1,0,1) * camera.camera_offset
-	)
+func update(cam_game_pos):
 	for center in chunks.keys():
 		var delta = center - cam_game_pos
 		var angle = acos(Vector2(0,-1).dot(delta))
@@ -48,3 +43,9 @@ func add_chunk(center):
 func _on_create_chunk( center ):
 	if chunks.has(center): return
 	add_chunk(center)
+
+func _on_GameCamera_moved( target_position, camera_y_angle ):
+	var cam_game_pos = world_data.get_game_pos(
+		camera.target_position - Vector3(1,0,1) * camera.camera_offset.rotated(Vector3(0,1,0), camera_y_angle)
+	)
+	update(cam_game_pos)

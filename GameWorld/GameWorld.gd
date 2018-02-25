@@ -45,7 +45,6 @@ func handle_mouse_motion(event):
 	if event.button_mask & BUTTON_MASK_RIGHT:
 		var relative = event.relative
 		$GameCamera.move(relative)
-		$Terrain.update()
 		$Hover.hide()
 	elif event.button_mask & BUTTON_MASK_MIDDLE:
 		$Hover.hide()
