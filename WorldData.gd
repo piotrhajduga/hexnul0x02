@@ -2,6 +2,8 @@ extends Node
 
 var SoftNoise = preload("res://GameWorld/softnoise.gd")
 
+export var WORLD_RADIUS = 128
+export var WORLD_RADIUS_FEATHER = 24
 export var TERRAIN_HEIGHT_SCALE = 15.0
 export var stone_min_angle = PI/8.0
 
@@ -59,6 +61,9 @@ func get_world_pos(game_pos):
 	return pos
 
 func get_height(pos):
+	var radius = pos.length()
+	if radius > WORLD_RADIUS: return 0.0
+	
 	var sum = 0.0
 	var sum_weight = 1.0
 	var weight = 1.0
@@ -70,7 +75,7 @@ func get_height(pos):
 		sum += val
 		weight = val
 		sum_weight += weight
-	return sum / sum_weight
+	return ((WORLD_RADIUS - max(radius,WORLD_RADIUS-WORLD_RADIUS_FEATHER)) / WORLD_RADIUS_FEATHER) * sum / sum_weight
 
 func get_normal(pos):
 	var delta = Vector3(0.001,0.0,0.0)
