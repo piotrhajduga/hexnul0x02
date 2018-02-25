@@ -15,7 +15,8 @@ var mode = MODE_IDLE
 
 func _ready():
 	$GameCamera.target_position = Vector3()
-	$Hover.hide()
+	$Hover.show()
+	mode = MODE_SELECT
 
 func _input(event):
 	match event.get_class():
@@ -38,7 +39,7 @@ func use_tool():
 		MODE_WAGON: emit_signal("wagon", selected)
 		MODE_SELECT: emit_signal("select", selected)
 		MODE_MOVE: emit_signal("move", selected)
-	mode = MODE_IDLE
+	mode = MODE_SELECT
 	$Hover.hide()
 	
 func handle_mouse_motion(event):

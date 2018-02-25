@@ -1,8 +1,8 @@
 [gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://WorldData.gd" type="Script" id=1]
-[ext_resource path="res://GameData.gd" type="Script" id=2]
-[ext_resource path="res://Pathfinder.gd" type="Script" id=3]
+[ext_resource path="res://Pathfinder.gd" type="Script" id=2]
+[ext_resource path="res://GameData.gd" type="Script" id=3]
 [ext_resource path="res://Menu/Units.gd" type="Script" id=4]
 [ext_resource path="res://Viewport.gd" type="Script" id=5]
 [ext_resource path="res://GameWorld/GameWorld.gd" type="Script" id=6]
@@ -28,8 +28,8 @@ size_flags_vertical = 1
 [node name="WorldData" type="Node" parent="." index="0"]
 
 script = ExtResource( 1 )
-WORLD_RADIUS = 128
-WORLD_RADIUS_FEATHER = 24
+WORLD_RADIUS = 80
+WORLD_RADIUS_FEATHER = 16
 TERRAIN_HEIGHT_SCALE = 15.0
 stone_min_angle = 0.392699
 noises_scales = PoolRealArray( 0.006, 0.023, 0.124, 0.34, 0.19, 0.53 )
@@ -40,15 +40,17 @@ grass_height = 0.43
 gravel_height = 0.57
 snow_height = 0.67
 
-[node name="GameData" type="Node" parent="." index="1"]
+[node name="Pathfinder" type="Node" parent="." index="1"]
 
 script = ExtResource( 2 )
+world_data_node = NodePath("../WorldData")
+radius = 80
 
-[node name="Pathfinder" type="Node" parent="." index="2"]
+[node name="GameData" type="Node" parent="." index="2"]
 
 script = ExtResource( 3 )
+pathfinder_node = NodePath("../Pathfinder")
 world_data_node = NodePath("../WorldData")
-radius = 32
 
 [node name="GridContainer" type="GridContainer" parent="." index="3"]
 
@@ -265,9 +267,9 @@ _sections_unfolded = [ "Light" ]
 [node name="Terrain" type="Spatial" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="3"]
 
 script = ExtResource( 9 )
-chunks_radius = 8
-radius = 6
-visibility_radius = Vector2( 38, 26 )
+chunks_radius = 5
+radius = 4
+visibility_radius = Vector2( 40, 26 )
 world_data_node = NodePath("../../../../../WorldData")
 camera_node = NodePath("../GameCamera")
 

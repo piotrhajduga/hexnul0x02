@@ -24,7 +24,7 @@ func _ready():
 	update()
 
 func update():
-	var visible_cells = world_data.get_cells_in_radius(center, radius)
+	var visible_cells = world_data.get_cells_in_radius(center, int(radius))
 
 	var points = PoolVector3Array()
 

@@ -16,11 +16,10 @@ onready var camera = get_node(camera_node)
 var chunks = {}
 
 func _ready():
-	var cam_chunk_pos = Vector2()
-	for pos in world_data.get_cells_in_radius(cam_chunk_pos, chunks_radius):
+	for pos in world_data.get_cells_in_radius(Vector2(), chunks_radius):
 		add_chunk(Vector2(
-			pos.y * 2 * radius + radius * (int(abs(pos.x)) % 2),
-			(pos.x * 3 * radius) / 2
+			(2*radius+1)*pos.y + radius * (int(abs(pos.x))%2),
+			(radius+2)*pos.x
 		))
 
 func update(cam_game_pos):
@@ -37,8 +36,8 @@ func add_chunk(center):
 	chunks[center].world_data = world_data
 	chunks[center].center = center
 	chunks[center].radius = radius
-	add_child(chunks[center])
 	chunks[center].hide()
+	add_child(chunks[center])
 
 func _on_create_chunk( center ):
 	if chunks.has(center): return

@@ -1,37 +1,62 @@
 extends Node
 
-var astar = AStar.new()
+class HexAStar extends AStar:
+	var world_data
+	
+	func _init(world_data):
+		self.world_data = world_data
+		
+	func _compute_cost(from_id, to_id):
+		return 1000 * (get_point_weight_scale(to_id) - get_point_weight_scale(from_id))
+		
+	func _estimate_cost(from_id, to_id):
+		var from_pos = self.get_point_position(from_id)
+		var to_pos = self.get_point_position(to_id)
+		return 1+(to_pos-from_pos).length()
 
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
 
-export(int) var radius = 32;
+onready var astar = AStar.new()
+
+export(int) var radius = 100;
 
 func add_cell(game_pos):
 	var pos = world_data.get_world_pos(game_pos)
 	var type = world_data.get_cell_type(pos)
 	var id = astar.get_available_point_id()
-	astar.add_point(id, pos, ceil(10*get_height(pos)))
+	astar.add_point(id, pos, 1+world_data.get_height(pos))
 
 func connect_cell(game_pos):
 	var id = astar.get_closest_point(world_data.get_world_pos(game_pos))
-	for xi in range(-1,1):
-		for yi in range(-1,1):
-			if xi == 0 and yi == 0:
-				continue
-			var neighbor = world_data.get_world_pos(game_pos + Vector2(xi, yi))
-			if ![world_data.STONE,world_data.WATER].has(get_cell_type(neighbor)):
-				astar.connect_points(id, astar.get_closest_point(neighbor))
+	for neighbor in world_data.get_cells_in_radius(game_pos,1):
+		if is_impassable(neighbor) or neighbor==game_pos:
+			continue
+		astar.connect_points(id, astar.get_closest_point(world_data.get_world_pos(neighbor)), true)
 
-func update():
+func cell_type(game_pos):
+	return world_data.get_cell_type(world_data.get_world_pos(game_pos))
+
+func is_impassable(game_pos):
+	return false
+#	var impassable = [
+#		world_data.STONE,
+#		world_data.WATER
+#	]
+#	return impassable.has(cell_type(game_pos))
+
+func get_path(from, to):
+	var path = PoolVector2Array()
+	var idfrom = astar.get_closest_point(world_data.get_world_pos(from))
+	var idto = astar.get_closest_point(world_data.get_world_pos(to))
+	var aspath = astar.get_point_path(idfrom, idto)
+	for point in aspath:
+		path.append(world_data.get_game_pos(point))
+	return path
+
+func _ready():
 	astar.clear()
-	for x in range(-radius-1,radius+1):
-		var yfrom = -radius+abs(x)/2
-		var yto = radius-ceil(abs(x)/2.0)
-		for y in range(yfrom-1, yto+1):
-			add_cell(Vector2(x,y))
-	for x in range(-radius,radius):
-		var yfrom = -radius+abs(x)/2
-		var yto = radius-ceil(abs(x)/2.0)
-		for y in range(yfrom, yto):
-			connect_cell(Vector2(x,y))
+	for game_pos in world_data.get_cells_in_radius(Vector2(),radius):
+		add_cell(game_pos)
+	for game_pos in world_data.get_cells_in_radius(Vector2(),radius-1):
+		connect_cell(game_pos)

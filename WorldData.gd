@@ -37,11 +37,12 @@ func _ready():
 
 func get_cells_in_radius(pos, radius):
 	var points = []
-	for x in range(-radius,radius):
-		var yfrom = -radius+ceil(abs(x)/2)
-		var yto = radius-ceil(abs(x)/2)-abs(x)%2
-		for y in range(yfrom, yto):
-			points.append(pos+Vector2(x, y))
+	for x in range(-radius,radius+1):
+		for y in range(2*radius+1-int(abs(x))):
+			points.append(Vector2(
+				int(pos.x) + x,
+				int(pos.y) + y - radius + floor(abs(x)/2)+(int(abs(pos.x))%2)*(int(abs(x))%2)
+			))
 	return points
 
 func get_game_pos(pos):
