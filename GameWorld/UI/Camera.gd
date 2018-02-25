@@ -5,7 +5,7 @@ onready var world_data = get_node(world_data_node)
 
 const up = Vector3(0.0,1.0,0.0)
 
-var max_camera_height = 40.0
+var max_camera_height = 30.0
 var min_camera_height = 2.0
 
 enum camera_movement {CAM_HI, CAM_LO, CAM_TURN_LEFT, CAM_TURN_RIGHT}

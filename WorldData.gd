@@ -24,8 +24,6 @@ const xStep = 1.0
 const zStep = sqrt(3.0) / 2.0
 const up = Vector3(0.0,1.0,0.0)
 
-var astar = AStar.new()
-
 func _ready():
 	if game_seed == null:
 		randomize()
@@ -34,19 +32,15 @@ func _ready():
 	noise = SoftNoise.new(game_seed.hash())
 	for i in range(noises_scales.size()):
 		noises_modifiers.insert(i, Vector2(randf(),randf()))
-		
-func add_cell(game_pos):
-	var pos = get_world_pos(game_pos)
-	var type = get_cell_type(pos)
-	var id = astar.get_available_point_id()
-	astar.add_point(id, pos, 1+get_height(pos))
-	for xi in range(-1,1):
-		for yi in range(-1,1):
-			if xi == 0 and yi == 0:
-				continue
-			var neighbor = get_world_pos(game_pos + Vector2(xi, yi))
-			if ![STONE,WATER].has(get_cell_type(neighbor)):
-				astar.connect_points(id, astar.get_closest_point(neighbor))
+
+func get_cells_in_radius(pos, radius):
+	var points = []
+	for x in range(-radius,radius):
+		var yfrom = -radius+ceil(abs(x)/2)
+		var yto = radius-ceil(abs(x)/2)-abs(x)%2
+		for y in range(yfrom, yto):
+			points.append(pos+Vector2(x, y))
+	return points
 
 func get_game_pos(pos):
 	var x = int(round(pos.x / (1.5 * xStep)))

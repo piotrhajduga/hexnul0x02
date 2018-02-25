@@ -1,52 +1,50 @@
 extends Spatial
 
-var Cell = preload("Cell.gd")
+var Chunk = preload("TerrainChunk.tscn")
 
-export(int) var radius = 32
+signal create_chunk(center)
 
-onready var collision = get_node("Area/CollisionShape")
+export(int) var chunks_radius = 12
+export(int) var radius = 4
+export(Vector2) var visibility_radius = Vector2(38,26)
 
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
+export(NodePath) var camera_node
+onready var camera = get_node(camera_node)
 
-export(Material) var cell_material = preload("TerrainCell.material")
+var chunks = {}
 
 func _ready():
-	cell_material.set_shader_param("terrain_height_scale", world_data.TERRAIN_HEIGHT_SCALE)
-	cell_material.set_shader_param("stone_min_angle", world_data.stone_min_angle)
-	cell_material.set_shader_param("snow_height", world_data.snow_height)
-	cell_material.set_shader_param("gravel_height", world_data.gravel_height)
-	cell_material.set_shader_param("grass_height", world_data.grass_height)
-	cell_material.set_shader_param("sand_height", world_data.sand_height)
-	cell_material.set_shader_param("water_height", world_data.water_height)
-	
-	var points = PoolVector3Array()
-	for x in range(-radius,radius):
-		var yfrom = -radius+abs(x)/2
-		var yto = radius-ceil(abs(x)/2.0)
-		for y in range(yfrom, yto):
-			add_cell(x, y)
-			points.append(get_world_point(x,y))
-			points.append(get_world_point(x,y+1))
-			points.append(get_world_point(x+1,y+1))
-			points.append(get_world_point(x+1,y+1))
-			points.append(get_world_point(x+1,y))
-			points.append(get_world_point(x,y))
-	collision.shape = ConcavePolygonShape.new()
-	collision.shape.set_faces(points)
-	collision.disabled = false
+	var cam_game_pos = world_data.get_game_pos(camera.target_position)
+	var cam_chunk_pos = Vector2()
+	for pos in world_data.get_cells_in_radius(cam_chunk_pos, chunks_radius):
+		add_chunk(Vector2(
+			pos.y * 2 * radius + radius * (int(abs(pos.x)) % 2),
+			(pos.x * 3 * radius) / 2
+		))
+	update()
 
-func add_cell(x,y):
-	var game_pos = Vector2(x,y)
-	var world_pos = world_data.get_world_pos(game_pos)
-	world_data.add_cell(game_pos)
-	var cell = Cell.new(world_data, cell_material)
-	add_child(cell)
-	cell.global_translate(world_pos)
-	cell.update_shape()
-	cell.scale = Vector3(1.002,1.0,1.002)
+func update():
+	var cam_game_pos = world_data.get_game_pos(
+		camera.target_position - Vector3(1,0,1) * camera.camera_offset
+	)
+	for center in chunks.keys():
+		var delta = center - cam_game_pos
+		var angle = acos(Vector2(0,-1).dot(delta))
+		if delta.length() <= visibility_radius.length():
+			chunks[center].show()
+		else:
+			chunks[center].hide()
 
-func get_world_point(x,y):
-	var pt = world_data.get_world_pos(Vector2(x,y))
-	pt.y = world_data.get_terrain_mesh_height(pt)
-	return pt
+func add_chunk(center):
+	chunks[center] = Chunk.instance()
+	chunks[center].world_data = world_data
+	chunks[center].center = center
+	chunks[center].radius = radius
+	add_child(chunks[center])
+	chunks[center].hide()
+
+func _on_create_chunk( center ):
+	if chunks.has(center): return
+	add_chunk(center)

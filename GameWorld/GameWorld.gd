@@ -14,7 +14,7 @@ enum {MODE_IDLE,MODE_SELECT,MODE_WAGON,MODE_MOVE}
 var mode = MODE_IDLE
 
 func _ready():
-	$GameCamera.target_position = $Terrain.translation
+	$GameCamera.target_position = Vector3()
 	$Hover.hide()
 
 func _input(event):
@@ -45,6 +45,7 @@ func handle_mouse_motion(event):
 	if event.button_mask & BUTTON_MASK_RIGHT:
 		var relative = event.relative
 		$GameCamera.move(relative)
+		$Terrain.update()
 		$Hover.hide()
 	elif event.button_mask & BUTTON_MASK_MIDDLE:
 		$Hover.hide()
