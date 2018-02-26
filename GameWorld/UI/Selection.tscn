@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://GameWorld/UI/Hover.gd" type="Script" id=1]
+[ext_resource path="res://GameWorld/UI/Selection.gd" type="Script" id=1]
 [ext_resource path="res://GameWorld/UI/Selection.material" type="Material" id=2]
 
 [node name="Selection" type="Spatial"]
@@ -9,8 +9,8 @@ script = ExtResource( 1 )
 _sections_unfolded = [ "Transform", "Visibility" ]
 world_data_node = null
 light_height = 3.0
-light_color = null
 material = ExtResource( 2 )
+state = null
 
 [node name="SpotLight" type="SpotLight" parent="." index="0"]
 

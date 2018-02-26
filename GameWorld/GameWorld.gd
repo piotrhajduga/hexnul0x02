@@ -2,6 +2,8 @@ extends Spatial
 
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
+export(NodePath) var pathfinder_node
+onready var pathfinder = get_node(pathfinder_node)
 
 signal wagon(game_pos)
 signal select(game_pos)
@@ -40,38 +42,55 @@ func use_tool():
 		MODE_SELECT: emit_signal("select", selected)
 		MODE_MOVE: emit_signal("move", selected)
 	mode = MODE_SELECT
-	$Hover.hide()
+	set_hover(null)
 	
 func handle_mouse_motion(event):
 	if event.button_mask & BUTTON_MASK_RIGHT:
 		var relative = event.relative
 		$GameCamera.move(relative)
-		$Hover.hide()
+		set_hover(null)
 	elif event.button_mask & BUTTON_MASK_MIDDLE:
-		$Hover.hide()
+		set_hover(null)
 		if event.relative.x > 0:
 			$GameCamera.move_camera($GameCamera.CAM_TURN_LEFT)
 		else:
 			$GameCamera.move_camera($GameCamera.CAM_TURN_RIGHT)
 	elif mode != MODE_IDLE:
 		mouse_pos = get_viewport().get_mouse_position()
-		selected = select_cell()
+		selected = get_cell_on_hover()
+		set_hover(selected)
 
-func select_cell():
-	var ray_length = 100
-	var from = $GameCamera.project_ray_origin(mouse_pos)
-	var to = from + $GameCamera.project_ray_normal(mouse_pos) * ray_length
-	var space_state = get_world().get_direct_space_state()
-	var pos2d = null
-
-	var result = space_state.intersect_ray(from, to)
-	if result.has("position"):
-		pos2d = world_data.get_game_pos(result["position"])
-		$Hover.translation = world_data.get_world_pos(pos2d)
-		$Hover.update_shape()
+func set_hover(game_pos):
+	if game_pos != null:
+		$Hover.translation = world_data.get_world_pos(game_pos)
+		match(mode):
+			MODE_IDLE:
+				$Hover.hide()
+				return
+			MODE_MOVE:
+				if pathfinder.is_impassable(game_pos):
+					$Hover.state = $Hover.STATE_MOVE_IMPASSABLE 
+				else: $Hover.state = $Hover.STATE_MOVE_PASSABLE
+			MODE_WAGON:
+				if pathfinder.is_impassable(game_pos):
+					$Hover.state = $Hover.STATE_MOVE_IMPASSABLE 
+				else: $Hover.state = $Hover.STATE_PLACE_UNIT
+			MODE_SELECT: $Hover.state = $Hover.STATE_HOVER
+			_: $Hover.state = $Hover.STATE_HOVER
+		$Hover.update()
 		$Hover.show()
 	else:
 		$Hover.hide()
+
+func get_cell_on_hover():
+	var pos2d = null
+	var ray_length = 3 * $GameCamera.camera_height
+	var from = $GameCamera.project_ray_origin(mouse_pos)
+	var to = from + $GameCamera.project_ray_normal(mouse_pos) * ray_length
+	var space_state = get_world().get_direct_space_state()
+	var result = space_state.intersect_ray(from, to)
+	if result.has("position"):
+		pos2d = world_data.get_game_pos(result["position"])
 	return pos2d
 
 func _on_Select_pressed():
@@ -94,7 +113,7 @@ func _on_GameData_actor_moved( actor, pos ):
 
 func _on_GameData_selected( pos ):
 	$Selection.translation = world_data.get_world_pos(pos)
-	$Selection.update_shape()
+	$Selection.update()
 	$Selection.show()
 
 func _on_GameData_deselected():

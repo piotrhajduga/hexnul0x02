@@ -7,8 +7,8 @@ onready var world_data = get_node(world_data_node)
 
 const up = Vector3(0.0,1.0,0.0)
 
-var max_camera_height = 30.0
-var min_camera_height = 2.0
+export(float) var max_camera_height = 30.0
+export(float) var min_camera_height = 2.0
 
 enum camera_movement {CAM_HI, CAM_LO, CAM_TURN_LEFT, CAM_TURN_RIGHT}
 
@@ -37,8 +37,8 @@ func set_height(new_height):
 func move(relative2d):
 	var relative3d = Vector3(relative2d.x,0.0,relative2d.y).rotated(up,camera_y_angle)
 	target_position -= relative3d * camera_vspeed
-	min_camera_height = world_data.get_terrain_mesh_height(target_position)
-	if camera_height < min_camera_height:
+	var terrain_height = world_data.get_terrain_mesh_height(target_position)
+	if camera_height > terrain_height and camera_height < min_camera_height:
 		set_height(min_camera_height)
 	emit_signal("moved", target_position, camera_y_angle)
 	look_at_target()

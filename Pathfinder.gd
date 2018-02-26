@@ -7,7 +7,7 @@ class HexAStar extends AStar:
 		self.world_data = world_data
 		
 	func _compute_cost(from_id, to_id):
-		return 1000 * (get_point_weight_scale(to_id) - get_point_weight_scale(from_id))
+		return 100 * (get_point_weight_scale(to_id) - get_point_weight_scale(from_id))
 		
 	func _estimate_cost(from_id, to_id):
 		var from_pos = self.get_point_position(from_id)
@@ -25,9 +25,10 @@ func add_cell(game_pos):
 	var pos = world_data.get_world_pos(game_pos)
 	var type = world_data.get_cell_type(pos)
 	var id = astar.get_available_point_id()
-	astar.add_point(id, pos, 1+world_data.get_height(pos))
+	astar.add_point(id, pos, 1+pow(world_data.get_height(pos),2))
 
 func connect_cell(game_pos):
+	if is_impassable(game_pos): return
 	var id = astar.get_closest_point(world_data.get_world_pos(game_pos))
 	for neighbor in world_data.get_cells_in_radius(game_pos,1):
 		if is_impassable(neighbor) or neighbor==game_pos:
@@ -38,12 +39,12 @@ func cell_type(game_pos):
 	return world_data.get_cell_type(world_data.get_world_pos(game_pos))
 
 func is_impassable(game_pos):
-	return false
-#	var impassable = [
-#		world_data.STONE,
-#		world_data.WATER
-#	]
-#	return impassable.has(cell_type(game_pos))
+	var impassable = [
+		world_data.SNOW,
+		world_data.STONE,
+		world_data.WATER
+	]
+	return impassable.has(cell_type(game_pos))
 
 func get_path(from, to):
 	var path = PoolVector2Array()

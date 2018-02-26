@@ -28,8 +28,10 @@ func select(pos):
 		emit_signal("selected", pos)
 
 func _on_GameWorld_wagon( pos ):
+	if pathfinder.is_impassable(pos): return
 	var wagon = Wagon.instance()
 	wagon.pathfinder = pathfinder
+	wagon.world_data = world_data
 	wagon.connect("moved", self, "_on_actor_moved")
 	wagon.game_position = pos
 	objects[pos] = wagon
@@ -44,8 +46,6 @@ func _on_actor_moved(actor, from_pos):
 func _on_GameWorld_select(pos):
 	if objects.has(pos):
 		select(pos)
-	else:
-		print("clicked: ", pos)
 
 func _on_GameWorld_move( pos ):
 	if selected == null:
