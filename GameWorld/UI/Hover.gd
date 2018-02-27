@@ -17,17 +17,23 @@ enum HoverState {
 	STATE_PLACE_UNIT
 }
 
+export(Color) var hover_color = Color("#c3cfb2")
+export(Color) var move_passable_color = Color("#23fdf2")
+export(Color) var move_impassable_color = Color("#ed6d35")
+export(Color) var place_unit_color = Color("#6dad35")
+
 var STATE_COLORS = {
-	STATE_HOVER: Color("#c3cfb2"),
-	STATE_MOVE_PASSABLE: Color("#23fdf2"),
-	STATE_MOVE_IMPASSABLE: Color("#ed6d35"),
-	STATE_PLACE_UNIT: Color("#6dad35")
+	STATE_HOVER: hover_color,
+	STATE_MOVE_PASSABLE: move_passable_color,
+	STATE_MOVE_IMPASSABLE: move_impassable_color,
+	STATE_PLACE_UNIT: place_unit_color
 }
 export(HoverState) var state = STATE_HOVER setget set_state
 var cell = null
 
 func set_state(val):
-	if val: state = val
+	if val != null: state = val
+	if cell  and light: update()
 
 func _ready():
 	cell = Cell.new(world_data, material)

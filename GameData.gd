@@ -39,13 +39,15 @@ func _on_GameWorld_wagon( pos ):
 	select(pos)
 
 func _on_actor_moved(actor, from_pos):
-	objects[from_pos] = null
+	objects.erase(from_pos)
 	objects[actor.game_position] = actor
 	emit_signal("actor_moved", actor, actor.game_position)
 
 func _on_GameWorld_select(pos):
 	if objects.has(pos):
 		select(pos)
+	else:
+		select(null)
 
 func _on_GameWorld_move( pos ):
 	if selected == null:

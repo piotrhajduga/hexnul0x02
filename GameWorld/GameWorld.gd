@@ -24,6 +24,15 @@ func _input(event):
 	match event.get_class():
 		"InputEventMouseButton": handle_mouse_button(event)
 		"InputEventMouseMotion": handle_mouse_motion(event)
+		"InputEventKey": handle_keypress(event)
+
+func handle_keypress(event):
+	match event.scancode:
+		KEY_W: mode = MODE_WAGON
+		KEY_M: mode = MODE_MOVE
+		KEY_S: mode = MODE_SELECT
+		KEY_ESCAPE: mode = MODE_IDLE
+	set_hover(get_cell_on_hover())
 
 func handle_mouse_button(event):
 	match event.button_index:
@@ -56,17 +65,14 @@ func handle_mouse_motion(event):
 		else:
 			$GameCamera.move_camera($GameCamera.CAM_TURN_RIGHT)
 	elif mode != MODE_IDLE:
-		mouse_pos = get_viewport().get_mouse_position()
 		selected = get_cell_on_hover()
 		set_hover(selected)
 
 func set_hover(game_pos):
-	if game_pos != null:
+	mouse_pos = get_viewport().get_mouse_position()
+	if game_pos != null and mode != MODE_IDLE:
 		$Hover.translation = world_data.get_world_pos(game_pos)
 		match(mode):
-			MODE_IDLE:
-				$Hover.hide()
-				return
 			MODE_MOVE:
 				if pathfinder.is_impassable(game_pos):
 					$Hover.state = $Hover.STATE_MOVE_IMPASSABLE 
@@ -75,8 +81,8 @@ func set_hover(game_pos):
 				if pathfinder.is_impassable(game_pos):
 					$Hover.state = $Hover.STATE_MOVE_IMPASSABLE 
 				else: $Hover.state = $Hover.STATE_PLACE_UNIT
-			MODE_SELECT: $Hover.state = $Hover.STATE_HOVER
-			_: $Hover.state = $Hover.STATE_HOVER
+			MODE_SELECT:
+				$Hover.state = $Hover.STATE_HOVER
 		$Hover.update()
 		$Hover.show()
 	else:

@@ -15,7 +15,7 @@ enum SelectionState {
 }
 
 var STATE_COLORS = {
-	STATE_NORMAL: Color("#fefced")
+	STATE_NORMAL: Color("#e09828")
 }
 export(SelectionState) var state = STATE_NORMAL setget set_state
 var cell = null
