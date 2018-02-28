@@ -39,6 +39,7 @@ func _on_GameWorld_wagon( pos ):
 	select(pos)
 
 func _on_actor_moved(actor, from_pos):
+	if from_pos == selected: select(null)
 	objects.erase(from_pos)
 	objects[actor.game_position] = actor
 	emit_signal("actor_moved", actor, actor.game_position)

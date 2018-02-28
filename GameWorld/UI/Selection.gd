@@ -21,7 +21,8 @@ export(SelectionState) var state = STATE_NORMAL setget set_state
 var cell = null
 
 func set_state(val):
-	if val: state = val
+	if val==null: return
+	state = val
 
 func _ready():
 	cell = Cell.new(world_data, material)

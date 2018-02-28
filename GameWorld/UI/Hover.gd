@@ -32,7 +32,8 @@ export(HoverState) var state = STATE_HOVER setget set_state
 var cell = null
 
 func set_state(val):
-	if val != null: state = val
+	if val==null: return
+	state = val
 	if cell  and light: update()
 
 func _ready():

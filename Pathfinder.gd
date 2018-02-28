@@ -1,23 +1,18 @@
 extends Node
 
 class HexAStar extends AStar:
-	var world_data
-	
-	func _init(world_data):
-		self.world_data = world_data
-		
 	func _compute_cost(from_id, to_id):
-		return 100 * (get_point_weight_scale(to_id) - get_point_weight_scale(from_id))
-		
-	func _estimate_cost(from_id, to_id):
 		var from_pos = self.get_point_position(from_id)
 		var to_pos = self.get_point_position(to_id)
 		return 1+(to_pos-from_pos).length()
+		
+	func _estimate_cost(from_id, to_id):
+		return 1 + (get_point_weight_scale(to_id) - get_point_weight_scale(from_id))
 
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
 
-onready var astar = AStar.new()
+onready var astar = HexAStar.new()
 
 export(int) var radius = 100;
 

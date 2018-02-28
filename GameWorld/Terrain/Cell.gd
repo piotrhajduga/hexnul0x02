@@ -53,6 +53,9 @@ func add_vertex(surfTool, i):
 
 func _ready():
 	pass
+	
+func update():
+	call_deferred("update_shape")
 
 func update_shape():
 	heights.clear()

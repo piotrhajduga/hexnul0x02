@@ -88,9 +88,9 @@ func set_hover(game_pos):
 	else:
 		$Hover.hide()
 
+var ray_length = 100
 func get_cell_on_hover():
 	var pos2d = null
-	var ray_length = 3 * $GameCamera.camera_height
 	var from = $GameCamera.project_ray_origin(mouse_pos)
 	var to = from + $GameCamera.project_ray_normal(mouse_pos) * ray_length
 	var space_state = get_world().get_direct_space_state()

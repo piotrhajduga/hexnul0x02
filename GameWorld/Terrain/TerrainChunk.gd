@@ -2,7 +2,7 @@ extends Spatial
 
 var Cell = preload("res://GameWorld/Terrain/Cell.gd")
 
-export(int) var radius = 32
+export(int) var radius = 4
 
 onready var collision = get_node("Area/CollisionShape")
 
@@ -14,13 +14,6 @@ export(Vector2) var center = Vector2()
 var cells = {}
 
 func _ready():
-	cell_material.set_shader_param("terrain_height_scale", world_data.TERRAIN_HEIGHT_SCALE)
-	cell_material.set_shader_param("stone_min_angle", world_data.stone_min_angle)
-	cell_material.set_shader_param("snow_height", world_data.snow_height)
-	cell_material.set_shader_param("gravel_height", world_data.gravel_height)
-	cell_material.set_shader_param("grass_height", world_data.grass_height)
-	cell_material.set_shader_param("sand_height", world_data.sand_height)
-	cell_material.set_shader_param("water_height", world_data.water_height)
 	update()
 
 func update():

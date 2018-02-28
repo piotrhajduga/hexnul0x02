@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode blend_mix,depth_draw_opaque,cull_back;
+render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley;
 
 uniform float terrain_height_scale : hint_range(1.0,100.0);
 
@@ -66,13 +66,14 @@ varying float water_weight;
 varying highp float angle;
 
 uniform float PI = 3.1415;
+uniform float center_weight = 2.0;
 
 void vertex() {
 	float height = sqrt((WORLD_MATRIX * vec4(VERTEX,1.0)).y / terrain_height_scale) * (1.0 - water_height) + water_height;
 	vec3 base_normal = normalize((WORLD_MATRIX * vec4(NORMAL, 0.0)).xyz);
-	
-	angle = acos(dot(vec3(0.0,1.0,0.0),base_normal));
-	COLOR = vec4(angle/PI,1.00-angle/PI,0.00,1.00);
+//
+//	angle = acos(dot(vec3(0.0,1.0,0.0),base_normal));
+//	COLOR = vec4(angle/PI,1.00-angle/PI,0.00,1.00);
 	
 	UV=UV*uv1_scale.xy+uv1_offset.xy;
 
@@ -83,18 +84,23 @@ void vertex() {
 	sand_weight = 0.0;
 	water_weight = 0.0;
 	
+	float weight = 1.0;
+	if (length(VERTEX) < 0.5) {
+		weight = center_weight;
+	}
+	
 	if (acos(dot(NORMAL,vec3(0.0,1.0,0.0))) > stone_min_angle) {
-		stone_weight = 1.0;
+		stone_weight = weight;
 	} else if (height > snow_height) {
-		snow_weight = 1.0;
+		snow_weight = weight;
 	} else if (height > gravel_height) {
-		gravel_weight = 1.0;
+		gravel_weight = weight;
 	} else if (height > grass_height) {
-		grass_weight = 1.0;
+		grass_weight = weight;
 	} else if (height > sand_height) {
-		sand_weight = 1.0;
+		sand_weight = weight;
 	} else {
-		water_weight = 1.0;
+		water_weight = weight;
 	}
 }
 
