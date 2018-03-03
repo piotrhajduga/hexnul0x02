@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/nor_sand.jpg-67035100370cc73326800b6acdeee00c.s3tc.stex"
-path.etc2="res://.import/nor_sand.jpg-67035100370cc73326800b6acdeee00c.etc2.stex"
+path.s3tc="res://.import/nor_sand.jpg-330a74c3db297ba3b206622ea6280a5c.s3tc.stex"
+path.etc2="res://.import/nor_sand.jpg-330a74c3db297ba3b206622ea6280a5c.etc2.stex"
 
 [deps]
 
-source_file="res://GameWorld/Terrain/nor_sand.jpg"
+source_file="res://GameWorld/Terrain/assets/nor_sand.jpg"
 source_md5="6e973b647de40044be23c8252687d283"
 
-dest_files=[ "res://.import/nor_sand.jpg-67035100370cc73326800b6acdeee00c.s3tc.stex", "res://.import/nor_sand.jpg-67035100370cc73326800b6acdeee00c.etc2.stex" ]
+dest_files=[ "res://.import/nor_sand.jpg-330a74c3db297ba3b206622ea6280a5c.s3tc.stex", "res://.import/nor_sand.jpg-330a74c3db297ba3b206622ea6280a5c.etc2.stex" ]
 dest_md5="14117a3f8630273b285dc6b82a2f3ae8"
 
 [params]

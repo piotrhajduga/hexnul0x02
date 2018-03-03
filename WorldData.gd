@@ -52,6 +52,14 @@ func get_game_pos(pos):
 		zpos -= zStep / 2.0
 	var y = int(round(zpos / (2.0 * zStep)))
 	return Vector2(x,y)
+
+func is_passable(game_pos):
+	var impassable = [
+		SNOW,
+		STONE,
+		WATER
+	]
+	return not impassable.has(get_cell_type(get_world_pos(game_pos)))
 	
 func get_world_pos(game_pos):
 	var pos = Vector3()
@@ -98,7 +106,7 @@ func get_terrain_mesh_height(pos):
 func get_cell_type(pos):
 	var height = get_height(pos)
 	if height>=snow_height: return SNOW
-	if acos(up.dot(get_normal(pos))) > PI/8:
+	if acos(up.dot(get_normal(pos))) > stone_min_angle:
 		return STONE
 	elif height>=gravel_height: return GRAVEL
 	elif height>=grass_height: return GRASS

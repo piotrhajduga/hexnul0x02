@@ -2,8 +2,10 @@ extends Spatial
 
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
-export(NodePath) var pathfinder_node
-onready var pathfinder = get_node(pathfinder_node)
+export(NodePath) var game_data_node
+onready var game_data = get_node(game_data_node)
+
+onready var pathfinder = $Selection.get_node("Pathfinder")
 
 signal wagon(game_pos)
 signal select(game_pos)
@@ -28,9 +30,9 @@ func _input(event):
 
 func handle_keypress(event):
 	match event.scancode:
-		KEY_W: mode = MODE_WAGON
-		KEY_M: mode = MODE_MOVE
-		KEY_S: mode = MODE_SELECT
+		KEY_W: _on_Units_mode_wagon()
+		KEY_M: _on_Move_pressed()
+		KEY_S: _on_Select_pressed()
 		KEY_ESCAPE: mode = MODE_IDLE
 	set_hover(get_cell_on_hover())
 
@@ -51,7 +53,7 @@ func use_tool():
 		MODE_SELECT: emit_signal("select", selected)
 		MODE_MOVE: emit_signal("move", selected)
 	mode = MODE_SELECT
-	set_hover(null)
+	set_hover(selected)
 	
 func handle_mouse_motion(event):
 	if event.button_mask & BUTTON_MASK_RIGHT:
@@ -74,13 +76,13 @@ func set_hover(game_pos):
 		$Hover.translation = world_data.get_world_pos(game_pos)
 		match(mode):
 			MODE_MOVE:
-				if pathfinder.is_impassable(game_pos):
-					$Hover.state = $Hover.STATE_MOVE_IMPASSABLE 
-				else: $Hover.state = $Hover.STATE_MOVE_PASSABLE
+				if pathfinder.is_passable(game_pos):
+					$Hover.state = $Hover.STATE_MOVE_PASSABLE 
+				else: $Hover.state = $Hover.STATE_MOVE_IMPASSABLE
 			MODE_WAGON:
-				if pathfinder.is_impassable(game_pos):
-					$Hover.state = $Hover.STATE_MOVE_IMPASSABLE 
-				else: $Hover.state = $Hover.STATE_PLACE_UNIT
+				if world_data.is_passable(game_pos):
+					$Hover.state = $Hover.STATE_PLACE_UNIT
+				else: $Hover.state = $Hover.STATE_MOVE_IMPASSABLE
 			MODE_SELECT:
 				$Hover.state = $Hover.STATE_HOVER
 		$Hover.update()
@@ -101,6 +103,8 @@ func get_cell_on_hover():
 
 func _on_Select_pressed():
 	mode = MODE_SELECT
+	$Selection.state = $Selection.STATE_NORMAL
+	$Selection.update()
 
 func _on_Units_mode_wagon():
 	emit_signal("select", null)
@@ -108,6 +112,8 @@ func _on_Units_mode_wagon():
 
 func _on_Move_pressed():
 	mode = MODE_MOVE
+	$Selection.state = $Selection.STATE_MOVE
+	$Selection.update()
 
 func _on_GameData_actor_placed(actor, pos):
 	_on_GameData_actor_moved(actor, pos)
@@ -118,9 +124,10 @@ func _on_GameData_actor_moved( actor, pos ):
 	actor.translation.y = world_data.get_terrain_mesh_height(actor.translation)
 
 func _on_GameData_selected( pos ):
-	$Selection.translation = world_data.get_world_pos(pos)
-	$Selection.update()
-	$Selection.show()
-
-func _on_GameData_deselected():
-	$Selection.hide()
+	if pos:
+		$Selection.state = $Selection.STATE_NORMAL
+		$Selection.translation = world_data.get_world_pos(pos)
+		$Selection.update()
+		$Selection.show()
+	else:
+		$Selection.hide()

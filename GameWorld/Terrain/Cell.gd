@@ -19,10 +19,6 @@ var world_data = null
 var material = null
 var global_pos = null
 
-func _init(world_data, material):
-	self.world_data = world_data
-	self.material = material
-
 var normals = {}
 func get_normal(i):
 	if normals.has(i): return normals[i]

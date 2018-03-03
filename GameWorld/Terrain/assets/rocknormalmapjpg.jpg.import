@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/rocknormalmapjpg.jpg-3cfb88e6f7551c0ae88e9bf32abb568f.s3tc.stex"
-path.etc2="res://.import/rocknormalmapjpg.jpg-3cfb88e6f7551c0ae88e9bf32abb568f.etc2.stex"
+path.s3tc="res://.import/rocknormalmapjpg.jpg-8e6624cda712b4009cde9e1999d11301.s3tc.stex"
+path.etc2="res://.import/rocknormalmapjpg.jpg-8e6624cda712b4009cde9e1999d11301.etc2.stex"
 
 [deps]
 
-source_file="res://GameWorld/Terrain/rocknormalmapjpg.jpg"
+source_file="res://GameWorld/Terrain/assets/rocknormalmapjpg.jpg"
 source_md5="bd2c3bcc0477b75caadf9a019cdb3690"
 
-dest_files=[ "res://.import/rocknormalmapjpg.jpg-3cfb88e6f7551c0ae88e9bf32abb568f.s3tc.stex", "res://.import/rocknormalmapjpg.jpg-3cfb88e6f7551c0ae88e9bf32abb568f.etc2.stex" ]
+dest_files=[ "res://.import/rocknormalmapjpg.jpg-8e6624cda712b4009cde9e1999d11301.s3tc.stex", "res://.import/rocknormalmapjpg.jpg-8e6624cda712b4009cde9e1999d11301.etc2.stex" ]
 dest_md5="7c6fa80a9c6b9c450ce79372da3d5bc8"
 
 [params]

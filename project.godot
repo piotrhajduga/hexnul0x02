@@ -18,6 +18,7 @@ config/icon="res://icon.png"
 
 window/size/width=1280
 window/size/height=800
+window/stretch/aspect="expand"
 
 [editor]
 
@@ -25,5 +26,4 @@ convert_text_resources_to_binary_on_export=true
 
 [rendering]
 
-threads/thread_model=2
 environment/default_environment="res://default_env.tres"

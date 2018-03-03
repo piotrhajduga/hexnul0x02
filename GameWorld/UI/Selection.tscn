@@ -10,7 +10,11 @@ _sections_unfolded = [ "Transform", "Visibility" ]
 world_data_node = null
 light_height = 3.0
 material = ExtResource( 2 )
+impassable_material = null
 state = null
+normal_color = Color( 0.764706, 0.811765, 0.698039, 1 )
+move_passable_color = Color( 0.137255, 0.992157, 0.94902, 1 )
+move_impassable_color = Color( 0.929412, 0.427451, 0.207843, 1 )
 
 [node name="SpotLight" type="SpotLight" parent="." index="0"]
 

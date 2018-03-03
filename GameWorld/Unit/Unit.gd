@@ -2,7 +2,6 @@ extends Spatial
 
 signal moved (actor, from_pos)
 
-var pathfinder
 var world_data
 
 var game_position = Vector2() setget set_game_position
@@ -33,12 +32,6 @@ func _physics_process(delta):
 			if path.size() > 1:
 				look_at_cell(path[1])
 			path.remove(0)
-
-func find_path(target_position):
-	if pathfinder:
-		path = pathfinder.get_path(game_position, target_position)
-	else:
-		set_game_position(target_position)
 
 func set_game_position(target_position):
 	var from_position = game_position

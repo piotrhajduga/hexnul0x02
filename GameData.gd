@@ -1,14 +1,14 @@
 extends Node
 
-export(NodePath) var pathfinder_node
-onready var pathfinder = get_node(pathfinder_node)
+export(NodePath) var selection_node
+onready var selection = get_node(selection_node)
+onready var pathfinder = selection.get_node("Pathfinder")
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
 
 signal actor_placed(actor, pos)
 signal actor_moved(actor, pos)
 signal selected(pos)
-signal deselected()
 
 var Wagon = preload("res://GameWorld/Unit/Unit.tscn")
 
@@ -22,21 +22,17 @@ var selected = null setget select
 
 func select(pos):
 	selected = pos
-	if selected == null:
-		emit_signal("deselected")
-	else:
-		emit_signal("selected", pos)
+	emit_signal("selected", pos)
 
 func _on_GameWorld_wagon( pos ):
-	if pathfinder.is_impassable(pos): return
-	var wagon = Wagon.instance()
-	wagon.pathfinder = pathfinder
-	wagon.world_data = world_data
-	wagon.connect("moved", self, "_on_actor_moved")
-	wagon.game_position = pos
-	objects[pos] = wagon
-	emit_signal("actor_placed", wagon, pos)
-	select(pos)
+	if world_data.is_passable(pos):
+		var wagon = Wagon.instance()
+		wagon.world_data = world_data
+		wagon.connect("moved", self, "_on_actor_moved")
+		wagon.game_position = pos
+		objects[pos] = wagon
+		emit_signal("actor_placed", wagon, pos)
+		select(pos)
 
 func _on_actor_moved(actor, from_pos):
 	if from_pos == selected: select(null)
@@ -56,5 +52,8 @@ func _on_GameWorld_move( pos ):
 		return
 	var actor = objects[selected]
 	if actor:
-		objects[selected].find_path(pos)
-		select(null)
+		objects[selected].path = pathfinder.get_path(selected, pos)
+		if objects[selected].path.empty():
+			select(selected)
+		else:
+			select(null)

@@ -1,6 +1,6 @@
 extends Spatial
 
-var Cell = preload("res://GameWorld/Terrain/Cell.gd")
+var Cell = preload("res://GameWorld/Terrain/Cell.tscn")
 
 export(int) var radius = 4
 
@@ -44,7 +44,9 @@ func create_collision_hex(game_pos):
 
 func add_cell(game_pos):
 	var world_pos = world_data.get_world_pos(game_pos)
-	cells[game_pos] = Cell.new(world_data, cell_material)
+	cells[game_pos] = Cell.instance()
+	cells[game_pos].world_data = world_data
+	cells[game_pos].material = cell_material
 	add_child(cells[game_pos])
 	cells[game_pos].global_translate(world_pos)
 	cells[game_pos].update_shape()

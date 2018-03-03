@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/grass-normal.jpg-25f2070d19698dc078934b38b125bf1d.s3tc.stex"
-path.etc2="res://.import/grass-normal.jpg-25f2070d19698dc078934b38b125bf1d.etc2.stex"
+path.s3tc="res://.import/grass-normal.jpg-9500955d687d886f6f68d5412aae5988.s3tc.stex"
+path.etc2="res://.import/grass-normal.jpg-9500955d687d886f6f68d5412aae5988.etc2.stex"
 
 [deps]
 
-source_file="res://GameWorld/Terrain/grass-normal.jpg"
+source_file="res://GameWorld/Terrain/assets/grass-normal.jpg"
 source_md5="7453fcf9dbac7c1a0b8b9c7817d41033"
 
-dest_files=[ "res://.import/grass-normal.jpg-25f2070d19698dc078934b38b125bf1d.s3tc.stex", "res://.import/grass-normal.jpg-25f2070d19698dc078934b38b125bf1d.etc2.stex" ]
+dest_files=[ "res://.import/grass-normal.jpg-9500955d687d886f6f68d5412aae5988.s3tc.stex", "res://.import/grass-normal.jpg-9500955d687d886f6f68d5412aae5988.etc2.stex" ]
 dest_md5="bdb77d595c2d2ddade03d5a0a720ac62"
 
 [params]

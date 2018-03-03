@@ -1,6 +1,6 @@
 extends Spatial
 
-var Cell = preload("res://GameWorld/Terrain/Cell.gd")
+var Cell = preload("res://GameWorld/Terrain/Cell.tscn")
 
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
@@ -34,10 +34,12 @@ var cell = null
 func set_state(val):
 	if val==null: return
 	state = val
-	if cell  and light: update()
+	if cell and light: update()
 
 func _ready():
-	cell = Cell.new(world_data, material)
+	cell = Cell.instance()
+	cell.world_data = world_data
+	cell.material = material
 	cell.translation.y = 0.01
 	add_child(cell)
 	light.translation.y = light_height + world_data.get_terrain_mesh_height(self.translation)
