@@ -111,9 +111,10 @@ func _on_Units_mode_wagon():
 	mode = MODE_WAGON
 
 func _on_Move_pressed():
-	mode = MODE_MOVE
-	$Selection.state = $Selection.STATE_MOVE
-	$Selection.update()
+	if $Selection.is_visible_in_tree():
+		mode = MODE_MOVE
+		$Selection.state = $Selection.STATE_MOVE
+		$Selection.update()
 
 func _on_GameData_actor_placed(actor, pos):
 	_on_GameData_actor_moved(actor, pos)

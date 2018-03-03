@@ -26,4 +26,5 @@ convert_text_resources_to_binary_on_export=true
 
 [rendering]
 
+threads/thread_model=2
 environment/default_environment="res://default_env.tres"
