@@ -8,10 +8,10 @@ path.etc2="res://.import/stone_albedo.jpg-639dd864ae8370546a22789b262e6f3d.etc2.
 [deps]
 
 source_file="res://GameWorld/Terrain/assets/stone_albedo.jpg"
-source_md5="48636d50da75c49ac77ef163757d7c3e"
+source_md5="2ebad715fe58ce2709c28b842199708e"
 
 dest_files=[ "res://.import/stone_albedo.jpg-639dd864ae8370546a22789b262e6f3d.s3tc.stex", "res://.import/stone_albedo.jpg-639dd864ae8370546a22789b262e6f3d.etc2.stex" ]
-dest_md5="085775322b78dd74e2b8e669fb721411"
+dest_md5="2dcc2215bbcf003f42207a333c842623"
 
 [params]
 

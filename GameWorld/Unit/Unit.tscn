@@ -226,7 +226,7 @@ extra_cull_margin = 0.0
 use_in_baked_light = false
 lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
+lod_max_distance = 10.0
 lod_max_hysteresis = 0.0
 mesh = ExtResource( 2 )
 skeleton = NodePath("..")
@@ -234,6 +234,6 @@ material/0 = SubResource( 1 )
 material/1 = SubResource( 2 )
 material/2 = SubResource( 3 )
 material/3 = SubResource( 4 )
-_sections_unfolded = [ "Transform", "material" ]
+_sections_unfolded = [ "Geometry", "LOD", "Transform", "Visibility", "material" ]
 
 

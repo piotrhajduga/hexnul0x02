@@ -14,13 +14,21 @@ signal move(game_pos)
 var mouse_pos = Vector2()
 var selected = Vector2()
 
-enum {MODE_IDLE,MODE_SELECT,MODE_WAGON,MODE_MOVE}
-var mode = MODE_IDLE
+enum Mode {MODE_IDLE,MODE_SELECT,MODE_WAGON,MODE_MOVE}
+export(Mode) var mode = MODE_IDLE setget set_mode
+
+func set_mode(imode):
+	mode = imode
+	if $Terrain:
+		if [MODE_WAGON,MODE_MOVE].has(mode):
+			$Terrain.show_grid()
+		else:
+			$Terrain.hide_grid()
 
 func _ready():
 	$GameCamera.target_position = Vector3()
 	$Hover.show()
-	mode = MODE_SELECT
+	self.mode = MODE_SELECT
 
 func _input(event):
 	match event.get_class():
@@ -52,7 +60,7 @@ func use_tool():
 		MODE_WAGON: emit_signal("wagon", selected)
 		MODE_SELECT: emit_signal("select", selected)
 		MODE_MOVE: emit_signal("move", selected)
-	mode = MODE_SELECT
+	self.mode = MODE_SELECT
 	set_hover(selected)
 	
 func handle_mouse_motion(event):
@@ -102,17 +110,17 @@ func get_cell_on_hover():
 	return pos2d
 
 func _on_Select_pressed():
-	mode = MODE_SELECT
+	self.mode = MODE_SELECT
 	$Selection.state = $Selection.STATE_NORMAL
 	$Selection.update()
 
 func _on_Units_mode_wagon():
 	emit_signal("select", null)
-	mode = MODE_WAGON
+	self.mode = MODE_WAGON
 
 func _on_Move_pressed():
 	if $Selection.is_visible_in_tree():
-		mode = MODE_MOVE
+		self.mode = MODE_MOVE
 		$Selection.state = $Selection.STATE_MOVE
 		$Selection.update()
 

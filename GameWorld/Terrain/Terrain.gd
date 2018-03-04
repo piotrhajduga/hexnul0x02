@@ -17,6 +17,8 @@ onready var world_data = get_node(world_data_node)
 export(NodePath) var camera_node
 onready var camera = get_node(camera_node)
 
+export(float, 0, 1) var cell_grid_alpha = 0.4
+
 var chunks = {}
 
 func _ready():
@@ -28,6 +30,12 @@ func _ready():
 	cell_material.set_shader_param("sand_height", world_data.sand_height)
 	cell_material.set_shader_param("water_height", world_data.water_height)
 	update_chunks(Vector2())
+
+func show_grid():
+	cell_material.set_shader_param("mask_weight", cell_grid_alpha)
+
+func hide_grid():
+	cell_material.set_shader_param("mask_weight", 0.0)
 
 func update_chunks(center):
 	for pos in world_data.get_cells_in_radius(center, chunks_radius):

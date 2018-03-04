@@ -8,10 +8,10 @@ path.etc2="res://.import/water-albedo.jpg-ff77bc2891c21c4426e702268f8cba00.etc2.
 [deps]
 
 source_file="res://GameWorld/Terrain/assets/water-albedo.jpg"
-source_md5="e999c0c826721edd82fb128f759c59b6"
+source_md5="b3d95989f5bac95502396e0053767ae6"
 
 dest_files=[ "res://.import/water-albedo.jpg-ff77bc2891c21c4426e702268f8cba00.s3tc.stex", "res://.import/water-albedo.jpg-ff77bc2891c21c4426e702268f8cba00.etc2.stex" ]
-dest_md5="f8b1674de246d47e6e13a45170590861"
+dest_md5="3f8c5b61a174810026a9421a470bbb80"
 
 [params]
 
