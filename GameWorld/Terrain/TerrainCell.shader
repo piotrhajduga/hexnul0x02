@@ -54,7 +54,8 @@ uniform sampler2D water_texture_normal : hint_normal;
 uniform vec3 uv1_scale;
 uniform vec3 uv1_offset;
 
-uniform float mask_radius : hint_range(0.0,1.0);
+uniform float mask_radius = 0.9;
+uniform float mask_weight = 0.6;
 uniform vec4 mask_color : hint_color;
 
 varying float stone_weight;
@@ -67,6 +68,8 @@ varying highp float angle;
 
 uniform float PI = 3.1415;
 uniform float center_weight = 2.0;
+
+varying float mask_edge_weight;
 
 void vertex() {
 	float height = sqrt((WORLD_MATRIX * vec4(VERTEX,1.0)).y / terrain_height_scale) * (1.0 - water_height) + water_height;
@@ -81,8 +84,11 @@ void vertex() {
 	sand_weight = 0.0;
 	water_weight = 0.0;
 	
+	mask_edge_weight = 1.0;
+	
 	float weight = 1.0/center_weight;
-	if (length(VERTEX) < 0.5) {
+	if (length(VERTEX.xz) < 0.5) {
+		mask_edge_weight = 0.0;
 		weight = 1.0;
 	}
 	
@@ -159,9 +165,12 @@ void fragment() {
 	weights_sum += weight;
 
 	// set values:
-	float radius = length(UV - vec2(0.5,0.5));
-	float mask = (radius<=mask_radius) ? 1.0 : (1.0/(1.0+radius-mask_radius));
-	ALBEDO = (albedo / weights_sum) * mask + mask_color.rgb * (mask - 1.0);
+	float fragment_mask_weight = 0.0;
+	if (mask_edge_weight >= mask_radius) {
+		fragment_mask_weight = mask_weight * (1.0 - ((1.0 - mask_edge_weight) / (1.0 - mask_radius)));
+	}
+	
+	ALBEDO = (albedo / weights_sum) * (1.0 - fragment_mask_weight) + mask_color.rgb * fragment_mask_weight;
 	
 	ROUGHNESS = roughness / weights_sum;
 	NORMALMAP = normalmap / weights_sum;

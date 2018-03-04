@@ -8,10 +8,10 @@ path.etc2="res://.import/snow_albedo.jpg-5921db7823861c18e975bc448bc8d8e6.etc2.s
 [deps]
 
 source_file="res://GameWorld/Terrain/assets/snow_albedo.jpg"
-source_md5="b319dcce91deeaaa3618fcfd22e4f6cc"
+source_md5="191b35fcbbc9329dfe6682d583419243"
 
 dest_files=[ "res://.import/snow_albedo.jpg-5921db7823861c18e975bc448bc8d8e6.s3tc.stex", "res://.import/snow_albedo.jpg-5921db7823861c18e975bc448bc8d8e6.etc2.stex" ]
-dest_md5="88afa7c446c6fe7d006b3d275aa546b1"
+dest_md5="a0d39ea20bec6b20209859fff5e8ec27"
 
 [params]
 

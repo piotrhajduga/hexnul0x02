@@ -8,10 +8,10 @@ path.etc2="res://.import/snow-normal.jpg-519847257de96a10ca331b1522587a0e.etc2.s
 [deps]
 
 source_file="res://GameWorld/Terrain/assets/snow-normal.jpg"
-source_md5="d64e6314686a1b49ff2b0ccd6b772a37"
+source_md5="45090a6badafca787908005eb8c28d19"
 
 dest_files=[ "res://.import/snow-normal.jpg-519847257de96a10ca331b1522587a0e.s3tc.stex", "res://.import/snow-normal.jpg-519847257de96a10ca331b1522587a0e.etc2.stex" ]
-dest_md5="ca6f5913877150fad0d39e5855ffcd7c"
+dest_md5="451e3bb7c7356a2ae79fbe99e3ebd297"
 
 [params]
 
