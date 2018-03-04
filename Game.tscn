@@ -44,14 +44,14 @@ script = ExtResource( 1 )
 WORLD_RADIUS = 70
 WORLD_RADIUS_FEATHER = 32
 TERRAIN_HEIGHT_SCALE = 15.0
-stone_min_angle = 0.349
+stone_min_angle = 0.35
 noises_scales = PoolRealArray( 0.03, 0.017, 0.124, 0.35, 0.14, 0.53 )
 game_seed = "robactwo"
-water_height = 0.41
-sand_height = 0.411
-grass_height = 0.43
-gravel_height = 0.57
-snow_height = 0.67
+water_height = 0.4
+sand_height = 0.4
+grass_height = 0.45
+gravel_height = 0.55
+snow_height = 0.65
 
 [node name="GameData" type="Node" parent="." index="1"]
 
@@ -250,11 +250,11 @@ _sections_unfolded = [ "Pause" ]
 
 transform = Transform( -0.458478, -0.669656, 0.584258, 0, 0.657426, 0.753519, -0.888706, 0.345472, -0.301416, 0, 7.74309, 0 )
 layers = 1
-light_color = Color( 1, 1, 1, 1 )
-light_energy = 1.0
-light_indirect_energy = 1.0
+light_color = Color( 0.957031, 0.954461, 0.927124, 1 )
+light_energy = 1.7
+light_indirect_energy = 0.7
 light_negative = false
-light_specular = 0.5
+light_specular = 0.4
 light_bake_mode = 2
 light_cull_mask = -1
 shadow_enabled = true
@@ -272,7 +272,7 @@ directional_shadow_normal_bias = 0.8
 directional_shadow_bias_split_scale = 0.25
 directional_shadow_depth_range = 0
 directional_shadow_max_distance = 200.0
-_sections_unfolded = [ "Shadow" ]
+_sections_unfolded = [ "Light", "Shadow" ]
 
 [node name="Terrain" type="Spatial" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="3"]
 

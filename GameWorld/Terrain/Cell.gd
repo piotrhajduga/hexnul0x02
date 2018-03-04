@@ -42,7 +42,6 @@ func add_vertex(surfTool, i):
 	var uv = outlineUVs[i] if i<7 else Vector2(0.5,0.5)
 	var normal = get_normal(i)
 	var height = get_height(i)
-	
 	surfTool.add_normal(normal)
 	surfTool.add_uv(uv)
 	surfTool.add_vertex(pos + Vector3(0.0, height, 0.0))

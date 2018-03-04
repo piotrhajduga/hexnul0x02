@@ -214,11 +214,11 @@ _sections_unfolded = [ "Albedo", "Roughness" ]
 [node name="Unit" type="Spatial"]
 
 script = ExtResource( 1 )
-_sections_unfolded = [ "Transform" ]
+_sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="MeshInstance" type="MeshInstance" parent="." index="0"]
 
-transform = Transform( -0.8, 0, -2.60673e-07, 0, 0.8, 0, 2.60673e-07, 0, -0.8, 0, 0, 0 )
+transform = Transform( -0.5, 0, -1.94707e-07, 0, 0.5, 0, 1.94707e-07, 0, -0.5, 0, 0, 0 )
 layers = 1
 material_override = null
 cast_shadow = 1

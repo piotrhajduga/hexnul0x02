@@ -2,7 +2,7 @@
 
 [ext_resource path="res://GameWorld/Terrain/Cell.gd" type="Script" id=1]
 
-[node name="Cell" type="MeshInstance" index="0"]
+[node name="Cell" type="MeshInstance"]
 
 layers = 1
 material_override = null
