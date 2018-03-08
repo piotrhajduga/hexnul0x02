@@ -53,7 +53,5 @@ func _on_GameWorld_move( pos ):
 	var actor = objects[selected]
 	if actor:
 		objects[selected].path = pathfinder.get_path(selected, pos)
-		if objects[selected].path.empty():
-			select(selected)
-		else:
+		if not objects[selected].path.empty():
 			select(null)

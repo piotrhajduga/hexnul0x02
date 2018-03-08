@@ -4,6 +4,7 @@ var Cell = preload("res://GameWorld/Terrain/Cell.tscn")
 
 export(int) var radius = 4
 
+onready var game_space = get_node("/root/GameSpace")
 onready var collision = get_node("Area/CollisionShape")
 
 var world_data = null
@@ -17,15 +18,12 @@ func _ready():
 	update()
 
 func update():
-	var visible_cells = world_data.get_cells_in_radius(center, int(radius))
-
-	var points = PoolVector3Array()
-
-	for game_pos in visible_cells:
+	for game_pos in game_space.offset_range(center, int(radius)):
 		if not cells.has(game_pos):
 			add_cell(game_pos)
+	var points = PoolVector3Array()
+	for game_pos in game_space.offset_range(center, int(radius)+1):
 		points.append_array(create_collision_hex(game_pos))
-
 	collision.shape = ConcavePolygonShape.new()
 	collision.shape.set_faces(points)
 	collision.disabled = false

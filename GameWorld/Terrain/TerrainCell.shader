@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley;
+render_mode depth_draw_opaque,cull_back,diffuse_burley;
 
 uniform float terrain_height_scale : hint_range(1.0,100.0);
 
@@ -91,7 +91,7 @@ void vertex() {
 		mask_edge_weight = 0.0;
 		weight = 1.0;
 	}
-	
+
 	if (acos(dot(base_normal,vec3(0.0,1.0,0.0))) > stone_min_angle) {
 		stone_weight = weight;
 	} else if (height > snow_height) {
@@ -115,7 +115,7 @@ void fragment() {
 	float roughness = 0.0;
 	vec3 normalmap = vec3(0.0);
 	float normalmap_depth = 0.0;
-
+	
 	//stone
 	weight = smoothstep(0.0,1.0,stone_weight);
 	albedo += stone_albedo.rgb * texture(stone_texture_albedo,UV).rgb * weight;
@@ -158,10 +158,10 @@ void fragment() {
 
 	//water
 	weight = smoothstep(0.0,1.0,water_weight);
-	albedo += water_albedo.rgb * texture(water_texture_albedo,UV).rgb * weight;
+	albedo += water_albedo.rgb * texture(water_texture_albedo,UV + vec2(sin(2.0*TIME),cos(2.0*TIME))*0.02).rgb * weight;
 	roughness += water_roughness * weight;
-	normalmap += texture(water_texture_normal,UV).rgb * weight;
-	normalmap_depth += water_normal_scale * weight;
+	normalmap += texture(water_texture_normal,UV + vec2(cos(4.0*TIME),sin(4.0*TIME))*0.03).rgb * weight;
+	normalmap_depth += (water_normal_scale) * weight;
 	weights_sum += weight;
 
 	// set values:

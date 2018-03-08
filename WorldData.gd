@@ -1,5 +1,8 @@
 extends Node
 
+#type GamePos - offset coords Vector2[int]
+#type WorldPos - world coords Vector3
+
 var SoftNoise = preload("res://GameWorld/softnoise.gd")
 
 export var WORLD_RADIUS = 128
@@ -20,6 +23,8 @@ export(float,0,1) var grass_height = 0.43
 export(float,0,1) var gravel_height = 0.61
 export(float,0,1) var snow_height = 0.67
 
+onready var game_space = get_node("/root/GameSpace")
+
 enum cell_type {WATER, SAND, GRASS, STONE, GRAVEL, SNOW}
 
 const xStep = 1.0
@@ -36,22 +41,24 @@ func _ready():
 		noises_modifiers.insert(i, Vector2(randf(),randf()))
 
 func get_cells_in_radius(pos, radius):
-	var points = []
-	for x in range(-radius,radius+1):
-		for y in range(2*radius+1-int(abs(x))):
-			points.append(Vector2(
-				int(pos.x) + x,
-				int(pos.y) + y - radius + floor(abs(x)/2)+(int(abs(pos.x))%2)*(int(abs(x))%2)
-			))
-	return points
+	return game_space.offset_range(pos, radius)
+#	var points = []
+#	for x in range(-radius,radius+1):
+#		for y in range(2*radius+1-int(abs(x))):
+#			points.append(Vector2(
+#				int(pos.x) + x,
+#				int(pos.y) + y - radius + floor(abs(x)/2)+(int(abs(pos.x))%2)*(int(abs(x))%2)
+#			))
+#	return points
 
 func get_game_pos(pos):
-	var x = int(round(pos.x / (1.5 * xStep)))
-	var zpos = pos.z
-	if x % 2 != 0:
-		zpos -= zStep / 2.0
-	var y = int(round(zpos / (2.0 * zStep)))
-	return Vector2(x,y)
+	return game_space.world_to_offset(pos)
+#	var x = int(round(pos.x / (1.5 * xStep)))
+#	var zpos = pos.z
+#	if x % 2 != 0:
+#		zpos -= zStep / 2.0
+#	var y = int(round(zpos / (2.0 * zStep)))
+#	return Vector2(x,y)
 
 func is_passable(game_pos):
 	var impassable = [
@@ -62,17 +69,17 @@ func is_passable(game_pos):
 	return not impassable.has(get_cell_type(get_world_pos(game_pos)))
 	
 func get_world_pos(game_pos):
-	var pos = Vector3()
-	pos.x = floor(game_pos.x) * 1.5 * xStep
-	pos.z = floor(game_pos.y) * 2.0 * zStep
-	if int(game_pos.x) % 2 != 0:
-		pos.z += zStep
-	return pos
+	return game_space.offset_to_world(game_pos)
+#	var pos = Vector3()
+#	pos.x = floor(game_pos.x) * 1.5 * xStep
+#	pos.z = floor(game_pos.y) * 2.0 * zStep
+#	if int(game_pos.x) % 2 != 0:
+#		pos.z += zStep
+#	return pos
 
 func get_height(pos):
 	var radius = pos.length()
 	if radius > WORLD_RADIUS: return 0.0
-	
 	var sum = 0.0
 	var sum_weight = 1.0
 	var weight = 1.0

@@ -17,27 +17,29 @@ onready var astar = HexAStar.new()
 export(Vector2) var game_pos = Vector2()
 export(int) var radius = 5
 
+onready var game_space = get_node("/root/GameSpace")
+
 func add_cell(cell_pos):
-	var pos = world_data.get_world_pos(cell_pos)
+	var pos = game_space.offset_to_world(cell_pos)
 	var type = world_data.get_cell_type(pos)
 	var id = astar.get_available_point_id()
-	astar.add_point(id, pos, 1+15*pow(world_data.get_height(pos),2))
+	astar.add_point(id, pos, 1)#1+15*pow(world_data.get_height(pos),2))
 
 func connect_cell(cell_pos):
 	if world_data.is_passable(cell_pos):
-		var id = astar.get_closest_point(world_data.get_world_pos(cell_pos))
-		for neighbor in world_data.get_cells_in_radius(cell_pos,1):
+		var id = astar.get_closest_point(game_space.offset_to_world(cell_pos))
+		for neighbor in game_space.offset_neighbors(cell_pos):
 			if neighbor!=cell_pos and world_data.is_passable(neighbor):
-				astar.connect_points(id, astar.get_closest_point(world_data.get_world_pos(neighbor)), false)
+				astar.connect_points(id, astar.get_closest_point(game_space.offset_to_world(neighbor)), false)
 
 func cell_type(game_pos):
-	return world_data.get_cell_type(world_data.get_world_pos(game_pos))
+	return world_data.get_cell_type(game_space.offset_to_world(game_pos))
 
 func get_path(from, to):
 	var path = []
-	if world_data.get_cells_in_radius(from,radius).has(to):
-		var idfrom = astar.get_closest_point(world_data.get_world_pos(from))
-		var idto = astar.get_closest_point(world_data.get_world_pos(to))
+	if game_space.offset_range(from,radius).has(to):
+		var idfrom = astar.get_closest_point(game_space.offset_to_world(from))
+		var idto = astar.get_closest_point(game_space.offset_to_world(to))
 		var aspath = astar.get_point_path(idfrom, idto)
 		if aspath.size() <= radius+1:
 			for point in aspath:
@@ -49,9 +51,9 @@ func _ready():
 
 func update():
 	astar.clear()
-	for cell_pos in world_data.get_cells_in_radius(game_pos,radius):
+	for cell_pos in game_space.offset_range(game_pos,radius):
 		add_cell(cell_pos)
-	for cell_pos in world_data.get_cells_in_radius(game_pos,radius-1):
+	for cell_pos in game_space.offset_range(game_pos,radius-1):
 		connect_cell(cell_pos)
 
 func is_passable(cell_pos):

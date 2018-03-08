@@ -5,6 +5,7 @@ onready var world_data = get_node(world_data_node)
 export(NodePath) var game_data_node
 onready var game_data = get_node(game_data_node)
 
+onready var game_space = get_node("/root/GameSpace")
 onready var pathfinder = $Selection.get_node("Pathfinder")
 
 signal wagon(game_pos)
@@ -19,7 +20,7 @@ export(Mode) var mode = MODE_IDLE setget set_mode
 
 func set_mode(imode):
 	mode = imode
-	if $Terrain:
+	if has_node("Terrain"):
 		if [MODE_WAGON,MODE_MOVE].has(mode):
 			$Terrain.show_grid()
 		else:
@@ -60,8 +61,6 @@ func use_tool():
 		MODE_WAGON: emit_signal("wagon", selected)
 		MODE_SELECT: emit_signal("select", selected)
 		MODE_MOVE: emit_signal("move", selected)
-	self.mode = MODE_SELECT
-	set_hover(selected)
 	
 func handle_mouse_motion(event):
 	if event.button_mask & BUTTON_MASK_RIGHT:
@@ -81,7 +80,7 @@ func handle_mouse_motion(event):
 func set_hover(game_pos):
 	mouse_pos = get_viewport().get_mouse_position()
 	if game_pos != null and mode != MODE_IDLE:
-		$Hover.translation = world_data.get_world_pos(game_pos)
+		$Hover.translation = game_space.offset_to_world(game_pos)
 		match(mode):
 			MODE_MOVE:
 				if pathfinder.is_passable(game_pos):
@@ -139,4 +138,6 @@ func _on_GameData_selected( pos ):
 		$Selection.update()
 		$Selection.show()
 	else:
+		self.mode = MODE_SELECT
+		$Hover.state = $Hover.STATE_HOVER
 		$Selection.hide()
