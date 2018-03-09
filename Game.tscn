@@ -1,7 +1,7 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://WorldData.gd" type="Script" id=1]
-[ext_resource path="res://GameData.gd" type="Script" id=2]
+[ext_resource path="res://GameLogic.gd" type="Script" id=2]
 [ext_resource path="res://Menu/Units.gd" type="Script" id=3]
 [ext_resource path="res://Viewport.gd" type="Script" id=4]
 [ext_resource path="res://GameWorld/GameWorld.gd" type="Script" id=5]
@@ -15,6 +15,9 @@
 [ext_resource path="res://GameWorld/Units.gd" type="Script" id=13]
 [ext_resource path="res://GameWorld/Terrain/Terrain.gd" type="Script" id=14]
 [ext_resource path="res://GameWorld/Terrain/TerrainCell.material" type="Material" id=15]
+[ext_resource path="res://GameWorld/Terrain/assets/water-albedo.jpg" type="Texture" id=16]
+[ext_resource path="res://GameWorld/Terrain/assets/water-normal.jpg" type="Texture" id=17]
+[ext_resource path="res://GameWorld/WaterHorizon.gd" type="Script" id=18]
 
 [sub_resource type="ShaderMaterial" id=1]
 
@@ -26,57 +29,107 @@ shader_param/uv1_offset = Vector3( 0, 0, 0 )
 shader_param/texture_albedo = ExtResource( 11 )
 _sections_unfolded = [ "shader_param" ]
 
-[node name="Game" type="Control" index="0"]
+[sub_resource type="PlaneMesh" id=2]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
+size = Vector2( 256, 192 )
+subdivide_width = 1
+subdivide_depth = 0
+
+[sub_resource type="SpatialMaterial" id=3]
+
+render_priority = 0
+flags_transparent = false
+flags_unshaded = false
+flags_vertex_lighting = false
+flags_no_depth_test = false
+flags_use_point_size = false
+flags_world_triplanar = false
+flags_fixed_size = false
+flags_albedo_tex_force_srgb = false
+vertex_color_use_as_albedo = false
+vertex_color_is_srgb = false
+params_diffuse_mode = 0
+params_specular_mode = 0
+params_blend_mode = 0
+params_cull_mode = 0
+params_depth_draw_mode = 0
+params_line_width = 1.0
+params_point_size = 1.0
+params_billboard_mode = 0
+params_grow = false
+params_use_alpha_scissor = false
+albedo_color = Color( 0.13385, 0.507946, 0.671875, 1 )
+albedo_texture = ExtResource( 16 )
+metallic = 0.0
+metallic_specular = 0.5
+metallic_texture_channel = 0
+roughness = 0.4
+roughness_texture_channel = 0
+emission_enabled = false
+normal_enabled = true
+normal_scale = 0.2
+normal_texture = ExtResource( 17 )
+rim_enabled = false
+clearcoat_enabled = false
+anisotropy_enabled = false
+ao_enabled = false
+depth_enabled = false
+subsurf_scatter_enabled = false
+transmission_enabled = false
+refraction_enabled = false
+detail_enabled = false
+uv1_scale = Vector3( 1, 1, 1 )
+uv1_offset = Vector3( 0, 0, 0 )
+uv1_triplanar = false
+uv1_triplanar_sharpness = 1.0
+uv2_scale = Vector3( 1, 1, 1 )
+uv2_offset = Vector3( 0, 0, 0 )
+uv2_triplanar = false
+uv2_triplanar_sharpness = 1.0
+proximity_fade_enable = false
+distance_fade_enable = false
+_sections_unfolded = [ "Albedo" ]
+
+[node name="Game" type="Spatial"]
 
 [node name="WorldData" type="Node" parent="." index="0"]
 
 script = ExtResource( 1 )
-WORLD_RADIUS = 70
-WORLD_RADIUS_FEATHER = 32
+WORLD_RADIUS = 64
+WORLD_RADIUS_FEATHER = 16
 TERRAIN_HEIGHT_SCALE = 15.0
 stone_min_angle = 0.35
 noises_scales = PoolRealArray( 0.004, 0.019, 0.124, 0.33, 0.14, 0.53 )
-forest_noise_scale = 0.75
-game_seed = "afiggdf"
+forest_noise_scale = 0.12
+game_seed = "bajałka"
 water_height = 0.46
 sand_height = 0.46
 grass_height = 0.49
 gravel_height = 0.56
-snow_height = 0.61
+snow_height = 0.66
 
-[node name="GameData" type="Node" parent="." index="1"]
+[node name="GameLogic" type="Node" parent="." index="1"]
 
 script = ExtResource( 2 )
 selection_node = NodePath("../GridContainer/ViewportContainer/Viewport/GameWorld/Selection")
 world_data_node = NodePath("../WorldData")
 
-[node name="GridContainer" type="GridContainer" parent="." index="2"]
+[node name="GridContainer" type="VBoxContainer" parent="." index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 1280.0
-margin_bottom = 824.0
+margin_bottom = 800.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-columns = 1
-_sections_unfolded = [ "Mouse", "Theme" ]
+alignment = 1
+_sections_unfolded = [ "Theme" ]
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GridContainer" index="0"]
 
@@ -177,7 +230,7 @@ anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 24.0
 margin_right = 1280.0
-margin_bottom = 824.0
+margin_bottom = 800.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -186,7 +239,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 stretch = false
 stretch_shrink = 1
-_sections_unfolded = [ "Mouse" ]
+_sections_unfolded = [ "Margin", "Mouse" ]
 
 [node name="Viewport" type="Viewport" parent="GridContainer/ViewportContainer" index="0"]
 
@@ -318,35 +371,53 @@ world_data_node = NodePath("../../../../../WorldData")
 
 script = ExtResource( 14 )
 cell_material = ExtResource( 15 )
-chunks_radius = 0
-radius = 32
+chunks_radius = 4
+radius = 4
 visibility_radius = Vector2( 36, 24 )
 chunks_alive_radius = 7
 world_data_node = NodePath("../../../../../WorldData")
 camera_node = NodePath("../GameCamera")
 cell_grid_alpha = 0.2
 
-[connection signal="actor_moved" from="GameData" to="GridContainer/ViewportContainer/Viewport/GameWorld/Units" method="_on_GameData_actor_moved"]
+[node name="WaterHorizon" type="MeshInstance" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="7"]
 
-[connection signal="actor_placed" from="GameData" to="GridContainer/ViewportContainer/Viewport/GameWorld/Units" method="_on_GameData_actor_placed"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0 )
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 2 )
+skeleton = NodePath("..")
+material/0 = SubResource( 3 )
+script = ExtResource( 18 )
+_sections_unfolded = [ "Transform", "material" ]
 
-[connection signal="selected" from="GameData" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_GameData_selected"]
+[connection signal="actor_moved" from="GameLogic" to="GridContainer/ViewportContainer/Viewport/GameWorld/Units" method="_on_GameLogic_actor_moved"]
 
-[connection signal="pressed" from="GridContainer/HBoxContainer/Select" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_Select_pressed"]
+[connection signal="actor_placed" from="GameLogic" to="GridContainer/ViewportContainer/Viewport/GameWorld/Units" method="_on_GameLogic_actor_placed"]
 
-[connection signal="pressed" from="GridContainer/HBoxContainer/Move" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_Move_pressed"]
-
-[connection signal="mode_wagon" from="GridContainer/HBoxContainer/Units" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_Units_mode_wagon"]
+[connection signal="selected" from="GameLogic" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_GameLogic_selected"]
 
 [connection signal="mouse_entered" from="GridContainer/ViewportContainer" to="GridContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_entered"]
 
 [connection signal="mouse_exited" from="GridContainer/ViewportContainer" to="GridContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_exited"]
 
-[connection signal="move" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameData" method="_on_GameWorld_move"]
+[connection signal="resized" from="GridContainer/ViewportContainer" to="GridContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_resized"]
 
-[connection signal="select" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameData" method="_on_GameWorld_select"]
+[connection signal="move" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_move"]
 
-[connection signal="wagon" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameData" method="_on_GameWorld_wagon"]
+[connection signal="select" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_select"]
+
+[connection signal="wagon" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_wagon"]
+
+[connection signal="moved" from="GridContainer/ViewportContainer/Viewport/GameWorld/GameCamera" to="GridContainer/ViewportContainer/Viewport/GameWorld/WaterHorizon" method="_on_GameCamera_moved"]
+
+[connection signal="moved" from="GridContainer/ViewportContainer/Viewport/GameWorld/GameCamera" to="GridContainer/ViewportContainer/Viewport/GameWorld/Units" method="_on_GameCamera_moved"]
 
 [connection signal="moved" from="GridContainer/ViewportContainer/Viewport/GameWorld/GameCamera" to="GridContainer/ViewportContainer/Viewport/GameWorld/Terrain" method="_on_GameCamera_moved" flags=3]
 

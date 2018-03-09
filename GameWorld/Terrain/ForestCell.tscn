@@ -2,7 +2,7 @@
 
 [ext_resource path="res://GameWorld/Terrain/ForestCell.gd" type="Script" id=1]
 
-[node name="ForestCell" type="Spatial"]
+[node name="ForestCell" type="Spatial" index="0"]
 
 script = ExtResource( 1 )
 radius = 1

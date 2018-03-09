@@ -22,6 +22,7 @@ GameSpace="*res://GameSpace.gd"
 
 window/size/width=1280
 window/size/height=800
+window/dpi/allow_hidpi=true
 window/stretch/aspect="expand"
 
 [editor]
@@ -30,4 +31,7 @@ convert_text_resources_to_binary_on_export=true
 
 [rendering]
 
+threads/thread_model=2
+quality/subsurface_scattering/quality=0
+quality/depth/hdr=false
 environment/default_environment="res://default_env.tres"

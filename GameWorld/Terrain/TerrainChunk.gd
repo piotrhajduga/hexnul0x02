@@ -18,16 +18,32 @@ var cells = {}
 func _ready():
 	update()
 
+func cell_range(offset,N):
+	var cube = game_space.offset_to_cube(offset)
+	var results = []
+	for dx in range(-N, N+1):
+		for dy in range(-N, N+1):
+			var dz = -dx-dy
+			results.append(game_space.cube_to_offset(Vector3(dx, dy, dz) + cube))
+	return results
+
 func update():
-	for game_pos in game_space.offset_range(center, int(radius)):
+	for game_pos in cell_range(center, int(radius)):
 		if not cells.has(game_pos):
 			add_cell(game_pos)
 	var points = PoolVector3Array()
-	for game_pos in game_space.offset_range(center, int(radius)+1):
+	for game_pos in cell_range(center, int(radius)+1):
 		points.append_array(create_collision_hex(game_pos))
 	collision.shape = ConcavePolygonShape.new()
 	collision.shape.set_faces(points)
 	collision.disabled = false
+
+func _on_camera_move(cam_game_pos):
+	for cell in get_children():
+		var delta = cell.translation - game_space.offset_to_world(cam_game_pos)
+		if delta.length() <= 30:
+			cell.show()
+		else: cell.hide()
 
 func create_collision_hex(game_pos):
 	var x = game_pos.x

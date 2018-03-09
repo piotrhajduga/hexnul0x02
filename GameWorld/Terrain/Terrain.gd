@@ -42,9 +42,8 @@ func hide_grid():
 func update_chunks(center):
 	for cube in game_space.cube_range(game_space.offset_to_cube(center), chunks_radius):
 		var pos = cube * (2 * radius + 1)
-		var chunk_center = game_space.cube_to_offset(Vector3(
-			pos.z, pos.y, pos.x
-		))
+		var chunk_center = game_space.cube_to_offset(
+			Vector3(pos.z,pos.y,pos.x))
 		if not chunks.has(chunk_center):
 			add_chunk(chunk_center)
 
@@ -63,6 +62,7 @@ func update(cam_game_pos):
 		var delta = center - cam_game_pos
 		if delta.length() <= visibility_radius.length():
 			chunks[center].show()
+			chunks[center]._on_camera_move(cam_game_pos)
 		#elif delta.length() > chunks_alive_radius:
 		#	remove_chunk(center)
 		else:

@@ -2,8 +2,8 @@
 
 [resource]
 
-radiance_size = 4
-sky_top_color = Color( 0.0470588, 0.454902, 0.976471, 1 )
+radiance_size = 2
+sky_top_color = Color( 0.200226, 0.528898, 0.949219, 1 )
 sky_horizon_color = Color( 0.556863, 0.823529, 0.909804, 1 )
 sky_curve = 0.120742
 sky_energy = 1.0
@@ -19,5 +19,5 @@ sun_angle_max = 100.0
 sun_curve = 0.0784585
 sun_energy = 8.0
 texture_size = 2
-_sections_unfolded = [ "Background", "Fog", "Ground", "Sky" ]
+_sections_unfolded = [ "Background", "Fog", "Ground", "Sky", "Sun" ]
 

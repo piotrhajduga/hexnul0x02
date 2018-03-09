@@ -11,3 +11,8 @@ func _on_ViewportContainer_mouse_entered():
 
 func _on_ViewportContainer_mouse_exited():
 	self.gui_disable_input = true
+
+
+func _on_ViewportContainer_resized():
+	if container:
+		self.size = container.get_viewport_rect().size
