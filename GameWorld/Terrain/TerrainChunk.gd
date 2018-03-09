@@ -1,6 +1,7 @@
 extends Spatial
 
 var Cell = preload("res://GameWorld/Terrain/Cell.tscn")
+var ForestCell = preload("res://GameWorld/Terrain/ForestCell.tscn")
 
 export(int) var radius = 4
 
@@ -48,6 +49,11 @@ func add_cell(game_pos):
 	add_child(cells[game_pos])
 	cells[game_pos].global_translate(world_pos)
 	cells[game_pos].update_shape()
+	if world_data.is_forest(world_pos):
+		var forest = ForestCell.instance()
+		forest.world_data = world_data
+		forest.rotation = Vector3(0,randf(),0)
+		cells[game_pos].add_child(forest)
 	cells[game_pos].scale = Vector3(1.002,1.0,1.002)
 
 func get_world_point(x, y):

@@ -10,10 +10,13 @@ export var WORLD_RADIUS_FEATHER = 24
 export var TERRAIN_HEIGHT_SCALE = 15.0
 export var stone_min_angle = PI/8.0
 
+var noise = null
+
 var noises_weight_sum = 0.0
 export var noises_scales = PoolRealArray([0.006,0.023,0.124,0.34,0.19,0.53])
 var noises_modifiers = PoolVector2Array()
-var noise = null
+
+export var forest_noise_scale = 0.75
 
 export(String) var game_seed = null
 
@@ -92,6 +95,12 @@ func get_height(pos):
 		weight = val
 		sum_weight += weight
 	return ((WORLD_RADIUS - max(radius,WORLD_RADIUS-WORLD_RADIUS_FEATHER)) / WORLD_RADIUS_FEATHER) * sum / sum_weight
+
+func is_forest(pos):
+	if [WATER,STONE,SNOW,SAND].has(get_cell_type(pos)): return false
+	var probe = Vector2(pos.x,pos.z) * forest_noise_scale
+	var val = (noise.openSimplex2D(probe.x, probe.y) + 1.0) * 0.5
+	return val > 0.6
 
 func get_normal(pos):
 	var delta = Vector3(0.001,0.0,0.0)

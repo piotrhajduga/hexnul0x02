@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/tree1.obj-8c2dc3f7e03390a02b928b318b5b0d53.mesh"
+
+[deps]
+
+files=[ "res://.import/tree1.obj-8c2dc3f7e03390a02b928b318b5b0d53.mesh" ]
+
+source_file="res://GameWorld/Terrain/tree1.obj"
+source_md5="f5f8178b031ba950cfa26bc6bfec0e18"
+
+dest_files=[ "res://.import/tree1.obj-8c2dc3f7e03390a02b928b318b5b0d53.mesh", "res://.import/tree1.obj-8c2dc3f7e03390a02b928b318b5b0d53.mesh" ]
+dest_md5="f808eb80d0265b2e90c1e92018d5fe73"
+
+[params]
+
+generate_tangents=true

@@ -14,8 +14,7 @@ var Wagon = preload("res://GameWorld/Unit/Unit.tscn")
 
 var rivers = {}
 var roads = {}
-var buildings = {}
-var objects = {}
+var places = {}
 var actors = {}
 
 var selected = null setget select
@@ -30,18 +29,18 @@ func _on_GameWorld_wagon( pos ):
 		wagon.world_data = world_data
 		wagon.connect("moved", self, "_on_actor_moved")
 		wagon.game_position = pos
-		objects[pos] = wagon
+		actors[pos] = wagon
 		emit_signal("actor_placed", wagon, pos)
 		select(pos)
 
 func _on_actor_moved(actor, from_pos):
 	if from_pos == selected: select(null)
-	objects.erase(from_pos)
-	objects[actor.game_position] = actor
+	actors.erase(from_pos)
+	actors[actor.game_position] = actor
 	emit_signal("actor_moved", actor, actor.game_position)
 
 func _on_GameWorld_select(pos):
-	if objects.has(pos):
+	if actors.has(pos):
 		select(pos)
 	else:
 		select(null)
@@ -50,8 +49,8 @@ func _on_GameWorld_move( pos ):
 	if selected == null:
 		print("No selection!")
 		return
-	var actor = objects[selected]
+	var actor = actors[selected]
 	if actor:
-		objects[selected].path = pathfinder.get_path(selected, pos)
-		if not objects[selected].path.empty():
+		actors[selected].path = pathfinder.get_path(selected, pos)
+		if not actors[selected].path.empty():
 			select(null)

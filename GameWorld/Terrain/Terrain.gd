@@ -41,7 +41,7 @@ func hide_grid():
 
 func update_chunks(center):
 	for cube in game_space.cube_range(game_space.offset_to_cube(center), chunks_radius):
-		var pos = cube * radius
+		var pos = cube * (2 * radius + 1)
 		var chunk_center = game_space.cube_to_offset(Vector3(
 			pos.z, pos.y, pos.x
 		))
