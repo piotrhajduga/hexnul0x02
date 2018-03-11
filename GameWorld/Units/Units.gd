@@ -8,8 +8,9 @@ func _on_GameLogic_actor_placed(actor, pos):
 	add_child(actor)
 
 func _on_GameLogic_actor_moved(actor, pos):
-	actor.translation = world_data.get_world_pos(pos)
-	actor.translation.y = world_data.get_terrain_mesh_height(actor.translation)
+	pass
+#	actor.translation = world_data.get_world_pos(pos)
+#	actor.translation.y = world_data.get_terrain_mesh_height(actor.translation)
 
 
 func _on_GameCamera_moved(target_position, camera_y_angle):

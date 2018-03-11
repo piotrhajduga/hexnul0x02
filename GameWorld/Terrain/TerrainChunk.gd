@@ -13,6 +13,8 @@ var world_data = null
 export(Material) var cell_material = preload("TerrainCell.material")
 
 export(Vector2) var center = Vector2()
+enum Edge {EDGE_NONE,EDGE_TOP,EDGE_BOTTOM}
+export(Edge) var edge = EDGE_NONE
 var cells = {}
 
 func _ready():
@@ -22,7 +24,10 @@ func cell_range(offset,N):
 	var cube = game_space.offset_to_cube(offset)
 	var results = []
 	for dx in range(-N, N+1):
-		for dy in range(-N, N+1):
+		for dy in range(
+			max(-N,-N-dx) if edge==EDGE_BOTTOM else -N,
+			(min(N,N-dx) if edge==EDGE_TOP else N) + 1
+		):
 			var dz = -dx-dy
 			results.append(game_space.cube_to_offset(Vector3(dx, dy, dz) + cube))
 	return results
@@ -41,7 +46,7 @@ func update():
 func _on_camera_move(cam_game_pos):
 	for cell in get_children():
 		var delta = cell.translation - game_space.offset_to_world(cam_game_pos)
-		if delta.length() <= 30:
+		if delta.length() <= 40:
 			cell.show()
 		else: cell.hide()
 

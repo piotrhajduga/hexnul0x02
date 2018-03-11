@@ -8,7 +8,7 @@
 [ext_resource path="res://GameWorld/UI/Selection.shader" type="Shader" id=6]
 [ext_resource path="res://GameWorld/UI/assets/cell_normal_highlight.png" type="Texture" id=7]
 [ext_resource path="res://Pathfinder.gd" type="Script" id=8]
-[ext_resource path="res://GameWorld/Units.gd" type="Script" id=9]
+[ext_resource path="res://GameWorld/Units/Units.gd" type="Script" id=9]
 [ext_resource path="res://GameWorld/Terrain/Terrain.gd" type="Script" id=10]
 [ext_resource path="res://GameWorld/Terrain/TerrainCell.material" type="Material" id=11]
 [ext_resource path="res://GameWorld/Terrain/assets/water-albedo.jpg" type="Texture" id=12]
@@ -215,9 +215,9 @@ material/0 = SubResource( 3 )
 script = ExtResource( 14 )
 _sections_unfolded = [ "Transform", "material" ]
 
-[connection signal="moved" from="GameCamera" to="Terrain" method="_on_GameCamera_moved" flags=3]
-
 [connection signal="moved" from="GameCamera" to="WaterHorizon" method="_on_GameCamera_moved"]
+
+[connection signal="moved" from="GameCamera" to="Terrain" method="_on_GameCamera_moved" flags=3]
 
 [connection signal="create_chunk" from="Terrain" to="Terrain" method="_on_create_chunk" flags=3]
 

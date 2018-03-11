@@ -10,7 +10,7 @@ signal actor_placed(actor, pos)
 signal actor_moved(actor, pos)
 signal selected(pos)
 
-var Wagon = preload("res://GameWorld/Unit/Unit.tscn")
+var Wagon = preload("res://GameWorld/Units/Unit.tscn")
 
 var rivers = {}
 var roads = {}

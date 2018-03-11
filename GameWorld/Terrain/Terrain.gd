@@ -1,5 +1,7 @@
+tool
 extends Spatial
 
+var ChunkClass = preload("TerrainChunk.gd")
 var Chunk = preload("TerrainChunk.tscn")
 
 export(Material) var cell_material = preload("TerrainCell.material")
@@ -40,15 +42,23 @@ func hide_grid():
 	cell_material.set_shader_param("mask_weight", 0.0)
 
 func update_chunks(center):
-	for cube in game_space.cube_range(game_space.offset_to_cube(center), chunks_radius):
+	var center_cube = game_space.offset_to_cube(center)
+	for cube in game_space.cube_range(center_cube, chunks_radius):
 		var pos = cube * (2 * radius + 1)
 		var chunk_center = game_space.cube_to_offset(
 			Vector3(pos.z,pos.y,pos.x))
 		if not chunks.has(chunk_center):
-			add_chunk(chunk_center)
+			var edge
+			if cube.x == chunks_radius:
+				add_chunk(chunk_center, ChunkClass.EDGE_BOTTOM)
+			elif cube.x == -chunks_radius:
+				add_chunk(chunk_center, ChunkClass.EDGE_TOP)
+			else:
+				add_chunk(chunk_center, ChunkClass.EDGE_NONE)
 
-func add_chunk(center):
+func add_chunk(center, edge):
 	chunks[center] = Chunk.instance()
+	chunks[center].edge = edge
 	chunks[center].cell_material = cell_material
 	chunks[center].world_data = world_data
 	chunks[center].center = center

@@ -51,7 +51,7 @@ func cube_direction(dir):
 	return cube_directions(dir)
 	
 func cube_distance(a, b):
-	return max(abs(a.x - b.x), abs(a.y - b.y), abs(a.z - b.z))
+	return (abs(a.x - b.x) + abs(a.y - b.y) + abs(a.z - b.z)) / 2
 
 #func lerp(a, b, t): # for floats
 #    return a + (b - a) * t

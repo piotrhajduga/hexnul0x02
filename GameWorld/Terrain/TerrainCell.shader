@@ -58,6 +58,8 @@ uniform float mask_radius = 0.9;
 uniform float mask_weight = 0.6;
 uniform vec4 mask_color : hint_color;
 
+uniform float ao_light_affect = 0.0;
+
 varying float stone_weight;
 varying float snow_weight;
 varying float gravel_weight;
@@ -175,4 +177,6 @@ void fragment() {
 	ROUGHNESS = roughness / weights_sum;
 	NORMALMAP = normalmap / weights_sum;
 	NORMALMAP_DEPTH = normalmap_depth / weights_sum;
+	
+	AO_LIGHT_AFFECT = ao_light_affect;
 }

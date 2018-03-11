@@ -1,0 +1,20 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/wagon2.obj-5854d48c1a4ad518f08e781c3a31043b.mesh"
+
+[deps]
+
+files=[ "res://.import/wagon2.obj-5854d48c1a4ad518f08e781c3a31043b.mesh" ]
+
+source_file="res://GameWorld/Units/wagon2.obj"
+source_md5="57acc39ba6f629341ce345b7d32b799e"
+
+dest_files=[ "res://.import/wagon2.obj-5854d48c1a4ad518f08e781c3a31043b.mesh", "res://.import/wagon2.obj-5854d48c1a4ad518f08e781c3a31043b.mesh" ]
+dest_md5="efe6f91edfe798126b98afb2e8945b78"
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
