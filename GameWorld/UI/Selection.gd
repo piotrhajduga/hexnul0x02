@@ -1,5 +1,7 @@
 extends Spatial
 
+var GameLogicClass = preload("res://GameLogic.gd")
+
 var Cell = preload("res://GameWorld/Terrain/Cell.tscn")
 
 export(NodePath) var world_data_node
@@ -46,7 +48,7 @@ func update():
 		STATE_NORMAL: 0,
 		STATE_MOVE: $Pathfinder.radius
 	}[state]):
-		if $Pathfinder.is_passable(rcpos):
+		if state != STATE_MOVE or $Pathfinder.is_passable(rcpos):
 			var cell = Cell.instance()
 			cell.world_data = world_data
 			cell.material = material
@@ -54,3 +56,19 @@ func update():
 			add_child(cell)
 			cell.translation = world_data.get_world_pos(rcpos) - world_data.get_world_pos($Pathfinder.game_pos) + Vector3(0,1,0)*0.01
 			cell.update_shape()
+
+func _on_GameLogic_change_mode(mode):
+	match(mode):
+		GameLogicClass.MODE_SELECT:
+			self.state = STATE_NORMAL
+		GameLogicClass.MODE_MOVE:
+			self.state = STATE_MOVE
+	update()
+
+func _on_GameLogic_selected(object):
+	if object:
+		self.translation = object.translation * Vector3(1,0,1)
+		update()
+		show()
+	else:
+		hide()

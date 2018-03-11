@@ -2,16 +2,34 @@ extends Spatial
 
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
+export(NodePath) var pathfinder_node
+onready var pathfinder = get_node(pathfinder_node)
 
-func _on_GameLogic_actor_placed(actor, pos):
-	_on_GameLogic_actor_moved(actor, pos)
-	add_child(actor)
+var map = {}
 
-func _on_GameLogic_actor_moved(actor, pos):
-	pass
-#	actor.translation = world_data.get_world_pos(pos)
-#	actor.translation.y = world_data.get_terrain_mesh_height(actor.translation)
+signal unit_placed(unit, pos)
 
+func place_unit(UnitType, pos):
+	if not map.has(pos) and world_data.is_passable(pos):
+		var unit = UnitType.instance()
+		unit.world_data = world_data
+		unit.pathfinder = pathfinder
+		unit.connect("moved", self, "_on_unit_moved")
+		unit.game_position = pos
+		map[pos] = unit
+		add_child(unit)
+		emit_signal("unit_placed", unit, pos)
+		select(unit)
+
+func _on_unit_moved(actor, from_pos):
+	map.erase(from_pos)
+	map[actor.game_position] = actor
+
+func move_unit(unit, pos):
+	unit.path = pathfinder.get_path(unit.game_position, pos)
+
+func select(pos):
+	return map[pos] if map.has(pos) else null
 
 func _on_GameCamera_moved(target_position, camera_y_angle):
 	for unit in get_children():

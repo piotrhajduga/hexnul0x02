@@ -6,51 +6,75 @@ onready var pathfinder = selection.get_node("Pathfinder")
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
 
-signal actor_placed(actor, pos)
-signal actor_moved(actor, pos)
-signal selected(pos)
+var Wagon = preload("res://GameWorld/Units/Wagon.tscn")
+var House = preload("res://GameWorld/Places/House.tscn")
 
-var Wagon = preload("res://GameWorld/Units/Unit.tscn")
+signal change_mode(mode)
+signal selected(object)
 
-var rivers = {}
-var roads = {}
-var places = {}
-var actors = {}
+enum Mode {MODE_IDLE,MODE_SELECT,MODE_PLACE,MODE_MOVE}
+export(Mode) var mode = MODE_IDLE setget set_mode
 
-var selected = null setget select
+func set_mode(val):
+	mode = val
+	emit_signal("change_mode", mode)
 
-func select(pos):
-	selected = pos
-	emit_signal("selected", pos)
+export(NodePath) var places_node
+onready var places = get_node(places_node)
+export(NodePath) var units_node
+onready var units = get_node(units_node)
 
-func _on_GameWorld_wagon( pos ):
-	if world_data.is_passable(pos):
-		var wagon = Wagon.instance()
-		wagon.world_data = world_data
-		wagon.connect("moved", self, "_on_actor_moved")
-		wagon.game_position = pos
-		actors[pos] = wagon
-		emit_signal("actor_placed", wagon, pos)
-		select(pos)
+enum ObjectType {OBJECT_UNIT, OBJECT_PLACE}
 
-func _on_actor_moved(actor, from_pos):
-	if from_pos == selected: select(null)
-	actors.erase(from_pos)
-	actors[actor.game_position] = actor
-	emit_signal("actor_moved", actor, actor.game_position)
+var selected = null
+var selected_type = OBJECT_UNIT
+
+func select(object, type):
+	selected = object
+	selected_type = type
+	emit_signal("selected", object)
+	
+export(ObjectType) var place_mode = OBJECT_UNIT
+var PlaceObjectClass = Wagon
+
+func set_place_mode(pmode, ObjectClass):
+	place_mode = pmode
+	PlaceObjectClass = ObjectClass
 
 func _on_GameWorld_select(pos):
-	if actors.has(pos):
-		select(pos)
-	else:
-		select(null)
+	match(mode):
+		MODE_SELECT:
+			var sel = units.select(pos)
+			if sel != null:
+				select(sel, OBJECT_UNIT)
+				return
+			sel = places.select(pos)
+			if sel != null:
+				print("select ",sel)
+				select(sel, OBJECT_PLACE)
+				return
+			select(null,null)
+		MODE_PLACE:
+			if units.map.has(pos) or places.map.has(pos):
+				return
+			match(place_mode):
+				OBJECT_UNIT:
+					units.place_unit(PlaceObjectClass, pos)
+					var unit = units.select(pos)
+					select(unit, OBJECT_UNIT if unit else null)
+				OBJECT_PLACE:
+					places.place_place(PlaceObjectClass, pos)
+					var place = places.select(pos)
+					select(place, OBJECT_PLACE if place else null)
+		MODE_MOVE:
+			if (selected_type == OBJECT_UNIT) and selected:
+				units.move_unit(selected, pos)
+				set_mode(MODE_SELECT)
+				select(units.select(pos), OBJECT_UNIT)
 
-func _on_GameWorld_move( pos ):
-	if selected == null:
-		print("No selection!")
-		return
-	var actor = actors[selected]
-	if actor:
-		actors[selected].path = pathfinder.get_path(selected, pos)
-		if not actors[selected].path.empty():
-			select(null)
+func _on_GameWorld_change_mode(mode):
+	if mode==MODE_MOVE and selected_type!=OBJECT_UNIT: return
+	set_mode(mode)
+
+func _on_GameWorld_change_place_mode(mode, ObjectClass):
+	set_place_mode(mode, ObjectClass)

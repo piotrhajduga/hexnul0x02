@@ -1,9 +1,16 @@
 extends Spatial
 
+var GameLogicClass = preload("res://GameLogic.gd")
+
 var Cell = preload("res://GameWorld/Terrain/Cell.tscn")
 
+onready var game_space = get_node("/root/GameSpace")
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
+export(NodePath) var game_logic_node
+onready var game_logic = get_node(game_logic_node)
+export(NodePath) var pathfinder_node
+onready var pathfinder = get_node(pathfinder_node)
 
 onready var light = get_node("SpotLight")
 
@@ -31,6 +38,25 @@ var STATE_COLORS = {
 export(HoverState) var state = STATE_HOVER setget set_state
 var cell = null
 
+func set_game_pos(game_pos):
+	if game_pos == null:
+		self.hide()
+		return
+	self.translation = game_space.offset_to_world(game_pos)
+	match(game_logic.mode):
+		GameLogicClass.MODE_MOVE:
+			if pathfinder.is_passable(game_pos):
+				self.state = STATE_MOVE_PASSABLE 
+			else:
+				self.state = STATE_MOVE_IMPASSABLE
+		GameLogicClass.MODE_PLACE:
+			if world_data.is_passable(game_pos):
+				self.state = STATE_PLACE_UNIT
+			else:
+				self.state = STATE_MOVE_IMPASSABLE
+		GameLogicClass.MODE_SELECT:
+			self.state = STATE_HOVER
+
 func set_state(val):
 	if val==null: return
 	state = val
@@ -48,3 +74,12 @@ func update():
 	light.light_color = STATE_COLORS[state]
 	material.set_shader_param("albedo", STATE_COLORS[state])
 	cell.update_shape()
+
+func _on_GameLogic_change_mode(mode):
+	match(mode):
+		GameLogicClass.MODE_MOVE: show()
+		GameLogicClass.MODE_PLACE: show()
+		GameLogicClass.MODE_SELECT: show()
+		GameLogicClass.MODE_IDLE: hide()
+	set_game_pos(game_space.world_to_offset(self.translation))
+	update()

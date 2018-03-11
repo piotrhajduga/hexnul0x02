@@ -1,35 +1,19 @@
 extends Spatial
 
+var GameLogicClass = preload("res://GameLogic.gd")
+
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
-export(NodePath) var game_data_node
-onready var game_data = get_node(game_data_node)
 
 onready var game_space = get_node("/root/GameSpace")
 onready var pathfinder = $Selection.get_node("Pathfinder")
 
-signal wagon(game_pos)
+var Wagon = preload("res://GameWorld/Units/Wagon.tscn")
+var House = preload("res://GameWorld/Places/House.tscn")
+
+signal change_mode(mode)
+signal change_place_mode(mode,ObjectClass)
 signal select(game_pos)
-signal move(game_pos)
-
-var mouse_pos = Vector2()
-var selected = Vector2()
-
-enum Mode {MODE_IDLE,MODE_SELECT,MODE_WAGON,MODE_MOVE}
-export(Mode) var mode = MODE_IDLE setget set_mode
-
-func set_mode(imode):
-	mode = imode
-	if has_node("Terrain"):
-		if [MODE_WAGON,MODE_MOVE].has(mode):
-			$Terrain.show_grid()
-		else:
-			$Terrain.hide_grid()
-
-func _ready():
-	$GameCamera.target_position = Vector3()
-	$Hover.show()
-	self.mode = MODE_SELECT
 
 func _input(event):
 	match event.get_class():
@@ -39,66 +23,41 @@ func _input(event):
 
 func handle_keypress(event):
 	match event.scancode:
-		KEY_W: _on_Units_mode_wagon()
-		KEY_M: _on_Move_pressed()
-		KEY_S: _on_Select_pressed()
-		KEY_ESCAPE: mode = MODE_IDLE
-	set_hover(get_cell_on_hover())
+		KEY_P: emit_signal("change_mode", GameLogicClass.MODE_PLACE)
+		KEY_W:
+			emit_signal("change_place_mode", GameLogicClass.OBJECT_UNIT, Wagon)
+			emit_signal("change_mode", GameLogicClass.MODE_PLACE)
+		KEY_H:
+			emit_signal("change_place_mode", GameLogicClass.OBJECT_PLACE, House)
+			emit_signal("change_mode", GameLogicClass.MODE_PLACE)
+		KEY_M: emit_signal("change_mode", GameLogicClass.MODE_MOVE)
+		KEY_S: emit_signal("change_mode", GameLogicClass.MODE_SELECT)
+		KEY_ESCAPE: emit_signal("change_mode", GameLogicClass.MODE_IDLE)
 
 func handle_mouse_button(event):
 	match event.button_index:
 		BUTTON_WHEEL_UP:
 			$GameCamera.move_camera($GameCamera.CAM_LO)
-			$Hover.hide()
 		BUTTON_WHEEL_DOWN:
 			$GameCamera.move_camera($GameCamera.CAM_HI)
-			$Hover.hide()
 		BUTTON_LEFT:
-			if !event.is_pressed(): use_tool()
-	
-func use_tool():
-	match mode:
-		MODE_WAGON: emit_signal("wagon", selected)
-		MODE_SELECT: emit_signal("select", selected)
-		MODE_MOVE: emit_signal("move", selected)
-	
+			if !event.is_pressed(): emit_signal("select", get_cell_on_hover())
+
 func handle_mouse_motion(event):
 	if event.button_mask & BUTTON_MASK_RIGHT:
 		var relative = event.relative
 		$GameCamera.move(relative)
-		set_hover(null)
 	elif event.button_mask & BUTTON_MASK_MIDDLE:
-		set_hover(null)
 		if event.relative.x > 0:
 			$GameCamera.move_camera($GameCamera.CAM_TURN_LEFT)
 		else:
 			$GameCamera.move_camera($GameCamera.CAM_TURN_RIGHT)
-	elif mode != MODE_IDLE:
-		selected = get_cell_on_hover()
-		set_hover(selected)
-
-func set_hover(game_pos):
-	mouse_pos = get_viewport().get_mouse_position()
-	if game_pos != null and mode != MODE_IDLE:
-		$Hover.translation = game_space.offset_to_world(game_pos)
-		match(mode):
-			MODE_MOVE:
-				if pathfinder.is_passable(game_pos):
-					$Hover.state = $Hover.STATE_MOVE_PASSABLE 
-				else: $Hover.state = $Hover.STATE_MOVE_IMPASSABLE
-			MODE_WAGON:
-				if world_data.is_passable(game_pos):
-					$Hover.state = $Hover.STATE_PLACE_UNIT
-				else: $Hover.state = $Hover.STATE_MOVE_IMPASSABLE
-			MODE_SELECT:
-				$Hover.state = $Hover.STATE_HOVER
-		$Hover.update()
-		$Hover.show()
 	else:
-		$Hover.hide()
+		$Hover.set_game_pos(get_cell_on_hover())
 
 var ray_length = 100
 func get_cell_on_hover():
+	var mouse_pos = get_viewport().get_mouse_position()
 	var pos2d = null
 	var from = $GameCamera.project_ray_origin(mouse_pos)
 	var to = from + $GameCamera.project_ray_normal(mouse_pos) * ray_length
@@ -107,29 +66,3 @@ func get_cell_on_hover():
 	if result.has("position"):
 		pos2d = world_data.get_game_pos(result["position"])
 	return pos2d
-
-func _on_Select_pressed():
-	self.mode = MODE_SELECT
-	$Selection.state = $Selection.STATE_NORMAL
-	$Selection.update()
-
-func _on_Units_mode_wagon():
-	emit_signal("select", null)
-	self.mode = MODE_WAGON
-
-func _on_Move_pressed():
-	if $Selection.is_visible_in_tree():
-		self.mode = MODE_MOVE
-		$Selection.state = $Selection.STATE_MOVE
-		$Selection.update()
-
-func _on_GameLogic_selected(pos):
-	if pos:
-		$Selection.state = $Selection.STATE_NORMAL
-		$Selection.translation = world_data.get_world_pos(pos)
-		$Selection.update()
-		$Selection.show()
-	else:
-		self.mode = MODE_SELECT
-		$Hover.state = $Hover.STATE_HOVER
-		$Selection.hide()

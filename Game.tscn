@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://WorldData.gd" type="Script" id=1]
 [ext_resource path="res://GameLogic.gd" type="Script" id=2]
@@ -14,13 +14,8 @@
 [ext_resource path="res://Pathfinder.gd" type="Script" id=12]
 [ext_resource path="res://GameWorld/Units/Units.gd" type="Script" id=13]
 [ext_resource path="res://GameWorld/Places/Places.gd" type="Script" id=14]
-[ext_resource path="res://GameWorld/Places/House.tscn" type="PackedScene" id=15]
-[ext_resource path="res://GameWorld/Terrain/Terrain.gd" type="Script" id=16]
-[ext_resource path="res://GameWorld/Terrain/TerrainCell.material" type="Material" id=17]
-[ext_resource path="res://GameWorld/Terrain/assets/water-albedo.jpg" type="Texture" id=18]
-[ext_resource path="res://GameWorld/Terrain/assets/water-normal.jpg" type="Texture" id=19]
-[ext_resource path="res://GameWorld/WaterHorizon.gd" type="Script" id=20]
-[ext_resource path="res://GameWorld/UI/Fog.gd" type="Script" id=21]
+[ext_resource path="res://GameWorld/Terrain/Terrain.gd" type="Script" id=15]
+[ext_resource path="res://GameWorld/Terrain/TerrainCell.material" type="Material" id=16]
 
 [sub_resource type="ShaderMaterial" id=1]
 
@@ -31,184 +26,6 @@ shader_param/uv1_scale = Vector3( 1, 1, 1 )
 shader_param/uv1_offset = Vector3( 0, 0, 0 )
 shader_param/texture_albedo = ExtResource( 11 )
 _sections_unfolded = [ "shader_param" ]
-
-[sub_resource type="PlaneMesh" id=2]
-
-size = Vector2( 256, 192 )
-subdivide_width = 1
-subdivide_depth = 0
-
-[sub_resource type="SpatialMaterial" id=3]
-
-render_priority = 0
-flags_transparent = false
-flags_unshaded = false
-flags_vertex_lighting = false
-flags_no_depth_test = false
-flags_use_point_size = false
-flags_world_triplanar = false
-flags_fixed_size = false
-flags_albedo_tex_force_srgb = false
-vertex_color_use_as_albedo = false
-vertex_color_is_srgb = false
-params_diffuse_mode = 0
-params_specular_mode = 0
-params_blend_mode = 0
-params_cull_mode = 0
-params_depth_draw_mode = 0
-params_line_width = 1.0
-params_point_size = 1.0
-params_billboard_mode = 0
-params_grow = false
-params_use_alpha_scissor = false
-albedo_color = Color( 0.13385, 0.507946, 0.671875, 1 )
-albedo_texture = ExtResource( 18 )
-metallic = 0.0
-metallic_specular = 0.5
-metallic_texture_channel = 0
-roughness = 0.4
-roughness_texture_channel = 0
-emission_enabled = false
-normal_enabled = true
-normal_scale = 0.4
-normal_texture = ExtResource( 19 )
-rim_enabled = false
-clearcoat_enabled = true
-clearcoat = 0.1
-clearcoat_gloss = 0.5
-anisotropy_enabled = false
-ao_enabled = false
-depth_enabled = false
-subsurf_scatter_enabled = false
-transmission_enabled = false
-refraction_enabled = false
-detail_enabled = false
-uv1_scale = Vector3( 200, 200, 200 )
-uv1_offset = Vector3( 0, 0, 0 )
-uv1_triplanar = false
-uv1_triplanar_sharpness = 1.0
-uv2_scale = Vector3( 1, 1, 1 )
-uv2_offset = Vector3( 0, 0, 0 )
-uv2_triplanar = false
-uv2_triplanar_sharpness = 1.0
-proximity_fade_enable = true
-proximity_fade_distance = 0.1
-distance_fade_enable = false
-_sections_unfolded = [ "NormalMap", "Proximity Fade" ]
-
-[sub_resource type="SpatialMaterial" id=6]
-
-render_priority = 0
-flags_transparent = false
-flags_unshaded = false
-flags_vertex_lighting = false
-flags_no_depth_test = false
-flags_use_point_size = false
-flags_world_triplanar = false
-flags_fixed_size = false
-flags_albedo_tex_force_srgb = false
-vertex_color_use_as_albedo = false
-vertex_color_is_srgb = false
-params_diffuse_mode = 0
-params_specular_mode = 0
-params_blend_mode = 0
-params_cull_mode = 0
-params_depth_draw_mode = 0
-params_line_width = 1.0
-params_point_size = 1.0
-params_billboard_mode = 0
-params_grow = false
-params_use_alpha_scissor = false
-albedo_color = Color( 1, 1, 1, 1 )
-metallic = 0.0
-metallic_specular = 0.5
-metallic_texture_channel = 0
-roughness = 0.0
-roughness_texture_channel = 0
-emission_enabled = false
-normal_enabled = false
-rim_enabled = false
-clearcoat_enabled = false
-anisotropy_enabled = false
-ao_enabled = false
-depth_enabled = false
-subsurf_scatter_enabled = false
-transmission_enabled = false
-refraction_enabled = false
-detail_enabled = false
-uv1_scale = Vector3( 1, 1, 1 )
-uv1_offset = Vector3( 0, 0, 0 )
-uv1_triplanar = false
-uv1_triplanar_sharpness = 1.0
-uv2_scale = Vector3( 1, 1, 1 )
-uv2_offset = Vector3( 0, 0, 0 )
-uv2_triplanar = false
-uv2_triplanar_sharpness = 1.0
-proximity_fade_enable = false
-distance_fade_enable = false
-_sections_unfolded = [ "Albedo" ]
-
-[sub_resource type="CylinderMesh" id=4]
-
-material = SubResource( 6 )
-top_radius = 50.0
-bottom_radius = 10.0
-height = 20.0
-radial_segments = 13
-rings = 1
-
-[sub_resource type="SpatialMaterial" id=5]
-
-render_priority = 0
-flags_transparent = false
-flags_unshaded = false
-flags_vertex_lighting = false
-flags_no_depth_test = false
-flags_use_point_size = false
-flags_world_triplanar = false
-flags_fixed_size = false
-flags_albedo_tex_force_srgb = false
-vertex_color_use_as_albedo = false
-vertex_color_is_srgb = false
-params_diffuse_mode = 0
-params_specular_mode = 4
-params_blend_mode = 0
-params_cull_mode = 1
-params_depth_draw_mode = 0
-params_line_width = 1.0
-params_point_size = 1.0
-params_billboard_mode = 0
-params_grow = false
-params_use_alpha_scissor = false
-albedo_color = Color( 0.50473, 0.565726, 0.582031, 1 )
-metallic = 0.0
-metallic_specular = 0.5
-metallic_texture_channel = 0
-roughness = 0.9
-roughness_texture_channel = 0
-emission_enabled = false
-normal_enabled = false
-rim_enabled = false
-clearcoat_enabled = false
-anisotropy_enabled = false
-ao_enabled = false
-depth_enabled = false
-subsurf_scatter_enabled = false
-transmission_enabled = false
-refraction_enabled = false
-detail_enabled = false
-uv1_scale = Vector3( 1, 1, 1 )
-uv1_offset = Vector3( 0, 0, 0 )
-uv1_triplanar = false
-uv1_triplanar_sharpness = 1.0
-uv2_scale = Vector3( 1, 1, 1 )
-uv2_offset = Vector3( 0, 0, 0 )
-uv2_triplanar = false
-uv2_triplanar_sharpness = 1.0
-proximity_fade_enable = true
-proximity_fade_distance = 5.0
-distance_fade_enable = false
-_sections_unfolded = [ "Albedo" ]
 
 [node name="Game" type="Control" index="0"]
 
@@ -226,7 +43,7 @@ size_flags_vertical = 1
 [node name="WorldData" type="Node" parent="." index="0"]
 
 script = ExtResource( 1 )
-WORLD_RADIUS = 92
+WORLD_RADIUS = 64
 WORLD_RADIUS_FEATHER = 16
 TERRAIN_HEIGHT_SCALE = 15.0
 stone_min_angle = 0.35
@@ -244,6 +61,10 @@ snow_height = 0.66
 script = ExtResource( 2 )
 selection_node = NodePath("../GridContainer/ViewportContainer/Viewport/GameWorld/Selection")
 world_data_node = NodePath("../WorldData")
+mode = null
+places_node = NodePath("../GridContainer/ViewportContainer/Viewport/GameWorld/Places")
+units_node = NodePath("../GridContainer/ViewportContainer/Viewport/GameWorld/Units")
+place_mode = null
 
 [node name="GridContainer" type="VBoxContainer" parent="." index="2"]
 
@@ -404,8 +225,6 @@ _sections_unfolded = [ "GUI", "Rendering", "Shadow Atlas" ]
 script = ExtResource( 5 )
 _sections_unfolded = [ "Transform" ]
 world_data_node = NodePath("../../../../WorldData")
-game_data_node = NodePath("../../../../GameData")
-mode = null
 
 [node name="GameCamera" type="Camera" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="0"]
 
@@ -472,6 +291,8 @@ _sections_unfolded = [ "Light", "Shadow" ]
 visible = false
 script = ExtResource( 9 )
 world_data_node = NodePath("../../../../../WorldData")
+game_logic_node = NodePath("../../../../../GameLogic")
+pathfinder_node = NodePath("../Selection/Pathfinder")
 material = SubResource( 1 )
 hover_color = Color( 0.764706, 0.811765, 0.698039, 1 )
 move_passable_color = Color( 0.115692, 0.871094, 0.832977, 1 )
@@ -490,6 +311,8 @@ move_passable_color = Color( 0.0653687, 0.492188, 0.352138, 1 )
 
 script = ExtResource( 12 )
 world_data_node = NodePath("../../../../../../WorldData")
+units_node = NodePath("../../Units")
+places_node = NodePath("../../Places")
 game_pos = Vector2( 0, 0 )
 radius = 4
 
@@ -497,69 +320,32 @@ radius = 4
 
 script = ExtResource( 13 )
 world_data_node = NodePath("../../../../../WorldData")
+pathfinder_node = NodePath("../Selection/Pathfinder")
 
 [node name="Places" type="Spatial" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="6"]
 
 script = ExtResource( 14 )
-
-[node name="House" parent="GridContainer/ViewportContainer/Viewport/GameWorld/Places" index="0" instance=ExtResource( 15 )]
-
-_sections_unfolded = [ "Transform" ]
-world_data_node = NodePath("../../../../../../WorldData")
+world_data_node = NodePath("../../../../../WorldData")
 
 [node name="Terrain" type="Spatial" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="7"]
 
-script = ExtResource( 16 )
-cell_material = ExtResource( 17 )
-chunks_radius = 5
-radius = 5
+script = ExtResource( 15 )
+cell_material = ExtResource( 16 )
+chunks_radius = 4
+radius = 4
 visibility_radius = Vector2( 36, 24 )
 chunks_alive_radius = 7
 world_data_node = NodePath("../../../../../WorldData")
 camera_node = NodePath("../GameCamera")
 cell_grid_alpha = 0.2
 
-[node name="WaterHorizon" type="MeshInstance" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="8"]
+[connection signal="change_mode" from="GameLogic" to="GridContainer/ViewportContainer/Viewport/GameWorld/Hover" method="_on_GameLogic_change_mode"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0 )
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-mesh = SubResource( 2 )
-skeleton = NodePath("..")
-material/0 = SubResource( 3 )
-script = ExtResource( 20 )
-_sections_unfolded = [ "Transform", "material" ]
+[connection signal="change_mode" from="GameLogic" to="GridContainer/ViewportContainer/Viewport/GameWorld/Selection" method="_on_GameLogic_change_mode"]
 
-[node name="Fog" type="MeshInstance" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="9"]
+[connection signal="change_mode" from="GameLogic" to="GridContainer/ViewportContainer/Viewport/GameWorld/Terrain" method="_on_GameLogic_change_mode"]
 
-visible = false
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-mesh = SubResource( 4 )
-skeleton = NodePath("..")
-material/0 = SubResource( 5 )
-script = ExtResource( 21 )
-_sections_unfolded = [ "Transform", "material" ]
-
-[connection signal="actor_moved" from="GameLogic" to="GridContainer/ViewportContainer/Viewport/GameWorld/Units" method="_on_GameLogic_actor_moved"]
-
-[connection signal="actor_placed" from="GameLogic" to="GridContainer/ViewportContainer/Viewport/GameWorld/Units" method="_on_GameLogic_actor_placed"]
-
-[connection signal="selected" from="GameLogic" to="GridContainer/ViewportContainer/Viewport/GameWorld" method="_on_GameLogic_selected"]
+[connection signal="selected" from="GameLogic" to="GridContainer/ViewportContainer/Viewport/GameWorld/Selection" method="_on_GameLogic_selected"]
 
 [connection signal="mouse_entered" from="GridContainer/ViewportContainer" to="GridContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_entered"]
 
@@ -567,19 +353,17 @@ _sections_unfolded = [ "Transform", "material" ]
 
 [connection signal="resized" from="GridContainer/ViewportContainer" to="GridContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_resized"]
 
-[connection signal="move" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_move"]
+[connection signal="change_mode" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_change_mode"]
+
+[connection signal="change_place_mode" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_change_place_mode"]
 
 [connection signal="select" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_select"]
-
-[connection signal="wagon" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_wagon"]
-
-[connection signal="moved" from="GridContainer/ViewportContainer/Viewport/GameWorld/GameCamera" to="GridContainer/ViewportContainer/Viewport/GameWorld/Fog" method="_on_GameCamera_moved"]
 
 [connection signal="moved" from="GridContainer/ViewportContainer/Viewport/GameWorld/GameCamera" to="GridContainer/ViewportContainer/Viewport/GameWorld/Units" method="_on_GameCamera_moved"]
 
 [connection signal="moved" from="GridContainer/ViewportContainer/Viewport/GameWorld/GameCamera" to="GridContainer/ViewportContainer/Viewport/GameWorld/Terrain" method="_on_GameCamera_moved" flags=3]
 
-[connection signal="moved" from="GridContainer/ViewportContainer/Viewport/GameWorld/GameCamera" to="GridContainer/ViewportContainer/Viewport/GameWorld/WaterHorizon" method="_on_GameCamera_moved"]
+[connection signal="place_placed" from="GridContainer/ViewportContainer/Viewport/GameWorld/Places" to="GridContainer/ViewportContainer/Viewport/GameWorld/Selection/Pathfinder" method="_on_Places_place_placed"]
 
 [connection signal="create_chunk" from="GridContainer/ViewportContainer/Viewport/GameWorld/Terrain" to="GridContainer/ViewportContainer/Viewport/GameWorld/Terrain" method="_on_create_chunk" flags=3]
 

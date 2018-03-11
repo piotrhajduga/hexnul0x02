@@ -12,6 +12,11 @@ class HexAStar extends AStar:
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
 
+export(NodePath) var units_node
+onready var units = get_node(units_node)
+export(NodePath) var places_node
+onready var places = get_node(places_node)
+
 onready var astar = HexAStar.new()
 
 export(Vector2) var game_pos = Vector2()
@@ -57,4 +62,14 @@ func update():
 		connect_cell(cell_pos)
 
 func is_passable(cell_pos):
-	return get_path(game_pos, cell_pos).size() > 0
+	return (
+		not units.map.has(cell_pos)
+		and not places.map.has(cell_pos)
+		and get_path(game_pos, cell_pos).size() > 0
+	)
+
+func _on_Places_place_placed(place, pos):
+	var world_pos = game_space.offset_to_world(pos)
+	var point = astar.get_closest_point(world_pos)
+	if (astar.get_point_position(point) - world_pos).length() < 0.1:
+		astar.remove_point(point)

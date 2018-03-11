@@ -1,6 +1,7 @@
 tool
 extends Spatial
 
+var GameLogicClass = preload("res:///GameLogic.gd")
 var ChunkClass = preload("TerrainChunk.gd")
 var Chunk = preload("TerrainChunk.tscn")
 
@@ -87,3 +88,9 @@ func remove_chunk(center):
 func _on_GameCamera_moved( target_position, camera_y_angle ):
 	var cam_game_pos = world_data.get_game_pos(camera.target_position)
 	update(cam_game_pos)
+
+func _on_GameLogic_change_mode(mode):
+	if [GameLogicClass.MODE_PLACE,GameLogicClass.MODE_MOVE].has(mode):
+		show_grid()
+	else:
+		hide_grid()
