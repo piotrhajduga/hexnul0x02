@@ -61,16 +61,21 @@ func set_state(val):
 	if val==null: return
 	state = val
 	if cell and light: update()
+	
+	
 
 func _ready():
+	update()
+	
+func update():
+	for cell in get_children():
+		remove_child(cell)
 	cell = Cell.instance()
 	cell.world_data = world_data
 	cell.material = material
 	cell.translation.y = 0.01
 	add_child(cell)
 	light.translation.y = light_height + world_data.get_terrain_mesh_height(self.translation)
-
-func update():
 	light.light_color = STATE_COLORS[state]
 	material.set_shader_param("albedo", STATE_COLORS[state])
 	cell.update_shape()

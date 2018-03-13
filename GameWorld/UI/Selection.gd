@@ -4,8 +4,11 @@ var GameLogicClass = preload("res://GameLogic.gd")
 
 var Cell = preload("res://GameWorld/Terrain/Cell.tscn")
 
+onready var game_space = get_node("/root/GameSpace")
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
+export(NodePath) var pathfinder_node
+onready var pathfinder = get_node(pathfinder_node)
 
 onready var light = get_node("SpotLight")
 
@@ -16,6 +19,7 @@ enum SelectionState {
 	STATE_NORMAL, STATE_MOVE
 }
 export(SelectionState) var state = STATE_NORMAL setget set_state
+export(int) var radius = 0
 
 export(Color) var normal_color = Color("#c3cfb2")
 export(Color) var move_passable_color = Color("#23fdf2")
@@ -38,24 +42,21 @@ func _ready():
 func update():
 	light.light_color = STATE_COLORS[state]
 	material.set_shader_param("albedo", STATE_COLORS[state])
-	$Pathfinder.game_pos = world_data.get_game_pos(self.translation)
-	$Pathfinder.update()
+	var game_pos = game_space.world_to_offset(self.translation)
 	for cell in cells:
 		remove_child(cell)
 		cell.queue_free()
 	cells.clear()
-	for rcpos in world_data.get_cells_in_radius($Pathfinder.game_pos, {
-		STATE_NORMAL: 0,
-		STATE_MOVE: $Pathfinder.radius
-	}[state]):
-		if state != STATE_MOVE or $Pathfinder.is_passable(rcpos):
-			var cell = Cell.instance()
-			cell.world_data = world_data
-			cell.material = material
-			cells.append(cell)
-			add_child(cell)
-			cell.translation = world_data.get_world_pos(rcpos) - world_data.get_world_pos($Pathfinder.game_pos) + Vector3(0,1,0)*0.01
-			cell.update_shape()
+	for rcpos in game_space.offset_range(game_pos, radius):
+		var cell = Cell.instance()
+		cell.world_data = world_data
+		cell.material = material
+		cells.append(cell)
+		add_child(cell)
+		var rcworld = game_space.offset_to_world(rcpos)
+		var world_pos = game_space.offset_to_world(game_pos)
+		cell.translation = rcworld - world_pos + Vector3(0,1,0) * 0.01
+		cell.update_shape()
 
 func _on_GameLogic_change_mode(mode):
 	match(mode):
@@ -63,6 +64,8 @@ func _on_GameLogic_change_mode(mode):
 			self.state = STATE_NORMAL
 		GameLogicClass.MODE_MOVE:
 			self.state = STATE_MOVE
+		_:
+			self.state = STATE_NORMAL
 	update()
 
 func _on_GameLogic_selected(object):

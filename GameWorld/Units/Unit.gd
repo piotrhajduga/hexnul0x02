@@ -1,14 +1,15 @@
 extends Spatial
 
-signal moved (actor, from_pos)
+signal moved (unit, from_pos)
 
 onready var game_space = get_node("/root/GameSpace")
 var world_data
 var pathfinder
+onready var units = get_parent()
 
 var game_position = Vector2() setget set_game_position
 
-var path = PoolVector2Array()
+var path = []
 
 var MOVEMENT_SPEED = 0.02
 var msec_passed = 0.0
@@ -38,7 +39,7 @@ func _movement():
 			set_game_position(path[0])
 			set_world_position(world_data.get_world_pos(game_position))
 			next_step()
-		elif pathfinder.is_passable(path[0]):
+		elif not units.map.has(path[0]):
 			self.translation += delta.normalized() * MOVEMENT_SPEED
 			self.translation.y = world_data.get_terrain_mesh_height(self.translation)
 		else:

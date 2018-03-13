@@ -1,75 +1,67 @@
 extends Node
 
-class HexAStar extends AStar:
-	func _compute_cost(from_id, to_id):
-		var from_pos = self.get_point_position(from_id)
-		var to_pos = self.get_point_position(to_id)
-		return 1+(to_pos-from_pos).length()
-		
-	func _estimate_cost(from_id, to_id):
-		return 1 + (get_point_weight_scale(to_id) - get_point_weight_scale(from_id))
-
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
 
-export(NodePath) var units_node
-onready var units = get_node(units_node)
-export(NodePath) var places_node
-onready var places = get_node(places_node)
-
-onready var astar = HexAStar.new()
-
-export(Vector2) var game_pos = Vector2()
-export(int) var radius = 5
+export(NodePath) var game_logic_node
+onready var game_logic = get_node(game_logic_node)
 
 onready var game_space = get_node("/root/GameSpace")
 
-func add_cell(cell_pos):
-	var pos = game_space.offset_to_world(cell_pos)
-	var type = world_data.get_cell_type(pos)
-	var id = astar.get_available_point_id()
-	astar.add_point(id, pos, 1)#1+15*pow(world_data.get_height(pos),2))
-
-func connect_cell(cell_pos):
-	if world_data.is_passable(cell_pos):
-		var id = astar.get_closest_point(game_space.offset_to_world(cell_pos))
-		for neighbor in game_space.offset_neighbors(cell_pos):
-			if neighbor!=cell_pos and world_data.is_passable(neighbor):
-				astar.connect_points(id, astar.get_closest_point(game_space.offset_to_world(neighbor)), false)
-
-func cell_type(game_pos):
-	return world_data.get_cell_type(game_space.offset_to_world(game_pos))
-
-func get_path(from, to):
-	var path = []
-	if game_space.offset_range(from,radius).has(to):
-		var idfrom = astar.get_closest_point(game_space.offset_to_world(from))
-		var idto = astar.get_closest_point(game_space.offset_to_world(to))
-		var aspath = astar.get_point_path(idfrom, idto)
-		if aspath.size() <= radius+1:
-			for point in aspath:
-				path.append(world_data.get_game_pos(point))
-	return path
-
 func _ready():
-	update()
+	pass
 
-func update():
-	astar.clear()
-	for cell_pos in game_space.offset_range(game_pos,radius):
-		add_cell(cell_pos)
-	for cell_pos in game_space.offset_range(game_pos,radius-1):
-		connect_cell(cell_pos)
+func _g_cost(from_cube, to_cube):
+	var from = game_space.offset_to_world(game_space.cube_to_offset(from_cube))
+	var to = game_space.offset_to_world(game_space.cube_to_offset(to_cube))
+	return world_data.get_height(to) - world_data.get_height(from)
+	
+func _h_cost(from, to):
+	return game_space.cube_distance(from, to)
+
+func _is_passable(pos):
+	return is_passable(game_space.cube_to_offset(pos))
+
+func get_path(from_off, to_off):
+	var from = game_space.offset_to_cube(from_off)
+	var to = game_space.offset_to_cube(to_off)
+	var closedSet = []
+	var openSet = [from]
+	var cameFrom = {}
+	var g_score = { from: 0 }
+	var f_score = { from: _h_cost(from, to) }
+	while not openSet.empty():
+		var cur = openSet[0]
+		for ios in range(1, openSet.size()):
+			if f_score.has(openSet[ios]) and f_score[openSet[ios]] < f_score[cur]:
+				cur = openSet[ios]
+		if cur == to:
+			return reconstruct_path(cameFrom, cur)
+		openSet.erase(cur)
+		if not closedSet.has(cur):
+			closedSet.append(cur)
+		for neighbor in game_space.cube_neighbors(cur):
+			if not _is_passable(neighbor) or closedSet.has(neighbor):
+				continue
+			if not openSet.has(neighbor):
+				openSet.append(neighbor)
+			var tgscore = g_score[cur] + _g_cost(cur, neighbor)
+			if g_score.has(neighbor) and tgscore >= g_score[neighbor]:
+				continue
+			cameFrom[neighbor] = cur
+			g_score[neighbor] = tgscore
+			f_score[neighbor] = tgscore + _h_cost(neighbor, to)
+	return []
+
+func reconstruct_path(cameFrom, current):
+	var path = [game_space.cube_to_offset(current)]
+	while cameFrom.keys().has(current):
+		current = cameFrom[current]
+		path.push_front(game_space.cube_to_offset(current))
+	return path
 
 func is_passable(cell_pos):
 	return (
-		not units.map.has(cell_pos)
-		and not places.map.has(cell_pos)
-		and get_path(game_pos, cell_pos).size() > 0
+		world_data.is_passable(cell_pos)
+		and (not game_logic.units.map.has(cell_pos) and not game_logic.places.map.has(cell_pos))
 	)
-
-func _on_Places_place_placed(place, pos):
-	var world_pos = game_space.offset_to_world(pos)
-	var point = astar.get_closest_point(world_pos)
-	if (astar.get_point_position(point) - world_pos).length() < 0.1:
-		astar.remove_point(point)

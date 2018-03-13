@@ -8,6 +8,7 @@ onready var pathfinder = get_node(pathfinder_node)
 var map = {}
 
 signal unit_placed(unit, pos)
+signal unit_moved(unit, from, to)
 
 func place_unit(UnitType, pos):
 	if not map.has(pos) and world_data.is_passable(pos):
@@ -21,9 +22,10 @@ func place_unit(UnitType, pos):
 		emit_signal("unit_placed", unit, pos)
 		select(unit)
 
-func _on_unit_moved(actor, from_pos):
+func _on_unit_moved(unit, from_pos):
 	map.erase(from_pos)
-	map[actor.game_position] = actor
+	map[unit.game_position] = unit
+	emit_signal("unit_moved", unit, from_pos, unit.game_position)
 
 func move_unit(unit, pos):
 	unit.path = pathfinder.get_path(unit.game_position, pos)
