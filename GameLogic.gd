@@ -2,7 +2,6 @@ extends Node
 
 export(NodePath) var selection_node
 onready var selection = get_node(selection_node)
-onready var pathfinder = selection.get_node("Pathfinder")
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
 
@@ -78,3 +77,7 @@ func _on_GameWorld_change_mode(mode):
 
 func _on_GameWorld_change_place_mode(mode, ObjectClass):
 	set_place_mode(mode, ObjectClass)
+
+
+func _on_Select_pressed():
+	set_mode(MODE_SELECT)

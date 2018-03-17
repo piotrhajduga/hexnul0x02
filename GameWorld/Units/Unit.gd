@@ -39,13 +39,14 @@ func _movement():
 			set_game_position(path[0])
 			set_world_position(world_data.get_world_pos(game_position))
 			next_step()
-		elif not units.map.has(path[0]):
+		elif pathfinder.is_passable(path[0]):
 			self.translation += delta.normalized() * MOVEMENT_SPEED
 			self.translation.y = world_data.get_terrain_mesh_height(self.translation)
 		else:
 			set_game_position(game_position)
 			set_world_position(world_data.get_world_pos(game_position))
-			path = []
+			var new_path = pathfinder.get_path(game_position, path[-1])
+			self.path = new_path
 
 func _physics_process(delta):
 	_movement()

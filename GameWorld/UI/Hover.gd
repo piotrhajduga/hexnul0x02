@@ -36,7 +36,6 @@ var STATE_COLORS = {
 	STATE_PLACE_UNIT: place_unit_color
 }
 export(HoverState) var state = STATE_HOVER setget set_state
-var cell = null
 
 func set_game_pos(game_pos):
 	if game_pos == null:
@@ -60,25 +59,31 @@ func set_game_pos(game_pos):
 func set_state(val):
 	if val==null: return
 	state = val
-	if cell and light: update()
-	
-	
+	if light: update()
 
 func _ready():
 	update()
+
+func _add_cell(world_pos):
+	var cell = Cell.instance()
+	cell.world_data = world_data
+	cell.material = material
+	cell.translation = world_pos - self.translation
+	cell.translation.y = 0.01
+	add_child(cell)
+	cell.update_shape()
 	
 func update():
 	for cell in get_children():
 		remove_child(cell)
-	cell = Cell.instance()
-	cell.world_data = world_data
-	cell.material = material
-	cell.translation.y = 0.01
-	add_child(cell)
 	light.translation.y = light_height + world_data.get_terrain_mesh_height(self.translation)
 	light.light_color = STATE_COLORS[state]
 	material.set_shader_param("albedo", STATE_COLORS[state])
-	cell.update_shape()
+	if state == STATE_MOVE_PASSABLE and game_logic.selected:
+		for offset in pathfinder.get_path(game_logic.selected.game_position, game_space.world_to_offset(self.translation)):
+			_add_cell(game_space.offset_to_world(offset))
+	else:
+		_add_cell(self.translation)
 
 func _on_GameLogic_change_mode(mode):
 	match(mode):

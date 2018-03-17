@@ -3,8 +3,8 @@
 [ext_resource path="res://WorldData.gd" type="Script" id=1]
 [ext_resource path="res://GameLogic.gd" type="Script" id=2]
 [ext_resource path="res://Pathfinder.gd" type="Script" id=3]
-[ext_resource path="res://Menu/Units.gd" type="Script" id=4]
-[ext_resource path="res://Viewport.gd" type="Script" id=5]
+[ext_resource path="res://Viewport.gd" type="Script" id=4]
+[ext_resource path="res://Menu/Units.gd" type="Script" id=5]
 [ext_resource path="res://GameWorld/GameWorld.gd" type="Script" id=6]
 [ext_resource path="res://GameWorld/UI/Camera.gd" type="Script" id=7]
 [ext_resource path="res://GameWorld/GameWorld.tres" type="Environment" id=8]
@@ -59,11 +59,11 @@ snow_height = 0.66
 [node name="GameLogic" type="Node" parent="." index="1"]
 
 script = ExtResource( 2 )
-selection_node = NodePath("../GridContainer/ViewportContainer/Viewport/GameWorld/Selection")
+selection_node = NodePath("../ViewportContainer/Viewport/GameWorld/Selection")
 world_data_node = NodePath("../WorldData")
 mode = null
-places_node = NodePath("../GridContainer/ViewportContainer/Viewport/GameWorld/Places")
-units_node = NodePath("../GridContainer/ViewportContainer/Viewport/GameWorld/Units")
+places_node = NodePath("../ViewportContainer/Viewport/GameWorld/Places")
+units_node = NodePath("../ViewportContainer/Viewport/GameWorld/Units")
 place_mode = null
 
 [node name="Pathfinder" type="Node" parent="." index="2"]
@@ -72,24 +72,53 @@ script = ExtResource( 3 )
 world_data_node = NodePath("../WorldData")
 game_logic_node = NodePath("../GameLogic")
 
-[node name="GridContainer" type="VBoxContainer" parent="." index="3"]
+[node name="ViewportContainer" type="ViewportContainer" parent="." index="3"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 1280.0
-margin_bottom = 800.0
+margin_bottom = 804.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-alignment = 1
-_sections_unfolded = [ "Theme" ]
+stretch = false
+stretch_shrink = 1
+_sections_unfolded = [ "Margin", "Mouse" ]
 
-[node name="HBoxContainer" type="HBoxContainer" parent="GridContainer" index="0"]
+[node name="Viewport" type="Viewport" parent="ViewportContainer" index="0"]
+
+arvr = false
+size = Vector2( 1280, 800 )
+own_world = true
+world = null
+transparent_bg = false
+msaa = 0
+hdr = false
+disable_3d = false
+usage = 2
+debug_draw = 0
+render_target_v_flip = false
+render_target_clear_mode = 0
+render_target_update_mode = 3
+audio_listener_enable_2d = false
+audio_listener_enable_3d = false
+physics_object_picking = false
+gui_disable_input = false
+gui_snap_controls_to_pixels = false
+shadow_atlas_size = 4
+shadow_atlas_quad_0 = 2
+shadow_atlas_quad_1 = 2
+shadow_atlas_quad_2 = 3
+shadow_atlas_quad_3 = 4
+script = ExtResource( 4 )
+_sections_unfolded = [ "GUI", "Rendering", "Shadow Atlas" ]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ViewportContainer/Viewport" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -106,7 +135,7 @@ size_flags_vertical = 1
 alignment = 0
 _sections_unfolded = [ "Mouse" ]
 
-[node name="Select" type="Button" parent="GridContainer/HBoxContainer" index="0"]
+[node name="Select" type="Button" parent="ViewportContainer/Viewport/HBoxContainer" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -129,7 +158,7 @@ text = "Select"
 flat = false
 align = 1
 
-[node name="Move" type="Button" parent="GridContainer/HBoxContainer" index="1"]
+[node name="Move" type="Button" parent="ViewportContainer/Viewport/HBoxContainer" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -153,7 +182,7 @@ text = "Move"
 flat = false
 align = 1
 
-[node name="Units" type="MenuButton" parent="GridContainer/HBoxContainer" index="2"]
+[node name="Units" type="MenuButton" parent="ViewportContainer/Viewport/HBoxContainer" index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -177,62 +206,15 @@ text = "Units"
 flat = true
 align = 1
 items = [  ]
-script = ExtResource( 4 )
-
-[node name="ViewportContainer" type="ViewportContainer" parent="GridContainer" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 24.0
-margin_right = 1280.0
-margin_bottom = 800.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-stretch = false
-stretch_shrink = 1
-_sections_unfolded = [ "Margin", "Mouse" ]
-
-[node name="Viewport" type="Viewport" parent="GridContainer/ViewportContainer" index="0"]
-
-arvr = false
-size = Vector2( 1280, 776 )
-own_world = true
-world = null
-transparent_bg = false
-msaa = 0
-hdr = false
-disable_3d = false
-usage = 2
-debug_draw = 0
-render_target_v_flip = false
-render_target_clear_mode = 0
-render_target_update_mode = 3
-audio_listener_enable_2d = false
-audio_listener_enable_3d = false
-physics_object_picking = false
-gui_disable_input = false
-gui_snap_controls_to_pixels = false
-shadow_atlas_size = 4
-shadow_atlas_quad_0 = 2
-shadow_atlas_quad_1 = 2
-shadow_atlas_quad_2 = 3
-shadow_atlas_quad_3 = 4
 script = ExtResource( 5 )
-_sections_unfolded = [ "GUI", "Rendering", "Shadow Atlas" ]
 
-[node name="GameWorld" type="Spatial" parent="GridContainer/ViewportContainer/Viewport" index="0"]
+[node name="GameWorld" type="Spatial" parent="ViewportContainer/Viewport" index="1"]
 
 script = ExtResource( 6 )
 _sections_unfolded = [ "Transform" ]
-world_data_node = NodePath("../../../../WorldData")
+world_data_node = NodePath("../../../WorldData")
 
-[node name="GameCamera" type="Camera" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="0"]
+[node name="GameCamera" type="Camera" parent="ViewportContainer/Viewport/GameWorld" index="0"]
 
 transform = Transform( 1, 0, 0, 0, 0.736169, 0.676797, 0, -0.676797, 0.736169, 0, 3, 3.18431 )
 keep_aspect = 1
@@ -249,7 +231,7 @@ near = 0.05
 far = 70.0
 script = ExtResource( 7 )
 _sections_unfolded = [ "Transform" ]
-world_data_node = NodePath("../../../../../WorldData")
+world_data_node = NodePath("../../../../WorldData")
 max_camera_height = 22.0
 min_camera_height = 2.0
 target_position = Vector3( 0, 0, 0 )
@@ -259,12 +241,12 @@ camera_vspeed = 1.0
 camera_hspeed = 1.0
 camera_y_angle = 0.0
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="1"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="ViewportContainer/Viewport/GameWorld" index="1"]
 
 environment = ExtResource( 8 )
 _sections_unfolded = [ "Pause" ]
 
-[node name="DirectionalLight" type="DirectionalLight" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="2"]
+[node name="DirectionalLight" type="DirectionalLight" parent="ViewportContainer/Viewport/GameWorld" index="2"]
 
 transform = Transform( -0.458478, -0.669656, 0.584258, 0, 0.657426, 0.753519, -0.888706, 0.345472, -0.301416, 0, 7.74309, 0 )
 layers = 1
@@ -292,41 +274,41 @@ directional_shadow_depth_range = 0
 directional_shadow_max_distance = 200.0
 _sections_unfolded = [ "Light", "Shadow" ]
 
-[node name="Hover" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="3" instance=ExtResource( 9 )]
+[node name="Hover" parent="ViewportContainer/Viewport/GameWorld" index="3" instance=ExtResource( 9 )]
 
 visible = false
 script = ExtResource( 10 )
-world_data_node = NodePath("../../../../../WorldData")
-game_logic_node = NodePath("../../../../../GameLogic")
-pathfinder_node = NodePath("../../../../../Pathfinder")
+world_data_node = NodePath("../../../../WorldData")
+game_logic_node = NodePath("../../../../GameLogic")
+pathfinder_node = NodePath("../../../../Pathfinder")
 material = SubResource( 1 )
 hover_color = Color( 0.764706, 0.811765, 0.698039, 1 )
 move_passable_color = Color( 0.115692, 0.871094, 0.832977, 1 )
 move_impassable_color = Color( 0.519531, 0.103881, 0.0487061, 1 )
 place_unit_color = Color( 0.115692, 0.871094, 0.832977, 1 )
 
-[node name="Selection" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="4" instance=ExtResource( 9 )]
+[node name="Selection" parent="ViewportContainer/Viewport/GameWorld" index="4" instance=ExtResource( 9 )]
 
 visible = false
-world_data_node = NodePath("../../../../../WorldData")
-pathfinder_node = NodePath("../../../../../Pathfinder")
+world_data_node = NodePath("../../../../WorldData")
+pathfinder_node = NodePath("../../../../Pathfinder")
 light_height = 5.0
 radius = 0
 normal_color = Color( 0.839844, 0.351849, 0.0590515, 1 )
 move_passable_color = Color( 0.0653687, 0.492188, 0.352138, 1 )
 
-[node name="Units" type="Spatial" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="5"]
+[node name="Units" type="Spatial" parent="ViewportContainer/Viewport/GameWorld" index="5"]
 
 script = ExtResource( 13 )
-world_data_node = NodePath("../../../../../WorldData")
-pathfinder_node = NodePath("../../../../../Pathfinder")
+world_data_node = NodePath("../../../../WorldData")
+pathfinder_node = NodePath("../../../../Pathfinder")
 
-[node name="Places" type="Spatial" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="6"]
+[node name="Places" type="Spatial" parent="ViewportContainer/Viewport/GameWorld" index="6"]
 
 script = ExtResource( 14 )
-world_data_node = NodePath("../../../../../WorldData")
+world_data_node = NodePath("../../../../WorldData")
 
-[node name="Terrain" type="Spatial" parent="GridContainer/ViewportContainer/Viewport/GameWorld" index="7"]
+[node name="Terrain" type="Spatial" parent="ViewportContainer/Viewport/GameWorld" index="7"]
 
 script = ExtResource( 15 )
 cell_material = ExtResource( 16 )
@@ -334,40 +316,42 @@ chunks_radius = 5
 radius = 5
 visibility_radius = Vector2( 36, 24 )
 chunks_alive_radius = 7
-world_data_node = NodePath("../../../../../WorldData")
+world_data_node = NodePath("../../../../WorldData")
 camera_node = NodePath("../GameCamera")
 cell_grid_alpha = 0.2
 
-[connection signal="change_mode" from="GameLogic" to="GridContainer/ViewportContainer/Viewport/GameWorld/Terrain" method="_on_GameLogic_change_mode"]
+[connection signal="change_mode" from="GameLogic" to="ViewportContainer/Viewport/GameWorld/Terrain" method="_on_GameLogic_change_mode"]
 
-[connection signal="change_mode" from="GameLogic" to="GridContainer/ViewportContainer/Viewport/GameWorld/Hover" method="_on_GameLogic_change_mode"]
+[connection signal="change_mode" from="GameLogic" to="ViewportContainer/Viewport/GameWorld/Hover" method="_on_GameLogic_change_mode"]
 
-[connection signal="change_mode" from="GameLogic" to="GridContainer/ViewportContainer/Viewport/GameWorld/Selection" method="_on_GameLogic_change_mode"]
+[connection signal="change_mode" from="GameLogic" to="ViewportContainer/Viewport/GameWorld/Selection" method="_on_GameLogic_change_mode"]
 
-[connection signal="selected" from="GameLogic" to="GridContainer/ViewportContainer/Viewport/GameWorld/Selection" method="_on_GameLogic_selected"]
+[connection signal="selected" from="GameLogic" to="ViewportContainer/Viewport/GameWorld/Selection" method="_on_GameLogic_selected"]
 
-[connection signal="mouse_entered" from="GridContainer/ViewportContainer" to="GridContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_entered"]
+[connection signal="mouse_entered" from="ViewportContainer" to="ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_entered"]
 
-[connection signal="mouse_exited" from="GridContainer/ViewportContainer" to="GridContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_exited"]
+[connection signal="mouse_exited" from="ViewportContainer" to="ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_exited"]
 
-[connection signal="resized" from="GridContainer/ViewportContainer" to="GridContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_resized"]
+[connection signal="resized" from="ViewportContainer" to="ViewportContainer/Viewport" method="_on_ViewportContainer_resized"]
 
-[connection signal="change_mode" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_change_mode"]
+[connection signal="pressed" from="ViewportContainer/Viewport/HBoxContainer/Select" to="GameLogic" method="_on_Select_pressed"]
 
-[connection signal="change_place_mode" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_change_place_mode"]
+[connection signal="change_mode" from="ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_change_mode"]
 
-[connection signal="select" from="GridContainer/ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_select"]
+[connection signal="change_place_mode" from="ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_change_place_mode"]
 
-[connection signal="moved" from="GridContainer/ViewportContainer/Viewport/GameWorld/GameCamera" to="GridContainer/ViewportContainer/Viewport/GameWorld/Terrain" method="_on_GameCamera_moved" flags=3]
+[connection signal="select" from="ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_select"]
 
-[connection signal="moved" from="GridContainer/ViewportContainer/Viewport/GameWorld/GameCamera" to="GridContainer/ViewportContainer/Viewport/GameWorld/Units" method="_on_GameCamera_moved"]
+[connection signal="moved" from="ViewportContainer/Viewport/GameWorld/GameCamera" to="ViewportContainer/Viewport/GameWorld/Terrain" method="_on_GameCamera_moved" flags=3]
 
-[connection signal="unit_moved" from="GridContainer/ViewportContainer/Viewport/GameWorld/Units" to="Pathfinder" method="_on_Units_unit_moved"]
+[connection signal="moved" from="ViewportContainer/Viewport/GameWorld/GameCamera" to="ViewportContainer/Viewport/GameWorld/Units" method="_on_GameCamera_moved"]
 
-[connection signal="unit_placed" from="GridContainer/ViewportContainer/Viewport/GameWorld/Units" to="Pathfinder" method="_on_Units_unit_placed"]
+[connection signal="unit_moved" from="ViewportContainer/Viewport/GameWorld/Units" to="Pathfinder" method="_on_Units_unit_moved"]
 
-[connection signal="place_placed" from="GridContainer/ViewportContainer/Viewport/GameWorld/Places" to="Pathfinder" method="_on_Places_place_placed"]
+[connection signal="unit_placed" from="ViewportContainer/Viewport/GameWorld/Units" to="Pathfinder" method="_on_Units_unit_placed"]
 
-[connection signal="create_chunk" from="GridContainer/ViewportContainer/Viewport/GameWorld/Terrain" to="GridContainer/ViewportContainer/Viewport/GameWorld/Terrain" method="_on_create_chunk" flags=3]
+[connection signal="place_placed" from="ViewportContainer/Viewport/GameWorld/Places" to="Pathfinder" method="_on_Places_place_placed"]
+
+[connection signal="create_chunk" from="ViewportContainer/Viewport/GameWorld/Terrain" to="ViewportContainer/Viewport/GameWorld/Terrain" method="_on_create_chunk" flags=3]
 
 
