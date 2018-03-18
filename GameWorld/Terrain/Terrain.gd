@@ -1,9 +1,9 @@
 tool
 extends Spatial
 
-var GameLogicClass = preload("res:///GameLogic.gd")
-var ChunkClass = preload("TerrainChunk.gd")
-var Chunk = preload("TerrainChunk.tscn")
+onready var GameLogicClass = load("res:///GameLogic.gd")
+onready var ChunkClass = load("res://GameWorld/Terrain/TerrainChunk.gd")
+onready var Chunk = load("res://GameWorld/Terrain/TerrainChunk.tscn")
 
 export(Material) var cell_material = preload("TerrainCell.material")
 

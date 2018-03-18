@@ -1,8 +1,8 @@
 extends Spatial
 
-var GameLogicClass = preload("res://GameLogic.gd")
+var GameLogicClass = load("res://GameLogic.gd")
 
-var Cell = preload("res://GameWorld/Terrain/Cell.tscn")
+var Cell = load("res://GameWorld/Terrain/Cell.tscn")
 
 onready var game_space = get_node("/root/GameSpace")
 export(NodePath) var world_data_node

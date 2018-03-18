@@ -3,42 +3,33 @@
 [ext_resource path="res://WorldData.gd" type="Script" id=1]
 [ext_resource path="res://GameLogic.gd" type="Script" id=2]
 [ext_resource path="res://Pathfinder.gd" type="Script" id=3]
-[ext_resource path="res://Viewport.gd" type="Script" id=4]
-[ext_resource path="res://Menu/Units.gd" type="Script" id=5]
-[ext_resource path="res://GameWorld/GameWorld.gd" type="Script" id=6]
-[ext_resource path="res://GameWorld/UI/Camera.gd" type="Script" id=7]
-[ext_resource path="res://GameWorld/GameWorld.tres" type="Environment" id=8]
-[ext_resource path="res://GameWorld/UI/Selection.tscn" type="PackedScene" id=9]
-[ext_resource path="res://GameWorld/UI/Hover.gd" type="Script" id=10]
-[ext_resource path="res://GameWorld/UI/Selection.shader" type="Shader" id=11]
-[ext_resource path="res://GameWorld/UI/assets/cell_normal_highlight.png" type="Texture" id=12]
-[ext_resource path="res://GameWorld/Units/Units.gd" type="Script" id=13]
-[ext_resource path="res://GameWorld/Places/Places.gd" type="Script" id=14]
-[ext_resource path="res://GameWorld/Terrain/Terrain.gd" type="Script" id=15]
-[ext_resource path="res://GameWorld/Terrain/TerrainCell.material" type="Material" id=16]
+[ext_resource path="res://GameWorld/GameWorld.gd" type="Script" id=4]
+[ext_resource path="res://GameWorld/UI/Camera.gd" type="Script" id=5]
+[ext_resource path="res://GameWorld/GameWorld.tres" type="Environment" id=6]
+[ext_resource path="res://GameWorld/UI/Selection.tscn" type="PackedScene" id=7]
+[ext_resource path="res://GameWorld/UI/Hover.gd" type="Script" id=8]
+[ext_resource path="res://GameWorld/UI/Selection.shader" type="Shader" id=9]
+[ext_resource path="res://GameWorld/UI/assets/cell_normal_highlight.png" type="Texture" id=10]
+[ext_resource path="res://GameWorld/Units/Units.gd" type="Script" id=11]
+[ext_resource path="res://GameWorld/Places/Places.gd" type="Script" id=12]
+[ext_resource path="res://GameWorld/Terrain/Terrain.gd" type="Script" id=13]
+[ext_resource path="res://GameWorld/Terrain/TerrainCell.material" type="Material" id=14]
+[ext_resource path="res://Viewport.gd" type="Script" id=15]
+[ext_resource path="res://Menu/Units.gd" type="Script" id=16]
 
 [sub_resource type="ShaderMaterial" id=1]
 
 render_priority = 0
-shader = ExtResource( 11 )
+shader = ExtResource( 9 )
 shader_param/albedo = Color( 0.115692, 0.871094, 0.832977, 1 )
 shader_param/uv1_scale = Vector3( 1, 1, 1 )
 shader_param/uv1_offset = Vector3( 0, 0, 0 )
-shader_param/texture_albedo = ExtResource( 12 )
+shader_param/texture_albedo = ExtResource( 10 )
 _sections_unfolded = [ "shader_param" ]
 
-[node name="Game" type="Control" index="0"]
+[node name="Game" type="Spatial" index="0"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
+_sections_unfolded = [ "Rect", "Size Flags" ]
 
 [node name="WorldData" type="Node" parent="." index="0"]
 
@@ -59,11 +50,11 @@ snow_height = 0.66
 [node name="GameLogic" type="Node" parent="." index="1"]
 
 script = ExtResource( 2 )
-selection_node = NodePath("../ViewportContainer/Viewport/GameWorld/Selection")
+selection_node = NodePath("../GameWorld/Selection")
 world_data_node = NodePath("../WorldData")
 mode = null
-places_node = NodePath("../ViewportContainer/Viewport/GameWorld/Places")
-units_node = NodePath("../ViewportContainer/Viewport/GameWorld/Units")
+places_node = NodePath("../GameWorld/Places")
+units_node = NodePath("../GameWorld/Units")
 place_mode = null
 
 [node name="Pathfinder" type="Node" parent="." index="2"]
@@ -72,149 +63,13 @@ script = ExtResource( 3 )
 world_data_node = NodePath("../WorldData")
 game_logic_node = NodePath("../GameLogic")
 
-[node name="ViewportContainer" type="ViewportContainer" parent="." index="3"]
+[node name="GameWorld" type="Spatial" parent="." index="3"]
 
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 1280.0
-margin_bottom = 804.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-stretch = false
-stretch_shrink = 1
-_sections_unfolded = [ "Margin", "Mouse" ]
-
-[node name="Viewport" type="Viewport" parent="ViewportContainer" index="0"]
-
-arvr = false
-size = Vector2( 1280, 800 )
-own_world = true
-world = null
-transparent_bg = false
-msaa = 0
-hdr = false
-disable_3d = false
-usage = 2
-debug_draw = 0
-render_target_v_flip = false
-render_target_clear_mode = 0
-render_target_update_mode = 3
-audio_listener_enable_2d = false
-audio_listener_enable_3d = false
-physics_object_picking = false
-gui_disable_input = false
-gui_snap_controls_to_pixels = false
-shadow_atlas_size = 4
-shadow_atlas_quad_0 = 2
-shadow_atlas_quad_1 = 2
-shadow_atlas_quad_2 = 3
-shadow_atlas_quad_3 = 4
 script = ExtResource( 4 )
-_sections_unfolded = [ "GUI", "Rendering", "Shadow Atlas" ]
-
-[node name="HBoxContainer" type="HBoxContainer" parent="ViewportContainer/Viewport" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 1280.0
-margin_bottom = 20.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-alignment = 0
-_sections_unfolded = [ "Mouse" ]
-
-[node name="Select" type="Button" parent="ViewportContainer/Viewport/HBoxContainer" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 51.0
-margin_bottom = 20.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
-text = "Select"
-flat = false
-align = 1
-
-[node name="Move" type="Button" parent="ViewportContainer/Viewport/HBoxContainer" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 55.0
-margin_right = 102.0
-margin_bottom = 20.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
-text = "Move"
-flat = false
-align = 1
-
-[node name="Units" type="MenuButton" parent="ViewportContainer/Viewport/HBoxContainer" index="2"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 106.0
-margin_right = 152.0
-margin_bottom = 20.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-toggle_mode = false
-action_mode = 0
-enabled_focus_mode = 0
-shortcut = null
-group = null
-text = "Units"
-flat = true
-align = 1
-items = [  ]
-script = ExtResource( 5 )
-
-[node name="GameWorld" type="Spatial" parent="ViewportContainer/Viewport" index="1"]
-
-script = ExtResource( 6 )
 _sections_unfolded = [ "Transform" ]
-world_data_node = NodePath("../../../WorldData")
+world_data_node = NodePath("../WorldData")
 
-[node name="GameCamera" type="Camera" parent="ViewportContainer/Viewport/GameWorld" index="0"]
+[node name="GameCamera" type="Camera" parent="GameWorld" index="0"]
 
 transform = Transform( 1, 0, 0, 0, 0.736169, 0.676797, 0, -0.676797, 0.736169, 0, 3, 3.18431 )
 keep_aspect = 1
@@ -229,9 +84,9 @@ fov = 75.0
 size = 1.0
 near = 0.05
 far = 70.0
-script = ExtResource( 7 )
+script = ExtResource( 5 )
 _sections_unfolded = [ "Transform" ]
-world_data_node = NodePath("../../../../WorldData")
+world_data_node = NodePath("../../WorldData")
 max_camera_height = 22.0
 min_camera_height = 2.0
 target_position = Vector3( 0, 0, 0 )
@@ -241,12 +96,12 @@ camera_vspeed = 1.0
 camera_hspeed = 1.0
 camera_y_angle = 0.0
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="ViewportContainer/Viewport/GameWorld" index="1"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="GameWorld" index="1"]
 
-environment = ExtResource( 8 )
+environment = ExtResource( 6 )
 _sections_unfolded = [ "Pause" ]
 
-[node name="DirectionalLight" type="DirectionalLight" parent="ViewportContainer/Viewport/GameWorld" index="2"]
+[node name="DirectionalLight" type="DirectionalLight" parent="GameWorld" index="2"]
 
 transform = Transform( -0.458478, -0.669656, 0.584258, 0, 0.657426, 0.753519, -0.888706, 0.345472, -0.301416, 0, 7.74309, 0 )
 layers = 1
@@ -274,59 +129,212 @@ directional_shadow_depth_range = 0
 directional_shadow_max_distance = 200.0
 _sections_unfolded = [ "Light", "Shadow" ]
 
-[node name="Hover" parent="ViewportContainer/Viewport/GameWorld" index="3" instance=ExtResource( 9 )]
+[node name="Hover" parent="GameWorld" index="3" instance=ExtResource( 7 )]
 
 visible = false
-script = ExtResource( 10 )
-world_data_node = NodePath("../../../../WorldData")
-game_logic_node = NodePath("../../../../GameLogic")
-pathfinder_node = NodePath("../../../../Pathfinder")
+script = ExtResource( 8 )
+world_data_node = NodePath("../../WorldData")
+game_logic_node = NodePath("../../GameLogic")
+pathfinder_node = NodePath("../../Pathfinder")
 material = SubResource( 1 )
 hover_color = Color( 0.764706, 0.811765, 0.698039, 1 )
 move_passable_color = Color( 0.115692, 0.871094, 0.832977, 1 )
 move_impassable_color = Color( 0.519531, 0.103881, 0.0487061, 1 )
 place_unit_color = Color( 0.115692, 0.871094, 0.832977, 1 )
 
-[node name="Selection" parent="ViewportContainer/Viewport/GameWorld" index="4" instance=ExtResource( 9 )]
+[node name="Selection" parent="GameWorld" index="4" instance=ExtResource( 7 )]
 
 visible = false
-world_data_node = NodePath("../../../../WorldData")
-pathfinder_node = NodePath("../../../../Pathfinder")
+world_data_node = NodePath("../../WorldData")
+pathfinder_node = NodePath("../../Pathfinder")
 light_height = 5.0
 radius = 0
 normal_color = Color( 0.839844, 0.351849, 0.0590515, 1 )
 move_passable_color = Color( 0.0653687, 0.492188, 0.352138, 1 )
 
-[node name="Units" type="Spatial" parent="ViewportContainer/Viewport/GameWorld" index="5"]
+[node name="Units" type="Spatial" parent="GameWorld" index="5"]
+
+script = ExtResource( 11 )
+world_data_node = NodePath("../../WorldData")
+pathfinder_node = NodePath("../../Pathfinder")
+
+[node name="Places" type="Spatial" parent="GameWorld" index="6"]
+
+script = ExtResource( 12 )
+world_data_node = NodePath("../../WorldData")
+
+[node name="Terrain" type="Spatial" parent="GameWorld" index="7"]
 
 script = ExtResource( 13 )
-world_data_node = NodePath("../../../../WorldData")
-pathfinder_node = NodePath("../../../../Pathfinder")
-
-[node name="Places" type="Spatial" parent="ViewportContainer/Viewport/GameWorld" index="6"]
-
-script = ExtResource( 14 )
-world_data_node = NodePath("../../../../WorldData")
-
-[node name="Terrain" type="Spatial" parent="ViewportContainer/Viewport/GameWorld" index="7"]
-
-script = ExtResource( 15 )
-cell_material = ExtResource( 16 )
+cell_material = ExtResource( 14 )
 chunks_radius = 4
 radius = 4
 visibility_radius = Vector2( 36, 24 )
 chunks_alive_radius = 7
-world_data_node = NodePath("../../../../WorldData")
+world_data_node = NodePath("../../WorldData")
 camera_node = NodePath("../GameCamera")
 cell_grid_alpha = 0.2
 
-[connection signal="change_mode" from="GameLogic" to="ViewportContainer/Viewport/GameWorld/Terrain" method="_on_GameLogic_change_mode"]
+[node name="ViewportContainer" type="ViewportContainer" parent="." index="4"]
 
-[connection signal="change_mode" from="GameLogic" to="ViewportContainer/Viewport/GameWorld/Hover" method="_on_GameLogic_change_mode"]
+visible = false
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1280.0
+margin_bottom = 800.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = false
+stretch_shrink = 1
+_sections_unfolded = [ "Margin", "Mouse", "Rect", "Size Flags" ]
 
-[connection signal="change_mode" from="GameLogic" to="ViewportContainer/Viewport/GameWorld/Selection" method="_on_GameLogic_change_mode"]
+[node name="Viewport" type="Viewport" parent="ViewportContainer" index="0"]
 
-[connection signal="selected" from="GameLogic" to="ViewportContainer/Viewport/GameWorld/Selection" method="_on_GameLogic_selected"]
+arvr = false
+size = Vector2( 1280, 800 )
+own_world = false
+world = null
+transparent_bg = false
+msaa = 1
+hdr = false
+disable_3d = false
+usage = 2
+debug_draw = 0
+render_target_v_flip = false
+render_target_clear_mode = 0
+render_target_update_mode = 0
+audio_listener_enable_2d = false
+audio_listener_enable_3d = false
+physics_object_picking = false
+gui_disable_input = false
+gui_snap_controls_to_pixels = false
+shadow_atlas_size = 4
+shadow_atlas_quad_0 = 2
+shadow_atlas_quad_1 = 2
+shadow_atlas_quad_2 = 3
+shadow_atlas_quad_3 = 4
+script = ExtResource( 15 )
+_sections_unfolded = [ "Rendering" ]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." index="5"]
+
+editor/display_folded = true
+visible = false
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1280.0
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+alignment = 0
+_sections_unfolded = [ "Mouse" ]
+
+[node name="Select" type="Button" parent="HBoxContainer" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 51.0
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Select"
+flat = false
+align = 1
+
+[node name="Move" type="Button" parent="HBoxContainer" index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 55.0
+margin_right = 102.0
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Move"
+flat = false
+align = 1
+
+[node name="Units" type="MenuButton" parent="HBoxContainer" index="2"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 106.0
+margin_right = 152.0
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+action_mode = 0
+enabled_focus_mode = 0
+shortcut = null
+group = null
+text = "Units"
+flat = true
+align = 1
+items = [  ]
+script = ExtResource( 16 )
+
+[connection signal="change_mode" from="GameLogic" to="GameWorld/Terrain" method="_on_GameLogic_change_mode"]
+
+[connection signal="change_mode" from="GameLogic" to="GameWorld/Hover" method="_on_GameLogic_change_mode"]
+
+[connection signal="change_mode" from="GameLogic" to="GameWorld/Selection" method="_on_GameLogic_change_mode"]
+
+[connection signal="selected" from="GameLogic" to="GameWorld/Selection" method="_on_GameLogic_selected"]
+
+[connection signal="change_mode" from="GameWorld" to="GameLogic" method="_on_GameWorld_change_mode"]
+
+[connection signal="change_place_mode" from="GameWorld" to="GameLogic" method="_on_GameWorld_change_place_mode"]
+
+[connection signal="select" from="GameWorld" to="GameLogic" method="_on_GameWorld_select"]
+
+[connection signal="moved" from="GameWorld/GameCamera" to="GameWorld/Terrain" method="_on_GameCamera_moved" flags=3]
+
+[connection signal="moved" from="GameWorld/GameCamera" to="GameWorld/Units" method="_on_GameCamera_moved"]
+
+[connection signal="place_placed" from="GameWorld/Places" to="Pathfinder" method="_on_Places_place_placed"]
+
+[connection signal="create_chunk" from="GameWorld/Terrain" to="GameWorld/Terrain" method="_on_create_chunk" flags=3]
 
 [connection signal="mouse_entered" from="ViewportContainer" to="ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_entered"]
 
@@ -334,20 +342,6 @@ cell_grid_alpha = 0.2
 
 [connection signal="resized" from="ViewportContainer" to="ViewportContainer/Viewport" method="_on_ViewportContainer_resized"]
 
-[connection signal="pressed" from="ViewportContainer/Viewport/HBoxContainer/Select" to="GameLogic" method="_on_Select_pressed"]
-
-[connection signal="change_mode" from="ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_change_mode"]
-
-[connection signal="change_place_mode" from="ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_change_place_mode"]
-
-[connection signal="select" from="ViewportContainer/Viewport/GameWorld" to="GameLogic" method="_on_GameWorld_select"]
-
-[connection signal="moved" from="ViewportContainer/Viewport/GameWorld/GameCamera" to="ViewportContainer/Viewport/GameWorld/Terrain" method="_on_GameCamera_moved" flags=3]
-
-[connection signal="moved" from="ViewportContainer/Viewport/GameWorld/GameCamera" to="ViewportContainer/Viewport/GameWorld/Units" method="_on_GameCamera_moved"]
-
-[connection signal="place_placed" from="ViewportContainer/Viewport/GameWorld/Places" to="Pathfinder" method="_on_Places_place_placed"]
-
-[connection signal="create_chunk" from="ViewportContainer/Viewport/GameWorld/Terrain" to="ViewportContainer/Viewport/GameWorld/Terrain" method="_on_create_chunk" flags=3]
+[connection signal="pressed" from="HBoxContainer/Select" to="GameLogic" method="_on_Select_pressed"]
 
 

@@ -1,6 +1,6 @@
 extends Spatial
 
-var GameLogicClass = preload("res://GameLogic.gd")
+var GameLogicClass = load("res://GameLogic.gd")
 
 export(NodePath) var world_data_node
 onready var world_data = get_node(world_data_node)
@@ -8,8 +8,8 @@ onready var world_data = get_node(world_data_node)
 onready var game_space = get_node("/root/GameSpace")
 onready var pathfinder = $Selection.get_node("Pathfinder")
 
-var Wagon = preload("res://GameWorld/Units/Wagon.tscn")
-var House = preload("res://GameWorld/Places/House.tscn")
+var Wagon = load("res://GameWorld/Units/Wagon.tscn")
+var House = load("res://GameWorld/Places/House.tscn")
 
 signal change_mode(mode)
 signal change_place_mode(mode,ObjectClass)

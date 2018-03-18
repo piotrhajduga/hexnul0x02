@@ -3,7 +3,7 @@ extends Node
 #type GamePos - offset coords Vector2[int]
 #type WorldPos - world coords Vector3
 
-var SoftNoise = preload("res://GameWorld/softnoise.gd")
+var SoftNoise = load("res://GameWorld/softnoise.gd")
 
 export var WORLD_RADIUS = 128
 export var WORLD_RADIUS_FEATHER = 24
