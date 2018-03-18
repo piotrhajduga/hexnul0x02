@@ -73,7 +73,7 @@ func _on_GameWorld_select(pos):
 					select(units.select(pos), OBJECT_UNIT)
 
 func _on_GameWorld_change_mode(mode):
-	if mode==MODE_MOVE and selected_type!=OBJECT_UNIT: return
+	if mode==MODE_MOVE and selected and selected_type!=OBJECT_UNIT: return
 	set_mode(mode)
 
 func _on_GameWorld_change_place_mode(mode, ObjectClass):
@@ -81,3 +81,13 @@ func _on_GameWorld_change_place_mode(mode, ObjectClass):
 
 func _on_Select_pressed():
 	set_mode(MODE_SELECT)
+
+
+func _on_Move_pressed():
+	if selected and selected_type==OBJECT_UNIT:
+		set_mode(MODE_MOVE)
+
+
+func _on_Units_mode_wagon():
+	set_place_mode(OBJECT_UNIT, Wagon)
+	set_mode(MODE_PLACE)

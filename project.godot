@@ -12,6 +12,7 @@ config_version=3
 
 config/name="hexnul0x02"
 run/main_scene="res://Game.tscn"
+run/low_processor_mode=true
 config/icon="res://icon.png"
 
 [autoload]
