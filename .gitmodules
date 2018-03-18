@@ -1,0 +1,9 @@
+[submodule "godot"]
+	path = godot
+	url = ./godot
+[submodule "godot-cpp"]
+	path = godot-cpp
+	url = ./godot-cpp/
+[submodule "godot_headers"]
+	path = godot_headers
+	url = ./godot_headers/

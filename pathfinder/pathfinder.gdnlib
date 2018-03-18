@@ -1,0 +1,20 @@
+[general]
+
+singleton=false
+load_once=true
+symbol_prefix="godot_"
+reloadable=true
+
+[entry]
+
+Android.x86=""
+Android.x86_64=""
+X11.64=""
+X11.32=""
+
+[dependencies]
+
+Android.x86=[ "res://pathfinder/lib/pathfinder.so" ]
+Android.x86_64=[ "res://pathfinder/lib/pathfinder.so" ]
+X11.64=[ "res://pathfinder/lib/pathfinder.so" ]
+X11.32=[ "res://pathfinder/lib/pathfinder.so" ]
