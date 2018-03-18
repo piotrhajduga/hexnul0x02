@@ -35,6 +35,7 @@ func _ready():
 	cell_material.set_shader_param("sand_height", world_data.sand_height)
 	cell_material.set_shader_param("water_height", world_data.water_height)
 	update_chunks(Vector2())
+	hide_grid()
 
 func show_grid():
 	cell_material.set_shader_param("mask_weight", cell_grid_alpha)

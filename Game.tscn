@@ -312,8 +312,8 @@ world_data_node = NodePath("../../../../WorldData")
 
 script = ExtResource( 15 )
 cell_material = ExtResource( 16 )
-chunks_radius = 5
-radius = 5
+chunks_radius = 4
+radius = 4
 visibility_radius = Vector2( 36, 24 )
 chunks_alive_radius = 7
 world_data_node = NodePath("../../../../WorldData")
@@ -345,10 +345,6 @@ cell_grid_alpha = 0.2
 [connection signal="moved" from="ViewportContainer/Viewport/GameWorld/GameCamera" to="ViewportContainer/Viewport/GameWorld/Terrain" method="_on_GameCamera_moved" flags=3]
 
 [connection signal="moved" from="ViewportContainer/Viewport/GameWorld/GameCamera" to="ViewportContainer/Viewport/GameWorld/Units" method="_on_GameCamera_moved"]
-
-[connection signal="unit_moved" from="ViewportContainer/Viewport/GameWorld/Units" to="Pathfinder" method="_on_Units_unit_moved"]
-
-[connection signal="unit_placed" from="ViewportContainer/Viewport/GameWorld/Units" to="Pathfinder" method="_on_Units_unit_placed"]
 
 [connection signal="place_placed" from="ViewportContainer/Viewport/GameWorld/Places" to="Pathfinder" method="_on_Places_place_placed"]
 

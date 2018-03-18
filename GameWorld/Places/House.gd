@@ -6,6 +6,7 @@ var world_data
 var game_position = Vector2()
 
 func _ready():
+	self.name = "House"
 	self.translation = world_data.get_world_pos(game_position)
 	var neighbors = game_space.offset_neighbors(game_position)
 	look_at_cell(neighbors[randi()%6])

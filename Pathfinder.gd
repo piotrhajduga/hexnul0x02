@@ -8,30 +8,34 @@ onready var game_logic = get_node(game_logic_node)
 
 onready var game_space = get_node("/root/GameSpace")
 
-func _ready():
-	pass
-
-func _g_cost(from_cube, to_cube):
+func _g_score(from_cube, to_cube):
 	var from = game_space.offset_to_world(game_space.cube_to_offset(from_cube))
 	var to = game_space.offset_to_world(game_space.cube_to_offset(to_cube))
 	return world_data.get_height(to) - world_data.get_height(from)
 	
-func _h_cost(from, to):
+func _h_score(from, to):
 	return game_space.cube_distance(from, to)
 
 func _is_passable(pos):
 	return is_passable(game_space.cube_to_offset(pos))
+	
+func _get_neighbors(pos):
+	return game_space.cube_neighbors(pos)
+
+func _compare_f_score(f_score, from, to):
+	return f_score.has(from) and f_score[from] < f_score[to]
 
 func get_path(from_off, to_off):
+	if not is_passable(to_off): return []
 	var from = game_space.offset_to_cube(from_off)
 	var to = game_space.offset_to_cube(to_off)
 	var closedSet = []
 	var openSet = [from]
 	var cameFrom = {}
 	var g_score = { from: 0 }
-	var f_score = { from: _h_cost(from, to) }
+	var f_score = { from: _h_score(from, to) }
 	while not openSet.empty():
-		var cur = openSet[0]
+		var cur = openSet.front()
 		for ios in range(1, openSet.size()):
 			if f_score.has(openSet[ios]) and f_score[openSet[ios]] < f_score[cur]:
 				cur = openSet[ios]
@@ -40,17 +44,17 @@ func get_path(from_off, to_off):
 		openSet.erase(cur)
 		if not closedSet.has(cur):
 			closedSet.append(cur)
-		for neighbor in game_space.cube_neighbors(cur):
+		for neighbor in _get_neighbors(cur):
 			if not _is_passable(neighbor) or closedSet.has(neighbor):
 				continue
 			if not openSet.has(neighbor):
 				openSet.append(neighbor)
-			var tgscore = g_score[cur] + _g_cost(cur, neighbor)
+			var tgscore = g_score[cur] + _g_score(cur, neighbor)
 			if g_score.has(neighbor) and tgscore >= g_score[neighbor]:
 				continue
 			cameFrom[neighbor] = cur
 			g_score[neighbor] = tgscore
-			f_score[neighbor] = tgscore + _h_cost(neighbor, to)
+			f_score[neighbor] = tgscore + _h_score(neighbor, to)
 	return []
 
 func reconstruct_path(cameFrom, current):

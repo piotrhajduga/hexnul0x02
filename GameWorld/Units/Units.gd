@@ -15,9 +15,9 @@ func place_unit(UnitType, pos):
 		var unit = UnitType.instance()
 		unit.world_data = world_data
 		unit.pathfinder = pathfinder
-		unit.connect("moved", self, "_on_unit_moved")
 		unit.game_position = pos
 		map[pos] = unit
+		unit.connect("moved", self, "_on_unit_moved")
 		add_child(unit)
 		emit_signal("unit_placed", unit, pos)
 		select(unit)
@@ -29,6 +29,7 @@ func _on_unit_moved(unit, from_pos):
 
 func move_unit(unit, pos):
 	unit.path = pathfinder.get_path(unit.game_position, pos)
+	return unit.path.size() > 0
 
 func select(pos):
 	return map[pos] if map.has(pos) else null

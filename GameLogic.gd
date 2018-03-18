@@ -45,11 +45,12 @@ func _on_GameWorld_select(pos):
 		MODE_SELECT:
 			var sel = units.select(pos)
 			if sel != null:
+				print("select unit ", sel)
 				select(sel, OBJECT_UNIT)
 				return
 			sel = places.select(pos)
 			if sel != null:
-				print("select ",sel)
+				print("select place ", sel)
 				select(sel, OBJECT_PLACE)
 				return
 			select(null,null)
@@ -67,9 +68,9 @@ func _on_GameWorld_select(pos):
 					select(place, OBJECT_PLACE if place else null)
 		MODE_MOVE:
 			if (selected_type == OBJECT_UNIT) and selected:
-				units.move_unit(selected, pos)
-				set_mode(MODE_SELECT)
-				select(units.select(pos), OBJECT_UNIT)
+				if units.move_unit(selected, pos):
+					set_mode(MODE_SELECT)
+					select(units.select(pos), OBJECT_UNIT)
 
 func _on_GameWorld_change_mode(mode):
 	if mode==MODE_MOVE and selected_type!=OBJECT_UNIT: return
@@ -77,7 +78,6 @@ func _on_GameWorld_change_mode(mode):
 
 func _on_GameWorld_change_place_mode(mode, ObjectClass):
 	set_place_mode(mode, ObjectClass)
-
 
 func _on_Select_pressed():
 	set_mode(MODE_SELECT)
