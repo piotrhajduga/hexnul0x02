@@ -34,5 +34,6 @@ convert_text_resources_to_binary_on_export=true
 
 threads/thread_model=2
 quality/subsurface_scattering/quality=0
+quality/filters/msaa=1
 quality/depth/hdr=false
 environment/default_environment="res://default_env.tres"

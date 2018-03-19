@@ -29,7 +29,7 @@ shader_param/uv1_offset = Vector3( 0, 0, 0 )
 shader_param/texture_albedo = ExtResource( 10 )
 _sections_unfolded = [ "shader_param" ]
 
-[node name="Game" type="Control" index="0"]
+[node name="Game" type="Control"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -335,9 +335,9 @@ _sections_unfolded = [ "Focus", "Size Flags" ]
 
 [connection signal="change_mode" from="GameLogic" to="GameWorld/Terrain" method="_on_GameLogic_change_mode"]
 
-[connection signal="change_mode" from="GameLogic" to="GameWorld/Hover" method="_on_GameLogic_change_mode"]
-
 [connection signal="change_mode" from="GameLogic" to="GameWorld/Selection" method="_on_GameLogic_change_mode"]
+
+[connection signal="change_mode" from="GameLogic" to="GameWorld/Hover" method="_on_GameLogic_change_mode"]
 
 [connection signal="selected" from="GameLogic" to="GameWorld/Selection" method="_on_GameLogic_selected"]
 
