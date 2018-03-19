@@ -15,13 +15,12 @@ signal change_mode(mode)
 signal change_place_mode(mode,ObjectClass)
 signal select(game_pos)
 
-func _input(event):
+func _unhandled_input(event):
 	match event.get_class():
-		"InputEventMouseButton": handle_mouse_button(event)
-		"InputEventMouseMotion": handle_mouse_motion(event)
-		"InputEventKey": handle_keypress(event)
+		"InputEventMouseButton": _mouse_button(event)
+		"InputEventMouseMotion": _mouse_motion(event)
 
-func handle_keypress(event):
+func _unhandled_key_input(event):
 	match event.scancode:
 		KEY_P: emit_signal("change_mode", GameLogicClass.MODE_PLACE)
 		KEY_W:
@@ -34,7 +33,7 @@ func handle_keypress(event):
 		KEY_S: emit_signal("change_mode", GameLogicClass.MODE_SELECT)
 		KEY_ESCAPE: emit_signal("change_mode", GameLogicClass.MODE_IDLE)
 
-func handle_mouse_button(event):
+func _mouse_button(event):
 	match event.button_index:
 		BUTTON_WHEEL_UP:
 			$GameCamera.move_camera($GameCamera.CAM_LO)
@@ -43,7 +42,7 @@ func handle_mouse_button(event):
 		BUTTON_LEFT:
 			if !event.is_pressed(): emit_signal("select", get_cell_on_hover())
 
-func handle_mouse_motion(event):
+func _mouse_motion(event):
 	if event.button_mask & BUTTON_MASK_RIGHT:
 		var relative = event.relative
 		$GameCamera.move(relative)

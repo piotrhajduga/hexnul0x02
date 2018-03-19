@@ -91,3 +91,7 @@ func _on_Move_pressed():
 func _on_Units_mode_wagon():
 	set_place_mode(OBJECT_UNIT, Wagon)
 	set_mode(MODE_PLACE)
+
+func _on_Places_mode_house():
+	set_place_mode(OBJECT_PLACE, House)
+	set_mode(MODE_PLACE)
