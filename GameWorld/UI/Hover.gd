@@ -66,6 +66,7 @@ func _ready():
 
 func _add_cell(world_pos):
 	var cell = Cell.instance()
+	cell.surface = true
 	cell.world_data = world_data
 	cell.material = material
 	cell.translation = world_pos - self.translation
@@ -76,7 +77,7 @@ func _add_cell(world_pos):
 func update():
 	for cell in get_children():
 		remove_child(cell)
-	light.translation.y = light_height + world_data.get_terrain_mesh_height(self.translation)
+	light.translation.y = light_height + world_data.get_surface_height(self.translation)
 	light.light_color = STATE_COLORS[state]
 	material.set_shader_param("albedo", STATE_COLORS[state])
 	if state == STATE_MOVE_PASSABLE and game_logic.selected:

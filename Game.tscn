@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://WorldData.gd" type="Script" id=1]
 [ext_resource path="res://GameLogic.gd" type="Script" id=2]
@@ -14,10 +14,12 @@
 [ext_resource path="res://GameWorld/Places/Places.gd" type="Script" id=12]
 [ext_resource path="res://GameWorld/Terrain/Terrain.gd" type="Script" id=13]
 [ext_resource path="res://GameWorld/Terrain/TerrainCell.material" type="Material" id=14]
-[ext_resource path="res://Menu/LightUI.theme" type="Theme" id=15]
-[ext_resource path="res://Menu.gd" type="Script" id=16]
-[ext_resource path="res://Menu/Units.gd" type="Script" id=17]
-[ext_resource path="res://Menu/Places.gd" type="Script" id=18]
+[ext_resource path="res://GameWorld/Terrain/assets/water-albedo.jpg" type="Texture" id=15]
+[ext_resource path="res://GameWorld/Terrain/assets/water-normal.jpg" type="Texture" id=16]
+[ext_resource path="res://Menu/LightUI.theme" type="Theme" id=17]
+[ext_resource path="res://Menu.gd" type="Script" id=18]
+[ext_resource path="res://Menu/Units.gd" type="Script" id=19]
+[ext_resource path="res://Menu/Places.gd" type="Script" id=20]
 
 [sub_resource type="ShaderMaterial" id=1]
 
@@ -29,7 +31,68 @@ shader_param/uv1_offset = Vector3( 0, 0, 0 )
 shader_param/texture_albedo = ExtResource( 10 )
 _sections_unfolded = [ "shader_param" ]
 
-[node name="Game" type="Control"]
+[sub_resource type="Shader" id=5]
+
+code = "shader_type spatial;
+render_mode depth_draw_alpha_prepass,cull_back,diffuse_burley;
+
+uniform float water_height;
+uniform vec4 water_albedo : hint_color;
+uniform float water_roughness : hint_range(0,1);
+uniform float water_normal_scale : hint_range(-16,16);
+uniform sampler2D water_texture_albedo : hint_albedo;
+uniform sampler2D water_texture_roughness : hint_white;
+uniform sampler2D water_texture_normal : hint_normal;
+
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+
+uniform float proximity_fade_distance : hint_range(0.0,1.0);
+uniform float ao_light_affect = 0.0;
+
+void vertex() {
+	UV=UV*uv1_scale.xy+uv1_offset.xy;
+}
+
+void fragment() {
+	//water
+	ALBEDO = water_albedo.rgb * texture(water_texture_albedo,UV + vec2(sin(2.0*TIME),cos(2.0*TIME))*0.02).rgb;
+	ROUGHNESS = water_roughness;
+	NORMALMAP = texture(water_texture_normal,UV + vec2(cos(4.0*TIME),sin(4.0*TIME))*0.03).rgb;
+	NORMALMAP_DEPTH = (water_normal_scale);
+	AO_LIGHT_AFFECT = ao_light_affect;
+	ALPHA = water_albedo.a * water_albedo.a;
+	float depth_tex = textureLod(DEPTH_TEXTURE,SCREEN_UV,0.0).r;
+	vec4 world_pos = INV_PROJECTION_MATRIX * vec4(SCREEN_UV*2.0-1.0,depth_tex*2.0-1.0,1.0);
+	world_pos.xyz/=world_pos.w;
+	ALPHA*=clamp(1.0-smoothstep(world_pos.z+proximity_fade_distance,world_pos.z,VERTEX.z),0.0,1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=4]
+
+render_priority = 0
+shader = SubResource( 5 )
+shader_param/water_height = 0.46
+shader_param/water_albedo = Color( 0.187408, 0.415434, 0.539062, 0.988941 )
+shader_param/water_roughness = 0.004
+shader_param/water_normal_scale = 0.4
+shader_param/uv1_scale = Vector3( 200, 200, 200 )
+shader_param/uv1_offset = Vector3( 0, 0, 0 )
+shader_param/proximity_fade_distance = 0.1
+shader_param/ao_light_affect = 1.0
+shader_param/water_texture_albedo = ExtResource( 15 )
+shader_param/water_texture_normal = ExtResource( 16 )
+_sections_unfolded = [ "shader_param" ]
+
+[sub_resource type="PlaneMesh" id=3]
+
+material = SubResource( 4 )
+size = Vector2( 400, 400 )
+subdivide_width = 10
+subdivide_depth = 10
+
+[node name="Game" type="Control" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -46,13 +109,13 @@ _sections_unfolded = [ "Rect" ]
 [node name="WorldData" type="Node" parent="." index="0"]
 
 script = ExtResource( 1 )
-WORLD_RADIUS = 64
-WORLD_RADIUS_FEATHER = 16
-TERRAIN_HEIGHT_SCALE = 15.0
+WORLD_RADIUS = 86
+WORLD_RADIUS_FEATHER = 48
+TERRAIN_HEIGHT_SCALE = 16.0
 stone_min_angle = 0.35
-noises_scales = PoolRealArray( 0.004, 0.019, 0.124, 0.33, 0.14, 0.53 )
+noises_scales = PoolRealArray( 0.006, 0.023, 0.124, 0.34, 0.19, 0.53 )
 forest_noise_scale = 0.12
-game_seed = "zabawka"
+game_seed = "texturing"
 water_height = 0.46
 sand_height = 0.46
 grass_height = 0.49
@@ -92,10 +155,10 @@ v_offset = 0.0
 doppler_tracking = 0
 projection = 0
 current = true
-fov = 75.0
+fov = 65.0
 size = 1.0
 near = 0.05
-far = 70.0
+far = 100.0
 script = ExtResource( 5 )
 _sections_unfolded = [ "Transform" ]
 world_data_node = NodePath("../../WorldData")
@@ -186,6 +249,25 @@ chunks_alive_radius = 7
 world_data_node = NodePath("../../WorldData")
 camera_node = NodePath("../GameCamera")
 cell_grid_alpha = 0.2
+surface = true
+
+[node name="MeshInstance" type="MeshInstance" parent="GameWorld/Terrain" index="0"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0 )
+visible = false
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 3 )
+skeleton = NodePath("..")
+material/0 = null
+_sections_unfolded = [ "Transform", "material" ]
 
 [node name="Menu" type="Panel" parent="." index="4"]
 
@@ -204,8 +286,8 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 size_flags_stretch_ratio = 0.0
-theme = ExtResource( 15 )
-script = ExtResource( 16 )
+theme = ExtResource( 17 )
+script = ExtResource( 18 )
 _sections_unfolded = [ "Theme", "Visibility" ]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Menu" index="0"]
@@ -302,7 +384,7 @@ text = "Units"
 flat = false
 align = 1
 items = [  ]
-script = ExtResource( 17 )
+script = ExtResource( 19 )
 _sections_unfolded = [ "Focus", "Size Flags", "Theme" ]
 
 [node name="Places" type="MenuButton" parent="Menu/VBoxContainer" index="3"]
@@ -330,14 +412,14 @@ text = "Places"
 flat = false
 align = 1
 items = [  ]
-script = ExtResource( 18 )
+script = ExtResource( 20 )
 _sections_unfolded = [ "Focus", "Size Flags" ]
 
 [connection signal="change_mode" from="GameLogic" to="GameWorld/Terrain" method="_on_GameLogic_change_mode"]
 
-[connection signal="change_mode" from="GameLogic" to="GameWorld/Selection" method="_on_GameLogic_change_mode"]
-
 [connection signal="change_mode" from="GameLogic" to="GameWorld/Hover" method="_on_GameLogic_change_mode"]
+
+[connection signal="change_mode" from="GameLogic" to="GameWorld/Selection" method="_on_GameLogic_change_mode"]
 
 [connection signal="selected" from="GameLogic" to="GameWorld/Selection" method="_on_GameLogic_selected"]
 

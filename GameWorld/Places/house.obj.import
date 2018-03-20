@@ -9,10 +9,10 @@ path="res://.import/house.obj-0344e8845dcfd67275a9fe0e7d92ee39.mesh"
 files=[ "res://.import/house.obj-0344e8845dcfd67275a9fe0e7d92ee39.mesh" ]
 
 source_file="res://GameWorld/Places/house.obj"
-source_md5="28de062b4562905207577ba366921d5f"
+source_md5="b3b5e08153aa31c9a5c5985986d46b69"
 
 dest_files=[ "res://.import/house.obj-0344e8845dcfd67275a9fe0e7d92ee39.mesh", "res://.import/house.obj-0344e8845dcfd67275a9fe0e7d92ee39.mesh" ]
-dest_md5="08977e13ea963a57a79f515c42df2941"
+dest_md5="d7801ed0cd6673540ceae16d9ffa1770"
 
 [params]
 

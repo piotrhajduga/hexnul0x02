@@ -7,10 +7,10 @@ path="res://.import/house_UV.png-f047e7888816f0782bc375ab27e8733a.stex"
 [deps]
 
 source_file="res://GameWorld/Terrain/assets/house_UV.png"
-source_md5="279f7af4db07a20be48dcd5086f54c21"
+source_md5="095d48d6768baf7b4245b83f32f59e9e"
 
 dest_files=[ "res://.import/house_UV.png-f047e7888816f0782bc375ab27e8733a.stex" ]
-dest_md5="52303c53d8303616a928be20e3e9cd6f"
+dest_md5="477bf493bc6c617c28cd3fb4c65c4fb8"
 
 [params]
 

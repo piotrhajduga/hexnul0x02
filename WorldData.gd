@@ -82,7 +82,8 @@ func get_world_pos(game_pos):
 
 func get_height(pos):
 	var radius = pos.length()
-	if radius > WORLD_RADIUS: return 0.0
+	if radius > WORLD_RADIUS:
+		return 0.0
 	var sum = 0.0
 	var sum_weight = 1.0
 	var weight = 1.0
@@ -94,7 +95,8 @@ func get_height(pos):
 		sum += val
 		weight = val
 		sum_weight += weight
-	return ((WORLD_RADIUS - max(radius,WORLD_RADIUS-WORLD_RADIUS_FEATHER)) / WORLD_RADIUS_FEATHER) * sum / sum_weight
+	var world_radius_modifier = ((WORLD_RADIUS - max(radius,WORLD_RADIUS-WORLD_RADIUS_FEATHER)) / WORLD_RADIUS_FEATHER)
+	return world_radius_modifier * sum / sum_weight
 
 func is_forest(pos):
 	if [WATER,STONE,SNOW,SAND].has(get_cell_type(pos)): return false
@@ -112,16 +114,30 @@ func get_normal(pos):
 	p2.y = get_terrain_mesh_height(p2)
 	return (p1-p0).cross(p2-p0).normalized()
 
+func get_surface_normal(pos):
+	var delta = Vector3(0.001,0.0,0.0)
+	var p0 = pos + delta
+	p0.y = get_surface_height(p0)
+	var p1 = pos + delta.rotated(up, PI*2/3)
+	p1.y = get_surface_height(p1)
+	var p2 = pos + delta.rotated(up, PI*4/3)
+	p2.y = get_surface_height(p2)
+	return (p1-p0).cross(p2-p0).normalized()
+
 func get_terrain_mesh_height(pos):
 	var height = get_height(pos)
-	if height < water_height: height = water_height
 	height -= water_height
 	height /= 1.0 - water_height
-	return height * height * TERRAIN_HEIGHT_SCALE
+	return height * abs(height) * TERRAIN_HEIGHT_SCALE
+
+func get_surface_height(pos):
+	var height = get_terrain_mesh_height(pos)
+	return height if height > 0 else 0
 
 func get_cell_type(pos):
 	var height = get_height(pos)
 	if height>=snow_height: return SNOW
+	elif height<sand_height: return WATER
 	if acos(up.dot(get_normal(pos))) > stone_min_angle:
 		return STONE
 	elif height>=gravel_height: return GRAVEL

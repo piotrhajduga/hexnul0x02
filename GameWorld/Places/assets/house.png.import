@@ -8,10 +8,10 @@ path.etc2="res://.import/house.png-c7263d5986f724eb86696f9811be026d.etc2.stex"
 [deps]
 
 source_file="res://GameWorld/Places/assets/house.png"
-source_md5="35279225087d42662dce6b06bd0b628a"
+source_md5="0b3f4a8fd95a04ed66f508b0ef522397"
 
 dest_files=[ "res://.import/house.png-c7263d5986f724eb86696f9811be026d.s3tc.stex", "res://.import/house.png-c7263d5986f724eb86696f9811be026d.etc2.stex" ]
-dest_md5="6ef86438cec70fb510ba593880c888b1"
+dest_md5="195d9a98cbfcb67826dee0fc7693ad3c"
 
 [params]
 

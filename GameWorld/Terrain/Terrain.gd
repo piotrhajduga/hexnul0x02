@@ -22,6 +22,8 @@ onready var camera = get_node(camera_node)
 
 export(float, 0, 1) var cell_grid_alpha = 0.4
 
+export(bool) var surface = false
+
 var chunks = {}
 
 onready var game_space = get_node("/root/GameSpace")
@@ -60,6 +62,7 @@ func update_chunks(center):
 
 func add_chunk(center, edge):
 	chunks[center] = Chunk.instance()
+	chunks[center].surface = surface
 	chunks[center].edge = edge
 	chunks[center].cell_material = cell_material
 	chunks[center].world_data = world_data

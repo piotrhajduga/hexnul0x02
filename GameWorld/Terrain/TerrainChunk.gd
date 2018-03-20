@@ -17,6 +17,8 @@ enum Edge {EDGE_NONE,EDGE_TOP,EDGE_BOTTOM}
 export(Edge) var edge = EDGE_NONE
 var cells = {}
 
+export(bool) var surface = false
+
 func _ready():
 	update()
 
@@ -62,9 +64,15 @@ func create_collision_hex(game_pos):
 	points.append(get_world_point(x,y))
 	return points
 
+func get_world_point(x, y):
+	var pt = world_data.get_world_pos(Vector2(x,y))
+	pt.y = world_data.get_surface_height(pt)
+	return pt
+
 func add_cell(game_pos):
 	var world_pos = world_data.get_world_pos(game_pos)
 	cells[game_pos] = Cell.instance()
+	cells[game_pos].surface = surface
 	cells[game_pos].world_data = world_data
 	cells[game_pos].material = cell_material
 	add_child(cells[game_pos])
@@ -76,8 +84,3 @@ func add_cell(game_pos):
 		forest.rotation = Vector3(0,randf(),0)
 		cells[game_pos].add_child(forest)
 	cells[game_pos].scale = Vector3(1.002,1.0,1.002)
-
-func get_world_point(x, y):
-	var pt = world_data.get_world_pos(Vector2(x,y))
-	pt.y = world_data.get_terrain_mesh_height(pt)
-	return pt
