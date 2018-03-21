@@ -45,23 +45,9 @@ func _ready():
 
 func get_cells_in_radius(pos, radius):
 	return game_space.offset_range(pos, radius)
-#	var points = []
-#	for x in range(-radius,radius+1):
-#		for y in range(2*radius+1-int(abs(x))):
-#			points.append(Vector2(
-#				int(pos.x) + x,
-#				int(pos.y) + y - radius + floor(abs(x)/2)+(int(abs(pos.x))%2)*(int(abs(x))%2)
-#			))
-#	return points
 
 func get_game_pos(pos):
 	return game_space.world_to_offset(pos)
-#	var x = int(round(pos.x / (1.5 * xStep)))
-#	var zpos = pos.z
-#	if x % 2 != 0:
-#		zpos -= zStep / 2.0
-#	var y = int(round(zpos / (2.0 * zStep)))
-#	return Vector2(x,y)
 
 func is_passable(game_pos):
 	var impassable = [
@@ -73,12 +59,6 @@ func is_passable(game_pos):
 	
 func get_world_pos(game_pos):
 	return game_space.offset_to_world(game_pos)
-#	var pos = Vector3()
-#	pos.x = floor(game_pos.x) * 1.5 * xStep
-#	pos.z = floor(game_pos.y) * 2.0 * zStep
-#	if int(game_pos.x) % 2 != 0:
-#		pos.z += zStep
-#	return pos
 
 func get_height(pos):
 	var radius = pos.length()

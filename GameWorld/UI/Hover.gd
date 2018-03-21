@@ -21,7 +21,8 @@ enum HoverState {
 	STATE_HOVER,
 	STATE_MOVE_PASSABLE,
 	STATE_MOVE_IMPASSABLE,
-	STATE_PLACE_UNIT
+	STATE_PLACE_UNIT,
+	STATE_PLACE_PLACE
 }
 
 export(Color) var hover_color = Color("#c3cfb2")
@@ -33,7 +34,8 @@ var STATE_COLORS = {
 	STATE_HOVER: hover_color,
 	STATE_MOVE_PASSABLE: move_passable_color,
 	STATE_MOVE_IMPASSABLE: move_impassable_color,
-	STATE_PLACE_UNIT: place_unit_color
+	STATE_PLACE_UNIT: place_unit_color,
+	STATE_PLACE_PLACE: place_unit_color
 }
 export(HoverState) var state = STATE_HOVER setget set_state
 
@@ -49,7 +51,7 @@ func set_game_pos(game_pos):
 			else:
 				self.state = STATE_MOVE_IMPASSABLE
 		GameLogicClass.MODE_PLACE:
-			if world_data.is_passable(game_pos):
+			if world_data.is_passable(game_pos) and not world_data.is_forest(game_space.offset_to_world(game_pos)):
 				self.state = STATE_PLACE_UNIT
 			else:
 				self.state = STATE_MOVE_IMPASSABLE

@@ -63,6 +63,8 @@ func _on_GameWorld_select(pos):
 					var unit = units.select(pos)
 					select(unit, OBJECT_UNIT if unit else null)
 				OBJECT_PLACE:
+					if world_data.is_forest(world_data.get_world_pos(pos)):
+						return
 					places.place_place(PlaceObjectClass, pos)
 					var place = places.select(pos)
 					select(place, OBJECT_PLACE if place else null)

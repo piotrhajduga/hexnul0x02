@@ -1,0 +1,20 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/fence.obj-6d6d06171b2470febcb3de5ea80ecccd.mesh"
+
+[deps]
+
+files=[ "res://.import/fence.obj-6d6d06171b2470febcb3de5ea80ecccd.mesh" ]
+
+source_file="res://GameWorld/Places/fence.obj"
+source_md5="9a4955413767b44bacd334ff5a5f3fd3"
+
+dest_files=[ "res://.import/fence.obj-6d6d06171b2470febcb3de5ea80ecccd.mesh", "res://.import/fence.obj-6d6d06171b2470febcb3de5ea80ecccd.mesh" ]
+dest_md5="3dbb41ed86d1aa82920f69b3ce7a26e3"
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )

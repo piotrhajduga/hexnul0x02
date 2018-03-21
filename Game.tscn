@@ -31,7 +31,7 @@ shader_param/uv1_offset = Vector3( 0, 0, 0 )
 shader_param/texture_albedo = ExtResource( 10 )
 _sections_unfolded = [ "shader_param" ]
 
-[sub_resource type="Shader" id=5]
+[sub_resource type="Shader" id=2]
 
 code = "shader_type spatial;
 render_mode depth_draw_alpha_prepass,cull_back,diffuse_burley;
@@ -69,10 +69,10 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=4]
+[sub_resource type="ShaderMaterial" id=3]
 
 render_priority = 0
-shader = SubResource( 5 )
+shader = SubResource( 2 )
 shader_param/water_height = 0.46
 shader_param/water_albedo = Color( 0.187408, 0.415434, 0.539062, 0.988941 )
 shader_param/water_roughness = 0.004
@@ -85,14 +85,14 @@ shader_param/water_texture_albedo = ExtResource( 15 )
 shader_param/water_texture_normal = ExtResource( 16 )
 _sections_unfolded = [ "shader_param" ]
 
-[sub_resource type="PlaneMesh" id=3]
+[sub_resource type="PlaneMesh" id=4]
 
-material = SubResource( 4 )
+material = SubResource( 3 )
 size = Vector2( 400, 400 )
 subdivide_width = 10
 subdivide_depth = 10
 
-[node name="Game" type="Control" index="0"]
+[node name="Game" type="Control"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -112,7 +112,7 @@ script = ExtResource( 1 )
 WORLD_RADIUS = 86
 WORLD_RADIUS_FEATHER = 48
 TERRAIN_HEIGHT_SCALE = 16.0
-stone_min_angle = 0.35
+stone_min_angle = 0.34
 noises_scales = PoolRealArray( 0.006, 0.023, 0.124, 0.34, 0.19, 0.53 )
 forest_noise_scale = 0.12
 game_seed = "texturing"
@@ -120,7 +120,7 @@ water_height = 0.46
 sand_height = 0.46
 grass_height = 0.49
 gravel_height = 0.56
-snow_height = 0.66
+snow_height = 0.65
 
 [node name="GameLogic" type="Node" parent="." index="1"]
 
@@ -155,7 +155,7 @@ v_offset = 0.0
 doppler_tracking = 0
 projection = 0
 current = true
-fov = 65.0
+fov = 60.0
 size = 1.0
 near = 0.05
 far = 100.0
@@ -165,7 +165,7 @@ world_data_node = NodePath("../../WorldData")
 max_camera_height = 22.0
 min_camera_height = 2.0
 target_position = Vector3( 0, 0, 0 )
-camera_offset = Vector3( 0, 3, 8 )
+camera_offset = Vector3( 0, 2, 8 )
 camera_height = 10.0
 camera_vspeed = 1.0
 camera_hspeed = 1.0
@@ -264,7 +264,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 3 )
+mesh = SubResource( 4 )
 skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Transform", "material" ]
@@ -417,9 +417,9 @@ _sections_unfolded = [ "Focus", "Size Flags" ]
 
 [connection signal="change_mode" from="GameLogic" to="GameWorld/Terrain" method="_on_GameLogic_change_mode"]
 
-[connection signal="change_mode" from="GameLogic" to="GameWorld/Hover" method="_on_GameLogic_change_mode"]
-
 [connection signal="change_mode" from="GameLogic" to="GameWorld/Selection" method="_on_GameLogic_change_mode"]
+
+[connection signal="change_mode" from="GameLogic" to="GameWorld/Hover" method="_on_GameLogic_change_mode"]
 
 [connection signal="selected" from="GameLogic" to="GameWorld/Selection" method="_on_GameLogic_selected"]
 
